@@ -9,7 +9,7 @@ project with ability to ~~illuminate the world~~ create nodes and build cluster 
 different distribution algorithms and inter-cluster communication coming in,
  such as (probably coming in the same order as below):
 
-* [ ] init cluster creation
+* [x] init cluster creation
 * [ ] epidemic(rumor mongering) - periodically chooses another node to share an update,
      stop sharing updates when specified count of nodes replied that they already have an update or 
      with some probability after every decline(or whatever is the feedback) anti-entropy as backup strategy for this
