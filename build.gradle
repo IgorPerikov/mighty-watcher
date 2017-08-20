@@ -1,0 +1,31 @@
+plugins {
+    id "java"
+}
+
+group 'com.github.igorperikov.heimdallr'
+version '0.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+ext {
+    nettyVersion = '4.1.14.Final'
+    guiceVersion = '4.1.0'
+    jsr305Version = '3.0.2'
+    slf4jVersion = '1.7.25'
+    logbackVersion = '1.2.3'
+}
+
+dependencies {
+//    compile group: 'org.jboss.marshalling', name: 'jboss-marshalling', version: '1.4.11.Final'
+    compile "io.netty:netty-all:${nettyVersion}"
+    compile "com.google.inject:guice:${guiceVersion}"
+    compile "com.google.code.findbugs:jsr305:${jsr305Version}"
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"
+    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+    compile "ch.qos.logback:logback-core:${logbackVersion}"
+}
