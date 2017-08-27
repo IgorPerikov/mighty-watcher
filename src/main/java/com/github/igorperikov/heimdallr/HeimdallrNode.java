@@ -14,6 +14,7 @@ import io.netty.util.concurrent.ScheduledFuture;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,6 +35,10 @@ public class HeimdallrNode {
         this.port = port;
         this.name = UUID.randomUUID();
         log.info("My name is {}", name);
+    }
+
+    public void testMEthod(@Nullable Integer value) {
+        value.byteValue();
     }
 
     public HeimdallrNode(int port, String peerAddress, int peerPort) {
