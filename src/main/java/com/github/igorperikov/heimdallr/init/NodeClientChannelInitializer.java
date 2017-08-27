@@ -9,9 +9,6 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
-import io.netty.handler.codec.serialization.ClassResolvers;
-import io.netty.handler.codec.serialization.ObjectDecoder;
-import io.netty.handler.codec.serialization.ObjectEncoder;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -20,11 +17,12 @@ public class NodeClientChannelInitializer extends ChannelInitializer<SocketChann
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
-        ch.pipeline().addLast(new ProtobufVarint32FrameDecoder());
-        ch.pipeline().addLast(new ProtobufDecoder(ClusterState.getDefaultInstance()));
-        ch.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
-        ch.pipeline().addLast(new ProtobufEncoder());
-
-        ch.pipeline().addLast(new ClientInboundChannelHandler(node));
+        ch.pipeline().addLast(
+                new ProtobufVarint32FrameDecoder(),
+                new ProtobufDecoder(ClusterState.getDefaultInstance()),
+                new ProtobufVarint32LengthFieldPrepender(),
+                new ProtobufEncoder(),
+                new ClientInboundChannelHandler(node)
+        );
     }
 }

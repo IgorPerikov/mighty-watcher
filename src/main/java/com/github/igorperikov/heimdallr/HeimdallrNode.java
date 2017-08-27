@@ -50,10 +50,9 @@ public class HeimdallrNode {
             Channel serverChannel = b.bind().sync().channel();
             log.info("Current node started listening on port {}", name, port);
             if (peerNodeAddress != null) {
-                ChannelFuture channelFuture = establishConnectToPeerNode(peerNodeAddress, childEventLoopGroup);
-                writeToPeerNode(channelFuture);
+                bootstrapFromPeerNode(childEventLoopGroup);
             } else {
-                clusterNodes.add(getNodeDefinition());
+                proceedLoneNode();
             }
             infoPrintingFuture = new ClusterInfoLogger().startPrintingClusterInfo(serverChannel.eventLoop(), this);
             serverChannel.closeFuture().sync();
@@ -63,6 +62,18 @@ public class HeimdallrNode {
         } finally {
             releaseResources(infoPrintingFuture, parentEventLoopGroup, childEventLoopGroup);
         }
+    }
+
+    private void bootstrapFromPeerNode(EventLoopGroup childEventLoopGroup) throws InterruptedException {
+        Bootstrap bootstrap = ClientBootstrapHelper.build(childEventLoopGroup, peerNodeAddress, this);
+        ChannelFuture channelFuture = bootstrap.connect();
+        log.info("Sending request to peer node");
+        ClusterStateRequest build = ClusterStateRequest.newBuilder().setNode(getNodeDefinition()).build();
+        channelFuture.sync().channel().writeAndFlush(build).sync();
+    }
+
+    private void proceedLoneNode() {
+        clusterNodes.add(getNodeDefinition());
     }
 
     private void releaseResources(
@@ -75,17 +86,6 @@ public class HeimdallrNode {
         }
         parentEventLoopGroup.shutdownGracefully().syncUninterruptibly();
         childEventLoopGroup.shutdownGracefully().syncUninterruptibly();
-    }
-
-    private void writeToPeerNode(ChannelFuture channelFuture) throws InterruptedException {
-        log.info("Sending request to peer node");
-        ClusterStateRequest build = ClusterStateRequest.newBuilder().setNode(getNodeDefinition()).build();
-        channelFuture.sync().channel().writeAndFlush(build).sync();
-    }
-
-    public ChannelFuture establishConnectToPeerNode(InetSocketAddress peerNodeAddress, EventLoopGroup eventLoopGroup) {
-        Bootstrap bootstrap = ClientBootstrapHelper.build(eventLoopGroup, peerNodeAddress, this);
-        return bootstrap.connect();
     }
 
     public NodeDefinition getNodeDefinition() {

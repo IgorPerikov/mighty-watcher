@@ -20,7 +20,7 @@ public class ClusterInfoLogger {
                     log.info("Cluster state: \r\n[{}]", clusterStateString);
                 },
                 5,
-                10,
+                20,
                 TimeUnit.SECONDS
         );
     }

@@ -4,16 +4,15 @@ heimdallr
 
 ### Description
 
-project with ability to ~~illuminate the world~~ create nodes and build cluster upon them
+project with ability to ~~illuminate the world~~ create nodes and build cluster upon them, kv database in future
 
 different distribution algorithms and inter-cluster communication coming in,
  such as (probably coming in the same order as below):
 
 * [x] init cluster creation
-* [ ] epidemic(rumor mongering) - periodically chooses another node to share an update,
-     stop sharing updates when specified count of nodes replied that they already have an update or 
-     with some probability after every decline(or whatever is the feedback) anti-entropy as backup strategy for this
-     adding + removing nodes
+* [ ] anti-entropy mechanism as background strategy for cluster state communication
+* [ ] direct mail mechanism
+* [ ] rumor mongering epidemic (push/pull, counters/feedback, etc)
 * [ ] heartbeat
 * [ ] quorum calculation
 * [ ] raft
@@ -22,6 +21,7 @@ different distribution algorithms and inter-cluster communication coming in,
 * [ ] byzantine fault tolerance
 * [ ] jepsen tests for byzantine fault tolerance
 * [ ] multiple dc 
+* [ ] database recovery from backup
 
 ### How to launch
 

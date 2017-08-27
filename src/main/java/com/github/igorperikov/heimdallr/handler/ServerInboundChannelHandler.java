@@ -9,8 +9,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -22,16 +21,12 @@ public class ServerInboundChannelHandler extends SimpleChannelInboundHandler<Clu
     protected void channelRead0(ChannelHandlerContext ctx, ClusterStateRequest msg) throws Exception {
         log.info("Request from client acquired");
         node.addClusterNode(msg.getNode());
-        Map<String, NodeDefinition> map = new HashMap<>();
-        for (NodeDefinition nodeDefinition : node.getClusterNodes()) {
-            map.put(nodeDefinition.getLabel(), nodeDefinition);
-        }
-        ClusterState clusterState = ClusterState.newBuilder().putAllNodes(map).build();
+        ClusterState clusterState = ClusterState.newBuilder()
+                .putAllNodes(node.getClusterNodes()
+                        .stream()
+                        .collect(Collectors.toMap(NodeDefinition::getLabel, Function.identity())))
+                .build();
         ctx.writeAndFlush(clusterState);
-//        ctx.writeAndFlush(new ClusterState(node.getClusterNodes()
-//                .stream()
-//                .collect(Collectors.toMap(NodeDefinition::getLabel, o -> new NodeDefinition(o.getLabel(), o.getAddress())))
-//        ));
     }
 
     @Override
