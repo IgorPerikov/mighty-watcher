@@ -1,7 +1,7 @@
-package com.github.igorperikov.heimdallr.init.handler;
+package com.github.igorperikov.heimdallr.handler;
 
 import com.github.igorperikov.heimdallr.HeimdallrNode;
-import com.github.igorperikov.heimdallr.init.pojo.ClusterState;
+import com.github.igorperikov.heimdallr.generated.ClusterState;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ public class ClientInboundChannelHandler extends SimpleChannelInboundHandler<Clu
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ClusterState msg) throws Exception {
         log.info("Response from server acquired");
-        node.replaceClusterNodes(msg.getNodes());
+        node.replaceClusterNodes(msg.getNodesMap().values());
     }
 
     @Override

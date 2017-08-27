@@ -1,5 +1,6 @@
 plugins {
     id "java"
+    id "com.google.protobuf" version "0.8.2"
 }
 
 group 'com.github.igorperikov.heimdallr'
@@ -20,6 +21,17 @@ ext {
     logbackVersion = '1.2.3'
     lombokVersion = '1.16.18'
     junitVersion = '4.12'
+
+    protobufJavaVersion = '3.3.0'
+    protocVersion = '3.3.0'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protocVersion}"
+    }
+
+    generatedFilesBaseDir = "$projectDir/src"
 }
 
 dependencies {
@@ -31,6 +43,8 @@ dependencies {
     compile "ch.qos.logback:logback-core:${logbackVersion}"
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+    compile "com.google.protobuf:protobuf-java:${protobufJavaVersion}"
 
     testCompile "junit:junit:${junitVersion}"
 }
