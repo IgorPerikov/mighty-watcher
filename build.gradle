@@ -18,14 +18,19 @@ ext {
     jsr305Version = '3.0.2'
     slf4jVersion = '1.7.25'
     logbackVersion = '1.2.3'
+    lombokVersion = '1.16.18'
+    junitVersion = '4.12'
 }
 
 dependencies {
-//    compile group: 'org.jboss.marshalling', name: 'jboss-marshalling', version: '1.4.11.Final'
     compile "io.netty:netty-all:${nettyVersion}"
     compile "com.google.inject:guice:${guiceVersion}"
     compile "com.google.code.findbugs:jsr305:${jsr305Version}"
     compile "org.slf4j:slf4j-api:${slf4jVersion}"
     compile "ch.qos.logback:logback-classic:${logbackVersion}"
     compile "ch.qos.logback:logback-core:${logbackVersion}"
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+    testCompile "junit:junit:${junitVersion}"
 }

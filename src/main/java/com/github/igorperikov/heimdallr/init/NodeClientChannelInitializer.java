@@ -7,13 +7,11 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class NodeClientChannelInitializer extends ChannelInitializer<SocketChannel> {
     private final HeimdallrNode node;
-
-    public NodeClientChannelInitializer(HeimdallrNode node) {
-        this.node = node;
-    }
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {

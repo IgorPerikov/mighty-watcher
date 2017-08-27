@@ -11,8 +11,8 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.util.concurrent.ScheduledFuture;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 import java.util.Collection;
@@ -20,17 +20,20 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Slf4j
 public class HeimdallrNode {
-    private static final Logger log = LoggerFactory.getLogger(HeimdallrNode.class);
-
     private final int port;
     private final UUID name;
-    private InetSocketAddress peerNodeAddress;
+
+    @Getter
     private final Set<NodeDefinition> clusterNodes = new HashSet<>();
+
+    private InetSocketAddress peerNodeAddress;
 
     public HeimdallrNode(int port) {
         this.port = port;
         this.name = UUID.randomUUID();
+        log.info("My name is {}", name);
     }
 
     public HeimdallrNode(int port, String peerAddress, int peerPort) {
@@ -44,28 +47,39 @@ public class HeimdallrNode {
         EventLoopGroup childEventLoopGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = ServerBootstrapHelper.build(parentEventLoopGroup, childEventLoopGroup, port, this);
-            ChannelFuture sync = b.bind().sync();
-            log.info("{} node started listening on port {}", name, port);
-            Channel serverChannel = sync.channel();
+            Channel serverChannel = b.bind().sync().channel();
+            log.info("Current node started listening on port {}", name, port);
             if (peerNodeAddress != null) {
                 ChannelFuture channelFuture = establishConnectToPeerNode(peerNodeAddress, childEventLoopGroup);
-                log.info("Sending request to peer node");
-                channelFuture.sync().channel().writeAndFlush(new ClusterStateRequest(getDefinition())).sync();
+                writeToPeerNode(channelFuture);
             } else {
-                clusterNodes.add(new NodeDefinition(name, getNodeAddress()));
+                clusterNodes.add(getNodeDefinition());
             }
-            infoPrintingFuture = new ClusterInfoLogger().startPrintingCLusterInfo(serverChannel.eventLoop(), this);
+            infoPrintingFuture = new ClusterInfoLogger().startPrintingClusterInfo(serverChannel.eventLoop(), this);
             serverChannel.closeFuture().sync();
             log.info("Shutting down node {}", name);
         } catch (InterruptedException e) {
             log.error("Interrupted", e);
         } finally {
-            if (infoPrintingFuture != null) {
-                infoPrintingFuture.cancel(true);
-            }
-            parentEventLoopGroup.shutdownGracefully().syncUninterruptibly();
-            childEventLoopGroup.shutdownGracefully().syncUninterruptibly();
+            releaseResources(infoPrintingFuture, parentEventLoopGroup, childEventLoopGroup);
         }
+    }
+
+    private void releaseResources(
+            ScheduledFuture<?> infoPrintingFuture,
+            EventLoopGroup parentEventLoopGroup,
+            EventLoopGroup childEventLoopGroup
+    ) {
+        if (infoPrintingFuture != null) {
+            infoPrintingFuture.cancel(true);
+        }
+        parentEventLoopGroup.shutdownGracefully().syncUninterruptibly();
+        childEventLoopGroup.shutdownGracefully().syncUninterruptibly();
+    }
+
+    private void writeToPeerNode(ChannelFuture channelFuture) throws InterruptedException {
+        log.info("Sending request to peer node");
+        channelFuture.sync().channel().writeAndFlush(new ClusterStateRequest(getNodeDefinition())).sync();
     }
 
     public ChannelFuture establishConnectToPeerNode(InetSocketAddress peerNodeAddress, EventLoopGroup eventLoopGroup) {
@@ -73,12 +87,8 @@ public class HeimdallrNode {
         return bootstrap.connect();
     }
 
-    public NodeDefinition getDefinition() {
+    public NodeDefinition getNodeDefinition() {
         return new NodeDefinition(name, getNodeAddress());
-    }
-
-    public Set<NodeDefinition> getClusterNodes() {
-        return clusterNodes;
     }
 
     public void replaceClusterNodes(Collection<NodeDefinition> nodes) {

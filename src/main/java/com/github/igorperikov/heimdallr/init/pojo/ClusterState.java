@@ -1,16 +1,13 @@
 package com.github.igorperikov.heimdallr.init.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.io.Serializable;
 import java.util.Set;
 
+@AllArgsConstructor
+@Getter
 public class ClusterState implements Serializable {
     private final Set<NodeDefinition> nodes;
-
-    public ClusterState(Set<NodeDefinition> nodes) {
-        this.nodes = nodes;
-    }
-
-    public Set<NodeDefinition> getNodes() {
-        return nodes;
-    }
 }

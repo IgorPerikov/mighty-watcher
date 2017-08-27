@@ -13,3 +13,5 @@ dist
 test-output
 
 book/
+
+.gradletasknamecache
