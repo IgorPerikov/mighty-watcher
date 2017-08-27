@@ -3,8 +3,8 @@
 
 package com.github.igorperikov.heimdallr.generated;
 
-public interface NodeDefinitionOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:heimdallr.NodeDefinition)
+public interface NodeDefinitionTOOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:heimdallr.NodeDefinitionTO)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -26,4 +26,23 @@ public interface NodeDefinitionOrBuilder extends
    */
   com.google.protobuf.ByteString
       getAddressBytes();
+
+  /**
+   * <code>string timestamp = 3;</code>
+   */
+  java.lang.String getTimestamp();
+  /**
+   * <code>string timestamp = 3;</code>
+   */
+  com.google.protobuf.ByteString
+      getTimestampBytes();
+
+  /**
+   * <code>.heimdallr.Type type = 4;</code>
+   */
+  int getTypeValue();
+  /**
+   * <code>.heimdallr.Type type = 4;</code>
+   */
+  com.github.igorperikov.heimdallr.generated.Type getType();
 }

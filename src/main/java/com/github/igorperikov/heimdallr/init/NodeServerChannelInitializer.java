@@ -1,7 +1,7 @@
 package com.github.igorperikov.heimdallr.init;
 
 import com.github.igorperikov.heimdallr.HeimdallrNode;
-import com.github.igorperikov.heimdallr.generated.ClusterStateRequest;
+import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
 import com.github.igorperikov.heimdallr.handler.ServerInboundChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -19,7 +19,7 @@ public class NodeServerChannelInitializer extends ChannelInitializer<SocketChann
     protected void initChannel(SocketChannel ch) throws Exception {
         ch.pipeline().addLast(
                 new ProtobufVarint32FrameDecoder(),
-                new ProtobufDecoder(ClusterStateRequest.getDefaultInstance()),
+                new ProtobufDecoder(ClusterStateTO.getDefaultInstance()),
                 new ProtobufVarint32LengthFieldPrepender(),
                 new ProtobufEncoder(),
                 new ServerInboundChannelHandler(node)

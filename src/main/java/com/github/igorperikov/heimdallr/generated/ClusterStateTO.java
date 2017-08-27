@@ -4,17 +4,17 @@
 package com.github.igorperikov.heimdallr.generated;
 
 /**
- * Protobuf type {@code heimdallr.ClusterState}
+ * Protobuf type {@code heimdallr.ClusterStateTO}
  */
-public  final class ClusterState extends
+public  final class ClusterStateTO extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:heimdallr.ClusterState)
-    ClusterStateOrBuilder {
-  // Use ClusterState.newBuilder() to construct.
-  private ClusterState(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:heimdallr.ClusterStateTO)
+    ClusterStateTOOrBuilder {
+  // Use ClusterStateTO.newBuilder() to construct.
+  private ClusterStateTO(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ClusterState() {
+  private ClusterStateTO() {
   }
 
   @java.lang.Override
@@ -22,7 +22,7 @@ public  final class ClusterState extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private ClusterState(
+  private ClusterStateTO(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -48,7 +48,7 @@ public  final class ClusterState extends
                   NodesDefaultEntryHolder.defaultEntry);
               mutable_bitField0_ |= 0x00000001;
             }
-            com.google.protobuf.MapEntry<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition>
+            com.google.protobuf.MapEntry<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO>
             nodes__ = input.readMessage(
                 NodesDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
             nodes_.getMutableMap().put(
@@ -68,7 +68,7 @@ public  final class ClusterState extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterState_descriptor;
+    return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterStateTO_descriptor;
   }
 
   @SuppressWarnings({"rawtypes"})
@@ -84,26 +84,26 @@ public  final class ClusterState extends
   }
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterState_fieldAccessorTable
+    return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterStateTO_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.github.igorperikov.heimdallr.generated.ClusterState.class, com.github.igorperikov.heimdallr.generated.ClusterState.Builder.class);
+            com.github.igorperikov.heimdallr.generated.ClusterStateTO.class, com.github.igorperikov.heimdallr.generated.ClusterStateTO.Builder.class);
   }
 
   public static final int NODES_FIELD_NUMBER = 1;
   private static final class NodesDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
-        java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> defaultEntry =
+        java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> defaultEntry =
             com.google.protobuf.MapEntry
-            .<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition>newDefaultInstance(
-                com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterState_NodesEntry_descriptor, 
+            .<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO>newDefaultInstance(
+                com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterStateTO_NodesEntry_descriptor, 
                 com.google.protobuf.WireFormat.FieldType.STRING,
                 "",
                 com.google.protobuf.WireFormat.FieldType.MESSAGE,
-                com.github.igorperikov.heimdallr.generated.NodeDefinition.getDefaultInstance());
+                com.github.igorperikov.heimdallr.generated.NodeDefinitionTO.getDefaultInstance());
   }
   private com.google.protobuf.MapField<
-      java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> nodes_;
-  private com.google.protobuf.MapField<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition>
+      java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> nodes_;
+  private com.google.protobuf.MapField<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO>
   internalGetNodes() {
     if (nodes_ == null) {
       return com.google.protobuf.MapField.emptyMapField(
@@ -116,7 +116,7 @@ public  final class ClusterState extends
     return internalGetNodes().getMap().size();
   }
   /**
-   * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+   * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
    */
 
   public boolean containsNodes(
@@ -128,36 +128,36 @@ public  final class ClusterState extends
    * Use {@link #getNodesMap()} instead.
    */
   @java.lang.Deprecated
-  public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> getNodes() {
+  public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> getNodes() {
     return getNodesMap();
   }
   /**
-   * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+   * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
    */
 
-  public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> getNodesMap() {
+  public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> getNodesMap() {
     return internalGetNodes().getMap();
   }
   /**
-   * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+   * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
    */
 
-  public com.github.igorperikov.heimdallr.generated.NodeDefinition getNodesOrDefault(
+  public com.github.igorperikov.heimdallr.generated.NodeDefinitionTO getNodesOrDefault(
       java.lang.String key,
-      com.github.igorperikov.heimdallr.generated.NodeDefinition defaultValue) {
+      com.github.igorperikov.heimdallr.generated.NodeDefinitionTO defaultValue) {
     if (key == null) { throw new java.lang.NullPointerException(); }
-    java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> map =
+    java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> map =
         internalGetNodes().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
   /**
-   * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+   * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
    */
 
-  public com.github.igorperikov.heimdallr.generated.NodeDefinition getNodesOrThrow(
+  public com.github.igorperikov.heimdallr.generated.NodeDefinitionTO getNodesOrThrow(
       java.lang.String key) {
     if (key == null) { throw new java.lang.NullPointerException(); }
-    java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> map =
+    java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> map =
         internalGetNodes().getMap();
     if (!map.containsKey(key)) {
       throw new java.lang.IllegalArgumentException();
@@ -190,9 +190,9 @@ public  final class ClusterState extends
     if (size != -1) return size;
 
     size = 0;
-    for (java.util.Map.Entry<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> entry
+    for (java.util.Map.Entry<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> entry
          : internalGetNodes().getMap().entrySet()) {
-      com.google.protobuf.MapEntry<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition>
+      com.google.protobuf.MapEntry<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO>
       nodes__ = NodesDefaultEntryHolder.defaultEntry.newBuilderForType()
           .setKey(entry.getKey())
           .setValue(entry.getValue())
@@ -210,10 +210,10 @@ public  final class ClusterState extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.github.igorperikov.heimdallr.generated.ClusterState)) {
+    if (!(obj instanceof com.github.igorperikov.heimdallr.generated.ClusterStateTO)) {
       return super.equals(obj);
     }
-    com.github.igorperikov.heimdallr.generated.ClusterState other = (com.github.igorperikov.heimdallr.generated.ClusterState) obj;
+    com.github.igorperikov.heimdallr.generated.ClusterStateTO other = (com.github.igorperikov.heimdallr.generated.ClusterStateTO) obj;
 
     boolean result = true;
     result = result && internalGetNodes().equals(
@@ -237,69 +237,69 @@ public  final class ClusterState extends
     return hash;
   }
 
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(byte[] data)
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(java.io.InputStream input)
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseDelimitedFrom(java.io.InputStream input)
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseDelimitedFrom(
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.github.igorperikov.heimdallr.generated.ClusterState parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -311,7 +311,7 @@ public  final class ClusterState extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.github.igorperikov.heimdallr.generated.ClusterState prototype) {
+  public static Builder newBuilder(com.github.igorperikov.heimdallr.generated.ClusterStateTO prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -326,15 +326,15 @@ public  final class ClusterState extends
     return builder;
   }
   /**
-   * Protobuf type {@code heimdallr.ClusterState}
+   * Protobuf type {@code heimdallr.ClusterStateTO}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:heimdallr.ClusterState)
-      com.github.igorperikov.heimdallr.generated.ClusterStateOrBuilder {
+      // @@protoc_insertion_point(builder_implements:heimdallr.ClusterStateTO)
+      com.github.igorperikov.heimdallr.generated.ClusterStateTOOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterState_descriptor;
+      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterStateTO_descriptor;
     }
 
     @SuppressWarnings({"rawtypes"})
@@ -361,12 +361,12 @@ public  final class ClusterState extends
     }
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterState_fieldAccessorTable
+      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterStateTO_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.github.igorperikov.heimdallr.generated.ClusterState.class, com.github.igorperikov.heimdallr.generated.ClusterState.Builder.class);
+              com.github.igorperikov.heimdallr.generated.ClusterStateTO.class, com.github.igorperikov.heimdallr.generated.ClusterStateTO.Builder.class);
     }
 
-    // Construct using com.github.igorperikov.heimdallr.generated.ClusterState.newBuilder()
+    // Construct using com.github.igorperikov.heimdallr.generated.ClusterStateTO.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -389,23 +389,23 @@ public  final class ClusterState extends
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterState_descriptor;
+      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_ClusterStateTO_descriptor;
     }
 
-    public com.github.igorperikov.heimdallr.generated.ClusterState getDefaultInstanceForType() {
-      return com.github.igorperikov.heimdallr.generated.ClusterState.getDefaultInstance();
+    public com.github.igorperikov.heimdallr.generated.ClusterStateTO getDefaultInstanceForType() {
+      return com.github.igorperikov.heimdallr.generated.ClusterStateTO.getDefaultInstance();
     }
 
-    public com.github.igorperikov.heimdallr.generated.ClusterState build() {
-      com.github.igorperikov.heimdallr.generated.ClusterState result = buildPartial();
+    public com.github.igorperikov.heimdallr.generated.ClusterStateTO build() {
+      com.github.igorperikov.heimdallr.generated.ClusterStateTO result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public com.github.igorperikov.heimdallr.generated.ClusterState buildPartial() {
-      com.github.igorperikov.heimdallr.generated.ClusterState result = new com.github.igorperikov.heimdallr.generated.ClusterState(this);
+    public com.github.igorperikov.heimdallr.generated.ClusterStateTO buildPartial() {
+      com.github.igorperikov.heimdallr.generated.ClusterStateTO result = new com.github.igorperikov.heimdallr.generated.ClusterStateTO(this);
       int from_bitField0_ = bitField0_;
       result.nodes_ = internalGetNodes();
       result.nodes_.makeImmutable();
@@ -440,16 +440,16 @@ public  final class ClusterState extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.github.igorperikov.heimdallr.generated.ClusterState) {
-        return mergeFrom((com.github.igorperikov.heimdallr.generated.ClusterState)other);
+      if (other instanceof com.github.igorperikov.heimdallr.generated.ClusterStateTO) {
+        return mergeFrom((com.github.igorperikov.heimdallr.generated.ClusterStateTO)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.github.igorperikov.heimdallr.generated.ClusterState other) {
-      if (other == com.github.igorperikov.heimdallr.generated.ClusterState.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.github.igorperikov.heimdallr.generated.ClusterStateTO other) {
+      if (other == com.github.igorperikov.heimdallr.generated.ClusterStateTO.getDefaultInstance()) return this;
       internalGetMutableNodes().mergeFrom(
           other.internalGetNodes());
       onChanged();
@@ -464,11 +464,11 @@ public  final class ClusterState extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.github.igorperikov.heimdallr.generated.ClusterState parsedMessage = null;
+      com.github.igorperikov.heimdallr.generated.ClusterStateTO parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.github.igorperikov.heimdallr.generated.ClusterState) e.getUnfinishedMessage();
+        parsedMessage = (com.github.igorperikov.heimdallr.generated.ClusterStateTO) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -480,8 +480,8 @@ public  final class ClusterState extends
     private int bitField0_;
 
     private com.google.protobuf.MapField<
-        java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> nodes_;
-    private com.google.protobuf.MapField<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition>
+        java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> nodes_;
+    private com.google.protobuf.MapField<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO>
     internalGetNodes() {
       if (nodes_ == null) {
         return com.google.protobuf.MapField.emptyMapField(
@@ -489,7 +489,7 @@ public  final class ClusterState extends
       }
       return nodes_;
     }
-    private com.google.protobuf.MapField<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition>
+    private com.google.protobuf.MapField<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO>
     internalGetMutableNodes() {
       onChanged();;
       if (nodes_ == null) {
@@ -506,7 +506,7 @@ public  final class ClusterState extends
       return internalGetNodes().getMap().size();
     }
     /**
-     * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+     * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
      */
 
     public boolean containsNodes(
@@ -518,36 +518,36 @@ public  final class ClusterState extends
      * Use {@link #getNodesMap()} instead.
      */
     @java.lang.Deprecated
-    public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> getNodes() {
+    public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> getNodes() {
       return getNodesMap();
     }
     /**
-     * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+     * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
      */
 
-    public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> getNodesMap() {
+    public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> getNodesMap() {
       return internalGetNodes().getMap();
     }
     /**
-     * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+     * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
      */
 
-    public com.github.igorperikov.heimdallr.generated.NodeDefinition getNodesOrDefault(
+    public com.github.igorperikov.heimdallr.generated.NodeDefinitionTO getNodesOrDefault(
         java.lang.String key,
-        com.github.igorperikov.heimdallr.generated.NodeDefinition defaultValue) {
+        com.github.igorperikov.heimdallr.generated.NodeDefinitionTO defaultValue) {
       if (key == null) { throw new java.lang.NullPointerException(); }
-      java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> map =
+      java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> map =
           internalGetNodes().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
-     * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+     * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
      */
 
-    public com.github.igorperikov.heimdallr.generated.NodeDefinition getNodesOrThrow(
+    public com.github.igorperikov.heimdallr.generated.NodeDefinitionTO getNodesOrThrow(
         java.lang.String key) {
       if (key == null) { throw new java.lang.NullPointerException(); }
-      java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> map =
+      java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> map =
           internalGetNodes().getMap();
       if (!map.containsKey(key)) {
         throw new java.lang.IllegalArgumentException();
@@ -561,7 +561,7 @@ public  final class ClusterState extends
       return this;
     }
     /**
-     * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+     * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
      */
 
     public Builder removeNodes(
@@ -575,16 +575,16 @@ public  final class ClusterState extends
      * Use alternate mutation accessors instead.
      */
     @java.lang.Deprecated
-    public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition>
+    public java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO>
     getMutableNodes() {
       return internalGetMutableNodes().getMutableMap();
     }
     /**
-     * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+     * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
      */
     public Builder putNodes(
         java.lang.String key,
-        com.github.igorperikov.heimdallr.generated.NodeDefinition value) {
+        com.github.igorperikov.heimdallr.generated.NodeDefinitionTO value) {
       if (key == null) { throw new java.lang.NullPointerException(); }
       if (value == null) { throw new java.lang.NullPointerException(); }
       internalGetMutableNodes().getMutableMap()
@@ -592,11 +592,11 @@ public  final class ClusterState extends
       return this;
     }
     /**
-     * <code>map&lt;string, .heimdallr.NodeDefinition&gt; nodes = 1;</code>
+     * <code>map&lt;string, .heimdallr.NodeDefinitionTO&gt; nodes = 1;</code>
      */
 
     public Builder putAllNodes(
-        java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinition> values) {
+        java.util.Map<java.lang.String, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO> values) {
       internalGetMutableNodes().getMutableMap()
           .putAll(values);
       return this;
@@ -612,39 +612,39 @@ public  final class ClusterState extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:heimdallr.ClusterState)
+    // @@protoc_insertion_point(builder_scope:heimdallr.ClusterStateTO)
   }
 
-  // @@protoc_insertion_point(class_scope:heimdallr.ClusterState)
-  private static final com.github.igorperikov.heimdallr.generated.ClusterState DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:heimdallr.ClusterStateTO)
+  private static final com.github.igorperikov.heimdallr.generated.ClusterStateTO DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.github.igorperikov.heimdallr.generated.ClusterState();
+    DEFAULT_INSTANCE = new com.github.igorperikov.heimdallr.generated.ClusterStateTO();
   }
 
-  public static com.github.igorperikov.heimdallr.generated.ClusterState getDefaultInstance() {
+  public static com.github.igorperikov.heimdallr.generated.ClusterStateTO getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ClusterState>
-      PARSER = new com.google.protobuf.AbstractParser<ClusterState>() {
-    public ClusterState parsePartialFrom(
+  private static final com.google.protobuf.Parser<ClusterStateTO>
+      PARSER = new com.google.protobuf.AbstractParser<ClusterStateTO>() {
+    public ClusterStateTO parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ClusterState(input, extensionRegistry);
+        return new ClusterStateTO(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<ClusterState> parser() {
+  public static com.google.protobuf.Parser<ClusterStateTO> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ClusterState> getParserForType() {
+  public com.google.protobuf.Parser<ClusterStateTO> getParserForType() {
     return PARSER;
   }
 
-  public com.github.igorperikov.heimdallr.generated.ClusterState getDefaultInstanceForType() {
+  public com.github.igorperikov.heimdallr.generated.ClusterStateTO getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

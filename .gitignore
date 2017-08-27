@@ -6,12 +6,6 @@
 build/
 *.class
 
-target
 build
-temp*
-dist
-test-output
-
-book/
 
 .gradletasknamecache
