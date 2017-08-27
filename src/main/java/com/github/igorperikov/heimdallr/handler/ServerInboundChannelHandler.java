@@ -1,32 +1,43 @@
 package com.github.igorperikov.heimdallr.handler;
 
 import com.github.igorperikov.heimdallr.HeimdallrNode;
-import com.github.igorperikov.heimdallr.generated.ClusterState;
-import com.github.igorperikov.heimdallr.generated.ClusterStateRequest;
-import com.github.igorperikov.heimdallr.generated.NodeDefinition;
+import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
+import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @AllArgsConstructor
-public class ServerInboundChannelHandler extends SimpleChannelInboundHandler<ClusterStateRequest> {
+public class ServerInboundChannelHandler extends SimpleChannelInboundHandler<ClusterStateTO> {
     private final HeimdallrNode node;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, ClusterStateRequest msg) throws Exception {
-        log.info("Request from client acquired");
-        node.addClusterNode(msg.getNode());
-        ClusterState clusterState = ClusterState.newBuilder()
-                .putAllNodes(node.getClusterNodes()
-                        .stream()
-                        .collect(Collectors.toMap(NodeDefinition::getLabel, Function.identity())))
-                .build();
-        ctx.writeAndFlush(clusterState);
+    protected void channelRead0(ChannelHandlerContext ctx, ClusterStateTO msg) throws Exception {
+        log.info("Other node sent her cluster state and asking for a merged state");
+        Map<String, NodeDefinitionTO> map = new HashMap<>(node.getClusterState().getNodesMap());
+        for (NodeDefinitionTO def : msg.getNodesMap().values()) {
+            String label = def.getLabel();
+            if (map.containsKey(label)) {
+                // resolve
+                Instant incomingStateTime = Instant.parse(def.getTimestamp());
+                Instant thisStateTime = Instant.parse(map.get(label).getTimestamp());
+                if (incomingStateTime.isAfter(thisStateTime)) {
+                    map.replace(label, def);
+                }
+            } else {
+                map.put(label, def);
+            }
+        }
+
+        ClusterStateTO build = ClusterStateTO.newBuilder().putAllNodes(map).build();
+        node.setClusterState(build);
+        ctx.writeAndFlush(build);
     }
 
     @Override

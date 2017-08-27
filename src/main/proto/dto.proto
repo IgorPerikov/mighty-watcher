@@ -6,15 +6,18 @@ option java_multiple_files = true;
 option java_package = "com.github.igorperikov.heimdallr.generated";
 option java_outer_classname = "HeimdallrOuter";
 
-message ClusterStateRequest {
-    NodeDefinition node = 1;
+message ClusterStateTO {
+    map<string, NodeDefinitionTO> nodes = 1;
 }
 
-message ClusterState {
-    map<string, NodeDefinition> nodes = 1;
-}
-
-message NodeDefinition {
+message NodeDefinitionTO {
     string label = 1;
     string address = 2;
+    string timestamp = 3;
+    Type type = 4;
+}
+
+enum Type {
+    LIVE = 0;
+    TOMBSTONE = 1;
 }

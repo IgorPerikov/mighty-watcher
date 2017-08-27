@@ -1,7 +1,8 @@
 package com.github.igorperikov.heimdallr;
 
-import com.github.igorperikov.heimdallr.generated.ClusterStateRequest;
-import com.github.igorperikov.heimdallr.generated.NodeDefinition;
+import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
+import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
+import com.github.igorperikov.heimdallr.generated.Type;
 import com.github.igorperikov.heimdallr.init.ClientBootstrapHelper;
 import com.github.igorperikov.heimdallr.init.ServerBootstrapHelper;
 import io.netty.bootstrap.Bootstrap;
@@ -12,28 +13,28 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.util.concurrent.ScheduledFuture;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.Instant;
 import java.util.UUID;
 
 @Slf4j
 public class HeimdallrNode {
     private final int port;
-    private final UUID name;
+    private final UUID label;
 
     @Getter
-    private final Set<NodeDefinition> clusterNodes = new HashSet<>();
+    @Setter
+    private ClusterStateTO clusterState;
 
     private InetSocketAddress peerNodeAddress;
 
     public HeimdallrNode(int port) {
         this.port = port;
-        this.name = UUID.randomUUID();
-        log.info("My name is {}", name);
+        this.label = UUID.randomUUID();
+        log.info("My name is {}", label);
     }
 
     public HeimdallrNode(int port, String peerAddress, int peerPort) {
@@ -48,7 +49,7 @@ public class HeimdallrNode {
         try {
             ServerBootstrap b = ServerBootstrapHelper.build(parentEventLoopGroup, childEventLoopGroup, port, this);
             Channel serverChannel = b.bind().sync().channel();
-            log.info("Current node started listening on port {}", name, port);
+            log.info("Current node started listening on port {}", label, port);
             if (peerNodeAddress != null) {
                 bootstrapFromPeerNode(childEventLoopGroup);
             } else {
@@ -56,7 +57,7 @@ public class HeimdallrNode {
             }
             infoPrintingFuture = new ClusterInfoLogger().startPrintingClusterInfo(serverChannel.eventLoop(), this);
             serverChannel.closeFuture().sync();
-            log.info("Shutting down node {}", name);
+            log.info("Shutting down node {}", label);
         } catch (InterruptedException e) {
             log.error("Interrupted", e);
         } finally {
@@ -68,12 +69,12 @@ public class HeimdallrNode {
         Bootstrap bootstrap = ClientBootstrapHelper.build(childEventLoopGroup, peerNodeAddress, this);
         ChannelFuture channelFuture = bootstrap.connect();
         log.info("Sending request to peer node");
-        ClusterStateRequest build = ClusterStateRequest.newBuilder().setNode(getNodeDefinition()).build();
+        ClusterStateTO build = ClusterStateTO.newBuilder().putNodes(label.toString(), getNodeDefinition()).build();
         channelFuture.sync().channel().writeAndFlush(build).sync();
     }
 
     private void proceedLoneNode() {
-        clusterNodes.add(getNodeDefinition());
+        clusterState = ClusterStateTO.newBuilder().putNodes(label.toString(), getNodeDefinition()).build();
     }
 
     private void releaseResources(
@@ -88,17 +89,17 @@ public class HeimdallrNode {
         childEventLoopGroup.shutdownGracefully().syncUninterruptibly();
     }
 
-    public NodeDefinition getNodeDefinition() {
-        return NodeDefinition.newBuilder().setLabel(name.toString()).setAddress(getNodeAddress().toString()).build();
+    public NodeDefinitionTO getNodeDefinition() {
+        return NodeDefinitionTO.newBuilder()
+                .setTimestamp(Instant.now().toString())
+                .setType(Type.LIVE)
+                .setLabel(label.toString())
+                .setAddress(getNodeAddress().toString())
+                .build();
     }
 
-    public void replaceClusterNodes(Collection<NodeDefinition> nodes) {
-        clusterNodes.clear();
-        clusterNodes.addAll(nodes);
-    }
-
-    public void addClusterNode(NodeDefinition nodeDefinition) {
-        clusterNodes.add(nodeDefinition);
+    public void addClusterNode(NodeDefinitionTO nodeDefinition) {
+        clusterState.getNodesMap().put(nodeDefinition.getLabel(), nodeDefinition);
     }
 
     public InetSocketAddress getNodeAddress() {

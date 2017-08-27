@@ -4,19 +4,21 @@
 package com.github.igorperikov.heimdallr.generated;
 
 /**
- * Protobuf type {@code heimdallr.NodeDefinition}
+ * Protobuf type {@code heimdallr.NodeDefinitionTO}
  */
-public  final class NodeDefinition extends
+public  final class NodeDefinitionTO extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:heimdallr.NodeDefinition)
-    NodeDefinitionOrBuilder {
-  // Use NodeDefinition.newBuilder() to construct.
-  private NodeDefinition(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // @@protoc_insertion_point(message_implements:heimdallr.NodeDefinitionTO)
+    NodeDefinitionTOOrBuilder {
+  // Use NodeDefinitionTO.newBuilder() to construct.
+  private NodeDefinitionTO(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private NodeDefinition() {
+  private NodeDefinitionTO() {
     label_ = "";
     address_ = "";
+    timestamp_ = "";
+    type_ = 0;
   }
 
   @java.lang.Override
@@ -24,7 +26,7 @@ public  final class NodeDefinition extends
   getUnknownFields() {
     return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
   }
-  private NodeDefinition(
+  private NodeDefinitionTO(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -56,6 +58,18 @@ public  final class NodeDefinition extends
             address_ = s;
             break;
           }
+          case 26: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            timestamp_ = s;
+            break;
+          }
+          case 32: {
+            int rawValue = input.readEnum();
+
+            type_ = rawValue;
+            break;
+          }
         }
       }
     } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -69,14 +83,14 @@ public  final class NodeDefinition extends
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinition_descriptor;
+    return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinitionTO_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinition_fieldAccessorTable
+    return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinitionTO_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.github.igorperikov.heimdallr.generated.NodeDefinition.class, com.github.igorperikov.heimdallr.generated.NodeDefinition.Builder.class);
+            com.github.igorperikov.heimdallr.generated.NodeDefinitionTO.class, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO.Builder.class);
   }
 
   public static final int LABEL_FIELD_NUMBER = 1;
@@ -147,6 +161,56 @@ public  final class NodeDefinition extends
     }
   }
 
+  public static final int TIMESTAMP_FIELD_NUMBER = 3;
+  private volatile java.lang.Object timestamp_;
+  /**
+   * <code>string timestamp = 3;</code>
+   */
+  public java.lang.String getTimestamp() {
+    java.lang.Object ref = timestamp_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      timestamp_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string timestamp = 3;</code>
+   */
+  public com.google.protobuf.ByteString
+      getTimestampBytes() {
+    java.lang.Object ref = timestamp_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      timestamp_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int TYPE_FIELD_NUMBER = 4;
+  private int type_;
+  /**
+   * <code>.heimdallr.Type type = 4;</code>
+   */
+  public int getTypeValue() {
+    return type_;
+  }
+  /**
+   * <code>.heimdallr.Type type = 4;</code>
+   */
+  public com.github.igorperikov.heimdallr.generated.Type getType() {
+    com.github.igorperikov.heimdallr.generated.Type result = com.github.igorperikov.heimdallr.generated.Type.valueOf(type_);
+    return result == null ? com.github.igorperikov.heimdallr.generated.Type.UNRECOGNIZED : result;
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -165,6 +229,12 @@ public  final class NodeDefinition extends
     if (!getAddressBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, address_);
     }
+    if (!getTimestampBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, timestamp_);
+    }
+    if (type_ != com.github.igorperikov.heimdallr.generated.Type.LIVE.getNumber()) {
+      output.writeEnum(4, type_);
+    }
   }
 
   public int getSerializedSize() {
@@ -178,6 +248,13 @@ public  final class NodeDefinition extends
     if (!getAddressBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, address_);
     }
+    if (!getTimestampBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, timestamp_);
+    }
+    if (type_ != com.github.igorperikov.heimdallr.generated.Type.LIVE.getNumber()) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeEnumSize(4, type_);
+    }
     memoizedSize = size;
     return size;
   }
@@ -188,16 +265,19 @@ public  final class NodeDefinition extends
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.github.igorperikov.heimdallr.generated.NodeDefinition)) {
+    if (!(obj instanceof com.github.igorperikov.heimdallr.generated.NodeDefinitionTO)) {
       return super.equals(obj);
     }
-    com.github.igorperikov.heimdallr.generated.NodeDefinition other = (com.github.igorperikov.heimdallr.generated.NodeDefinition) obj;
+    com.github.igorperikov.heimdallr.generated.NodeDefinitionTO other = (com.github.igorperikov.heimdallr.generated.NodeDefinitionTO) obj;
 
     boolean result = true;
     result = result && getLabel()
         .equals(other.getLabel());
     result = result && getAddress()
         .equals(other.getAddress());
+    result = result && getTimestamp()
+        .equals(other.getTimestamp());
+    result = result && type_ == other.type_;
     return result;
   }
 
@@ -212,74 +292,78 @@ public  final class NodeDefinition extends
     hash = (53 * hash) + getLabel().hashCode();
     hash = (37 * hash) + ADDRESS_FIELD_NUMBER;
     hash = (53 * hash) + getAddress().hashCode();
+    hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+    hash = (53 * hash) + getTimestamp().hashCode();
+    hash = (37 * hash) + TYPE_FIELD_NUMBER;
+    hash = (53 * hash) + type_;
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(byte[] data)
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(java.io.InputStream input)
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseDelimitedFrom(java.io.InputStream input)
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseDelimitedFrom(
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition parseFrom(
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -291,7 +375,7 @@ public  final class NodeDefinition extends
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.github.igorperikov.heimdallr.generated.NodeDefinition prototype) {
+  public static Builder newBuilder(com.github.igorperikov.heimdallr.generated.NodeDefinitionTO prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -306,25 +390,25 @@ public  final class NodeDefinition extends
     return builder;
   }
   /**
-   * Protobuf type {@code heimdallr.NodeDefinition}
+   * Protobuf type {@code heimdallr.NodeDefinitionTO}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:heimdallr.NodeDefinition)
-      com.github.igorperikov.heimdallr.generated.NodeDefinitionOrBuilder {
+      // @@protoc_insertion_point(builder_implements:heimdallr.NodeDefinitionTO)
+      com.github.igorperikov.heimdallr.generated.NodeDefinitionTOOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinition_descriptor;
+      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinitionTO_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinition_fieldAccessorTable
+      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinitionTO_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.github.igorperikov.heimdallr.generated.NodeDefinition.class, com.github.igorperikov.heimdallr.generated.NodeDefinition.Builder.class);
+              com.github.igorperikov.heimdallr.generated.NodeDefinitionTO.class, com.github.igorperikov.heimdallr.generated.NodeDefinitionTO.Builder.class);
     }
 
-    // Construct using com.github.igorperikov.heimdallr.generated.NodeDefinition.newBuilder()
+    // Construct using com.github.igorperikov.heimdallr.generated.NodeDefinitionTO.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -345,30 +429,36 @@ public  final class NodeDefinition extends
 
       address_ = "";
 
+      timestamp_ = "";
+
+      type_ = 0;
+
       return this;
     }
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinition_descriptor;
+      return com.github.igorperikov.heimdallr.generated.HeimdallrOuter.internal_static_heimdallr_NodeDefinitionTO_descriptor;
     }
 
-    public com.github.igorperikov.heimdallr.generated.NodeDefinition getDefaultInstanceForType() {
-      return com.github.igorperikov.heimdallr.generated.NodeDefinition.getDefaultInstance();
+    public com.github.igorperikov.heimdallr.generated.NodeDefinitionTO getDefaultInstanceForType() {
+      return com.github.igorperikov.heimdallr.generated.NodeDefinitionTO.getDefaultInstance();
     }
 
-    public com.github.igorperikov.heimdallr.generated.NodeDefinition build() {
-      com.github.igorperikov.heimdallr.generated.NodeDefinition result = buildPartial();
+    public com.github.igorperikov.heimdallr.generated.NodeDefinitionTO build() {
+      com.github.igorperikov.heimdallr.generated.NodeDefinitionTO result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public com.github.igorperikov.heimdallr.generated.NodeDefinition buildPartial() {
-      com.github.igorperikov.heimdallr.generated.NodeDefinition result = new com.github.igorperikov.heimdallr.generated.NodeDefinition(this);
+    public com.github.igorperikov.heimdallr.generated.NodeDefinitionTO buildPartial() {
+      com.github.igorperikov.heimdallr.generated.NodeDefinitionTO result = new com.github.igorperikov.heimdallr.generated.NodeDefinitionTO(this);
       result.label_ = label_;
       result.address_ = address_;
+      result.timestamp_ = timestamp_;
+      result.type_ = type_;
       onBuilt();
       return result;
     }
@@ -400,16 +490,16 @@ public  final class NodeDefinition extends
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.github.igorperikov.heimdallr.generated.NodeDefinition) {
-        return mergeFrom((com.github.igorperikov.heimdallr.generated.NodeDefinition)other);
+      if (other instanceof com.github.igorperikov.heimdallr.generated.NodeDefinitionTO) {
+        return mergeFrom((com.github.igorperikov.heimdallr.generated.NodeDefinitionTO)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.github.igorperikov.heimdallr.generated.NodeDefinition other) {
-      if (other == com.github.igorperikov.heimdallr.generated.NodeDefinition.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.github.igorperikov.heimdallr.generated.NodeDefinitionTO other) {
+      if (other == com.github.igorperikov.heimdallr.generated.NodeDefinitionTO.getDefaultInstance()) return this;
       if (!other.getLabel().isEmpty()) {
         label_ = other.label_;
         onChanged();
@@ -417,6 +507,13 @@ public  final class NodeDefinition extends
       if (!other.getAddress().isEmpty()) {
         address_ = other.address_;
         onChanged();
+      }
+      if (!other.getTimestamp().isEmpty()) {
+        timestamp_ = other.timestamp_;
+        onChanged();
+      }
+      if (other.type_ != 0) {
+        setTypeValue(other.getTypeValue());
       }
       onChanged();
       return this;
@@ -430,11 +527,11 @@ public  final class NodeDefinition extends
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.github.igorperikov.heimdallr.generated.NodeDefinition parsedMessage = null;
+      com.github.igorperikov.heimdallr.generated.NodeDefinitionTO parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.github.igorperikov.heimdallr.generated.NodeDefinition) e.getUnfinishedMessage();
+        parsedMessage = (com.github.igorperikov.heimdallr.generated.NodeDefinitionTO) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -581,6 +678,119 @@ public  final class NodeDefinition extends
       onChanged();
       return this;
     }
+
+    private java.lang.Object timestamp_ = "";
+    /**
+     * <code>string timestamp = 3;</code>
+     */
+    public java.lang.String getTimestamp() {
+      java.lang.Object ref = timestamp_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        timestamp_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string timestamp = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTimestampBytes() {
+      java.lang.Object ref = timestamp_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        timestamp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string timestamp = 3;</code>
+     */
+    public Builder setTimestamp(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      timestamp_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string timestamp = 3;</code>
+     */
+    public Builder clearTimestamp() {
+      
+      timestamp_ = getDefaultInstance().getTimestamp();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string timestamp = 3;</code>
+     */
+    public Builder setTimestampBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      timestamp_ = value;
+      onChanged();
+      return this;
+    }
+
+    private int type_ = 0;
+    /**
+     * <code>.heimdallr.Type type = 4;</code>
+     */
+    public int getTypeValue() {
+      return type_;
+    }
+    /**
+     * <code>.heimdallr.Type type = 4;</code>
+     */
+    public Builder setTypeValue(int value) {
+      type_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.heimdallr.Type type = 4;</code>
+     */
+    public com.github.igorperikov.heimdallr.generated.Type getType() {
+      com.github.igorperikov.heimdallr.generated.Type result = com.github.igorperikov.heimdallr.generated.Type.valueOf(type_);
+      return result == null ? com.github.igorperikov.heimdallr.generated.Type.UNRECOGNIZED : result;
+    }
+    /**
+     * <code>.heimdallr.Type type = 4;</code>
+     */
+    public Builder setType(com.github.igorperikov.heimdallr.generated.Type value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      
+      type_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.heimdallr.Type type = 4;</code>
+     */
+    public Builder clearType() {
+      
+      type_ = 0;
+      onChanged();
+      return this;
+    }
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
       return this;
@@ -592,39 +802,39 @@ public  final class NodeDefinition extends
     }
 
 
-    // @@protoc_insertion_point(builder_scope:heimdallr.NodeDefinition)
+    // @@protoc_insertion_point(builder_scope:heimdallr.NodeDefinitionTO)
   }
 
-  // @@protoc_insertion_point(class_scope:heimdallr.NodeDefinition)
-  private static final com.github.igorperikov.heimdallr.generated.NodeDefinition DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:heimdallr.NodeDefinitionTO)
+  private static final com.github.igorperikov.heimdallr.generated.NodeDefinitionTO DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.github.igorperikov.heimdallr.generated.NodeDefinition();
+    DEFAULT_INSTANCE = new com.github.igorperikov.heimdallr.generated.NodeDefinitionTO();
   }
 
-  public static com.github.igorperikov.heimdallr.generated.NodeDefinition getDefaultInstance() {
+  public static com.github.igorperikov.heimdallr.generated.NodeDefinitionTO getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<NodeDefinition>
-      PARSER = new com.google.protobuf.AbstractParser<NodeDefinition>() {
-    public NodeDefinition parsePartialFrom(
+  private static final com.google.protobuf.Parser<NodeDefinitionTO>
+      PARSER = new com.google.protobuf.AbstractParser<NodeDefinitionTO>() {
+    public NodeDefinitionTO parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-        return new NodeDefinition(input, extensionRegistry);
+        return new NodeDefinitionTO(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<NodeDefinition> parser() {
+  public static com.google.protobuf.Parser<NodeDefinitionTO> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<NodeDefinition> getParserForType() {
+  public com.google.protobuf.Parser<NodeDefinitionTO> getParserForType() {
     return PARSER;
   }
 
-  public com.github.igorperikov.heimdallr.generated.NodeDefinition getDefaultInstanceForType() {
+  public com.github.igorperikov.heimdallr.generated.NodeDefinitionTO getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

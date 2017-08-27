@@ -1,6 +1,6 @@
 package com.github.igorperikov.heimdallr;
 
-import com.github.igorperikov.heimdallr.generated.NodeDefinition;
+import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.ScheduledFuture;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +13,11 @@ public class ClusterInfoLogger {
     public ScheduledFuture<?> startPrintingClusterInfo(EventLoop eventLoop, HeimdallrNode heimdallrNode) {
         return eventLoop.scheduleWithFixedDelay(
                 () -> {
-                    String clusterStateString = heimdallrNode.getClusterNodes()
+                    String clusterStateString = heimdallrNode.getClusterState()
+                            .getNodesMap()
+                            .values()
                             .stream()
-                            .map(NodeDefinition::toString)
+                            .map(NodeDefinitionTO::toString)
                             .collect(Collectors.joining("\r\n"));
                     log.info("Cluster state: \r\n[{}]", clusterStateString);
                 },
