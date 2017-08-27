@@ -1,11 +1,9 @@
 package com.github.igorperikov.heimdallr;
 
-import com.github.igorperikov.heimdallr.init.pojo.NodeDefinition;
+import com.github.igorperikov.heimdallr.generated.NodeDefinition;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.ScheduledFuture;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;

@@ -1,9 +1,9 @@
 package com.github.igorperikov.heimdallr;
 
+import com.github.igorperikov.heimdallr.generated.ClusterStateRequest;
+import com.github.igorperikov.heimdallr.generated.NodeDefinition;
 import com.github.igorperikov.heimdallr.init.ClientBootstrapHelper;
 import com.github.igorperikov.heimdallr.init.ServerBootstrapHelper;
-import com.github.igorperikov.heimdallr.init.pojo.ClusterStateRequest;
-import com.github.igorperikov.heimdallr.init.pojo.NodeDefinition;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -14,7 +14,6 @@ import io.netty.util.concurrent.ScheduledFuture;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.HashSet;
@@ -35,10 +34,6 @@ public class HeimdallrNode {
         this.port = port;
         this.name = UUID.randomUUID();
         log.info("My name is {}", name);
-    }
-
-    public void testMEthod(@Nullable Integer value) {
-        value.byteValue();
     }
 
     public HeimdallrNode(int port, String peerAddress, int peerPort) {
@@ -84,7 +79,8 @@ public class HeimdallrNode {
 
     private void writeToPeerNode(ChannelFuture channelFuture) throws InterruptedException {
         log.info("Sending request to peer node");
-        channelFuture.sync().channel().writeAndFlush(new ClusterStateRequest(getNodeDefinition())).sync();
+        ClusterStateRequest build = ClusterStateRequest.newBuilder().setNode(getNodeDefinition()).build();
+        channelFuture.sync().channel().writeAndFlush(build).sync();
     }
 
     public ChannelFuture establishConnectToPeerNode(InetSocketAddress peerNodeAddress, EventLoopGroup eventLoopGroup) {
@@ -93,7 +89,7 @@ public class HeimdallrNode {
     }
 
     public NodeDefinition getNodeDefinition() {
-        return new NodeDefinition(name, getNodeAddress());
+        return NodeDefinition.newBuilder().setLabel(name.toString()).setAddress(getNodeAddress().toString()).build();
     }
 
     public void replaceClusterNodes(Collection<NodeDefinition> nodes) {
