@@ -10,7 +10,7 @@ different distribution algorithms and inter-cluster communication coming in,
  such as (probably coming in the same order as below):
 
 * [x] init cluster creation
-* [ ] anti-entropy mechanism as background strategy for cluster state communication
+* [ ] anti-entropy mechanism
 * [ ] direct mail mechanism
 * [ ] rumor mongering epidemic (push/pull, counters/feedback, etc)
 * [ ] heartbeat

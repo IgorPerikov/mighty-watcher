@@ -1,5 +1,6 @@
 package com.github.igorperikov.heimdallr.handler;
 
+import com.github.igorperikov.heimdallr.ClusterStateResolver;
 import com.github.igorperikov.heimdallr.HeimdallrNode;
 import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,7 +16,8 @@ public class ClientInboundChannelHandler extends SimpleChannelInboundHandler<Clu
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ClusterStateTO msg) throws Exception {
         log.info("Peer node answered her cluster state");
-        node.setClusterState(msg);
+        ClusterStateTO resolvedState = ClusterStateResolver.resolve(node.getClusterState(), msg);
+        node.setClusterState(resolvedState);
     }
 
     @Override

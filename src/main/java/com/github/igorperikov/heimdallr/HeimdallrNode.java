@@ -16,9 +16,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class HeimdallrNode {
@@ -49,13 +52,15 @@ public class HeimdallrNode {
         try {
             ServerBootstrap b = ServerBootstrapHelper.build(parentEventLoopGroup, childEventLoopGroup, port, this);
             Channel serverChannel = b.bind().sync().channel();
-            log.info("Current node started listening on port {}", label, port);
+            log.info("Current node started listening on port {}", port);
+            initOwnClusterState();
             if (peerNodeAddress != null) {
-                bootstrapFromPeerNode(childEventLoopGroup);
+                sendMessage(childEventLoopGroup, peerNodeAddress);
             } else {
                 proceedLoneNode();
             }
             infoPrintingFuture = new ClusterInfoLogger().startPrintingClusterInfo(serverChannel.eventLoop(), this);
+            launchAntiEntropyMechanism(childEventLoopGroup);
             serverChannel.closeFuture().sync();
             log.info("Shutting down node {}", label);
         } catch (InterruptedException e) {
@@ -65,8 +70,31 @@ public class HeimdallrNode {
         }
     }
 
-    private void bootstrapFromPeerNode(EventLoopGroup childEventLoopGroup) throws InterruptedException {
-        Bootstrap bootstrap = ClientBootstrapHelper.build(childEventLoopGroup, peerNodeAddress, this);
+    private void initOwnClusterState() {
+        clusterState = ClusterStateTO.newBuilder().putNodes(label.toString(), getNodeDefinition()).build();
+    }
+
+    private void launchAntiEntropyMechanism(EventLoopGroup eventLoopGroup) {
+        eventLoopGroup.scheduleWithFixedDelay(() -> {
+                    ClusterStateTO clusterState = getClusterState();
+                    clusterState.getNodesMap().entrySet().stream()
+                            .filter(entry -> !entry.getKey().equals(label.toString()))
+                            .map(Map.Entry::getValue)
+                            .forEach(node -> {
+                                Integer port = Integer.valueOf(node.getAddress().split(":")[1]);
+                                InetSocketAddress address = new InetSocketAddress("localhost", port);
+                                try {
+                                    sendMessage(eventLoopGroup, address);
+                                } catch (InterruptedException ignored) {}
+                            });
+                },
+                5,
+                5,
+                TimeUnit.SECONDS);
+    }
+
+    private void sendMessage(EventLoopGroup eventLoopGroup, InetSocketAddress address) throws InterruptedException {
+        Bootstrap bootstrap = ClientBootstrapHelper.build(eventLoopGroup, address, this);
         ChannelFuture channelFuture = bootstrap.connect();
         log.info("Sending request to peer node");
         ClusterStateTO build = ClusterStateTO.newBuilder().putNodes(label.toString(), getNodeDefinition()).build();
@@ -74,7 +102,7 @@ public class HeimdallrNode {
     }
 
     private void proceedLoneNode() {
-        clusterState = ClusterStateTO.newBuilder().putNodes(label.toString(), getNodeDefinition()).build();
+        // TODO: makes nothing
     }
 
     private void releaseResources(
@@ -96,10 +124,6 @@ public class HeimdallrNode {
                 .setLabel(label.toString())
                 .setAddress(getNodeAddress().toString())
                 .build();
-    }
-
-    public void addClusterNode(NodeDefinitionTO nodeDefinition) {
-        clusterState.getNodesMap().put(nodeDefinition.getLabel(), nodeDefinition);
     }
 
     public InetSocketAddress getNodeAddress() {

@@ -14,7 +14,7 @@ repositories {
 }
 
 ext {
-    nettyVersion = '4.1.14.Final'
+    nettyVersion = '4.1.15.Final'
     guiceVersion = '4.1.0'
     jsr305Version = '3.0.2'
     slf4jVersion = '1.7.25'
