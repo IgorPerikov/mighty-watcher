@@ -3,12 +3,9 @@ package com.github.igorperikov.heimdallr;
 import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
 import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
 import com.github.igorperikov.heimdallr.generated.Type;
-import com.github.igorperikov.heimdallr.init.ClientBootstrapHelper;
 import com.github.igorperikov.heimdallr.init.ServerBootstrapHelper;
-import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.util.concurrent.ScheduledFuture;
@@ -16,16 +13,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.time.Instant;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class HeimdallrNode {
     private final int port;
+
+    @Getter
     private final UUID label;
 
     @Getter
@@ -47,6 +43,7 @@ public class HeimdallrNode {
 
     public void start() {
         ScheduledFuture<?> infoPrintingFuture = null;
+        ScheduledFuture<?> antiEntropyFuture = null;
         EventLoopGroup parentEventLoopGroup = new NioEventLoopGroup(1);
         EventLoopGroup childEventLoopGroup = new NioEventLoopGroup();
         try {
@@ -55,18 +52,16 @@ public class HeimdallrNode {
             log.info("Current node started listening on port {}", port);
             initOwnClusterState();
             if (peerNodeAddress != null) {
-                sendMessage(childEventLoopGroup, peerNodeAddress);
-            } else {
-                proceedLoneNode();
+                new MessageSender(this, childEventLoopGroup, peerNodeAddress).send();
             }
-            infoPrintingFuture = new ClusterInfoLogger().startPrintingClusterInfo(serverChannel.eventLoop(), this);
-            launchAntiEntropyMechanism(childEventLoopGroup);
+            infoPrintingFuture = new ClusterInfoLogger(this, childEventLoopGroup).startPrintingClusterInfo();
+            antiEntropyFuture = new AntiEntropyMechanism(this, childEventLoopGroup).launch();
             serverChannel.closeFuture().sync();
             log.info("Shutting down node {}", label);
         } catch (InterruptedException e) {
             log.error("Interrupted", e);
         } finally {
-            releaseResources(infoPrintingFuture, parentEventLoopGroup, childEventLoopGroup);
+            releaseResources(infoPrintingFuture, antiEntropyFuture, parentEventLoopGroup, childEventLoopGroup);
         }
     }
 
@@ -74,44 +69,17 @@ public class HeimdallrNode {
         clusterState = ClusterStateTO.newBuilder().putNodes(label.toString(), getNodeDefinition()).build();
     }
 
-    private void launchAntiEntropyMechanism(EventLoopGroup eventLoopGroup) {
-        eventLoopGroup.scheduleWithFixedDelay(() -> {
-                    ClusterStateTO clusterState = getClusterState();
-                    clusterState.getNodesMap().entrySet().stream()
-                            .filter(entry -> !entry.getKey().equals(label.toString()))
-                            .map(Map.Entry::getValue)
-                            .forEach(node -> {
-                                Integer port = Integer.valueOf(node.getAddress().split(":")[1]);
-                                InetSocketAddress address = new InetSocketAddress("localhost", port);
-                                try {
-                                    sendMessage(eventLoopGroup, address);
-                                } catch (InterruptedException ignored) {}
-                            });
-                },
-                5,
-                5,
-                TimeUnit.SECONDS);
-    }
-
-    private void sendMessage(EventLoopGroup eventLoopGroup, InetSocketAddress address) throws InterruptedException {
-        Bootstrap bootstrap = ClientBootstrapHelper.build(eventLoopGroup, address, this);
-        ChannelFuture channelFuture = bootstrap.connect();
-        log.info("Sending request to peer node");
-        ClusterStateTO build = ClusterStateTO.newBuilder().putNodes(label.toString(), getNodeDefinition()).build();
-        channelFuture.sync().channel().writeAndFlush(build).sync();
-    }
-
-    private void proceedLoneNode() {
-        // TODO: makes nothing
-    }
-
     private void releaseResources(
             ScheduledFuture<?> infoPrintingFuture,
+            ScheduledFuture<?> antiEntropyFuture,
             EventLoopGroup parentEventLoopGroup,
             EventLoopGroup childEventLoopGroup
     ) {
         if (infoPrintingFuture != null) {
             infoPrintingFuture.cancel(true);
+        }
+        if (antiEntropyFuture != null) {
+            antiEntropyFuture.cancel(true);
         }
         parentEventLoopGroup.shutdownGracefully().syncUninterruptibly();
         childEventLoopGroup.shutdownGracefully().syncUninterruptibly();

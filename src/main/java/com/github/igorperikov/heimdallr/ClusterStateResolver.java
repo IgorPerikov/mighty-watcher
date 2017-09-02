@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClusterStateResolver {
-    public static ClusterStateTO resolve(ClusterStateTO first, ClusterStateTO second) {
+    public ClusterStateTO resolve(ClusterStateTO first, ClusterStateTO second) {
         Map<String, NodeDefinitionTO> map = new HashMap<>(second.getNodesMap());
         for (NodeDefinitionTO def : first.getNodesMap().values()) {
             String label = def.getLabel();

@@ -2,18 +2,24 @@ package com.github.igorperikov.heimdallr;
 
 import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
 import io.netty.channel.EventLoop;
+import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.ScheduledFuture;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
+@AllArgsConstructor
 public class ClusterInfoLogger {
-    public ScheduledFuture<?> startPrintingClusterInfo(EventLoop eventLoop, HeimdallrNode heimdallrNode) {
+    private HeimdallrNode node;
+    private EventLoopGroup eventLoop;
+
+    public ScheduledFuture<?> startPrintingClusterInfo() {
         return eventLoop.scheduleWithFixedDelay(
                 () -> {
-                    String clusterStateString = heimdallrNode.getClusterState()
+                    String clusterStateString = node.getClusterState()
                             .getNodesMap()
                             .values()
                             .stream()

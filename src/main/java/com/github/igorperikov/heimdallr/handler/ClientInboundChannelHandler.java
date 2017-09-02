@@ -12,11 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class ClientInboundChannelHandler extends SimpleChannelInboundHandler<ClusterStateTO> {
     private final HeimdallrNode node;
+    private final ClusterStateResolver resolver = new ClusterStateResolver();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ClusterStateTO msg) throws Exception {
         log.info("Peer node answered her cluster state");
-        ClusterStateTO resolvedState = ClusterStateResolver.resolve(node.getClusterState(), msg);
+        ClusterStateTO resolvedState = resolver.resolve(node.getClusterState(), msg);
         node.setClusterState(resolvedState);
     }
 
