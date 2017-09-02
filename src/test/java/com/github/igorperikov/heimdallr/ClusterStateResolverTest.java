@@ -52,16 +52,12 @@ public class ClusterStateResolverTest {
     public void shouldAlwaysAddInfoAboutAbsentNodes() {
         String label1 = UUID.randomUUID().toString();
         String label2 = UUID.randomUUID().toString();
-        String past = Instant.now().minus(1, ChronoUnit.DAYS).toString();
-        String now = Instant.now().toString();
         String address1 = new InetSocketAddress("localhost", 1234).toString();
         String address2 = new InetSocketAddress("localhost", 2345).toString();
 
         NodeDefinitionTO firstDef = NodeDefinitionTO.newBuilder()
                 .setLabel(label1)
                 .setAddress(address1)
-                .setTimestamp(past)
-                .setType(Type.TOMBSTONE)
                 .build();
         ClusterStateTO firstState = ClusterStateTO.newBuilder()
                 .putNodes(firstDef.getLabel(), firstDef)
@@ -70,8 +66,6 @@ public class ClusterStateResolverTest {
         NodeDefinitionTO secondDef = NodeDefinitionTO.newBuilder()
                 .setLabel(label2)
                 .setAddress(address2)
-                .setTimestamp(now)
-                .setType(Type.LIVE)
                 .build();
         ClusterStateTO secondState = ClusterStateTO.newBuilder()
                 .putNodes(secondDef.getLabel(), secondDef)

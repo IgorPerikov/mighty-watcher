@@ -10,7 +10,7 @@ different distribution algorithms and inter-cluster communication coming in,
  such as (probably coming in the same order as below):
 
 * [x] init cluster creation
-* [ ] anti-entropy mechanism
+* [x] anti-entropy mechanism
 * [ ] direct mail mechanism
 * [ ] rumor mongering epidemic (push/pull, counters/feedback, etc)
 * [ ] heartbeat
@@ -25,4 +25,11 @@ different distribution algorithms and inter-cluster communication coming in,
 
 ### How to launch
 
-TBD
+simply an executable .jar file, launch with `java -jar`
+
+specify first or all three params, which are: 
+* port which will new node will listen
+* peer node address
+* peer node port
+
+peer node specified if at least 1 node is already exists

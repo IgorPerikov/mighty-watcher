@@ -20,7 +20,7 @@ public class MessageSender {
     public void send() throws InterruptedException {
         Bootstrap bootstrap = ClientBootstrapHelper.build(eventLoopGroup, address, node);
         ChannelFuture channelFuture = bootstrap.connect();
-        log.info("Sending request to peer node");
+        log.info("Sending request to node {}", address);
         ClusterStateTO build = ClusterStateTO.newBuilder()
                 .putNodes(node.getLabel().toString(), node.getNodeDefinition())
                 .build();

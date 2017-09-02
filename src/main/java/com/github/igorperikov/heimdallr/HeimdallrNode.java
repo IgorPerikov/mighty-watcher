@@ -1,5 +1,6 @@
 package com.github.igorperikov.heimdallr;
 
+import com.github.igorperikov.heimdallr.epidemics.AntiEntropyMechanism;
 import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
 import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
 import com.github.igorperikov.heimdallr.generated.Type;
