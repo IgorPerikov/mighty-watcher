@@ -10,6 +10,10 @@ message ClusterStateTO {
     map<string, NodeDefinitionTO> nodes = 1;
 }
 
+message ClusterStateDiffTO {
+    map<string, NodeDefinitionTO> nodes = 1;
+}
+
 message NodeDefinitionTO {
     string label = 1;
     string address = 2;

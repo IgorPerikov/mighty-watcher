@@ -25,6 +25,16 @@ public final class HeimdallrOuter {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_heimdallr_ClusterStateTO_NodesEntry_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_heimdallr_ClusterStateDiffTO_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_heimdallr_ClusterStateDiffTO_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_heimdallr_ClusterStateDiffTO_NodesEntry_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_heimdallr_ClusterStateDiffTO_NodesEntry_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_heimdallr_NodeDefinitionTO_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -42,12 +52,16 @@ public final class HeimdallrOuter {
       "O\0223\n\005nodes\030\001 \003(\0132$.heimdallr.ClusterStat" +
       "eTO.NodesEntry\032I\n\nNodesEntry\022\013\n\003key\030\001 \001(" +
       "\t\022*\n\005value\030\002 \001(\0132\033.heimdallr.NodeDefinit" +
-      "ionTO:\0028\001\"d\n\020NodeDefinitionTO\022\r\n\005label\030\001" +
-      " \001(\t\022\017\n\007address\030\002 \001(\t\022\021\n\ttimestamp\030\003 \001(\t" +
-      "\022\035\n\004type\030\004 \001(\0162\017.heimdallr.Type*\037\n\004Type\022" +
-      "\010\n\004LIVE\020\000\022\r\n\tTOMBSTONE\020\001B>\n*com.github.i" +
-      "gorperikov.heimdallr.generatedB\016Heimdall" +
-      "rOuterP\001b\006proto3"
+      "ionTO:\0028\001\"\230\001\n\022ClusterStateDiffTO\0227\n\005node" +
+      "s\030\001 \003(\0132(.heimdallr.ClusterStateDiffTO.N" +
+      "odesEntry\032I\n\nNodesEntry\022\013\n\003key\030\001 \001(\t\022*\n\005" +
+      "value\030\002 \001(\0132\033.heimdallr.NodeDefinitionTO" +
+      ":\0028\001\"d\n\020NodeDefinitionTO\022\r\n\005label\030\001 \001(\t\022" +
+      "\017\n\007address\030\002 \001(\t\022\021\n\ttimestamp\030\003 \001(\t\022\035\n\004t",
+      "ype\030\004 \001(\0162\017.heimdallr.Type*\037\n\004Type\022\010\n\004LI" +
+      "VE\020\000\022\r\n\tTOMBSTONE\020\001B>\n*com.github.igorpe" +
+      "rikov.heimdallr.generatedB\016HeimdallrOute" +
+      "rP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -73,8 +87,20 @@ public final class HeimdallrOuter {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_heimdallr_ClusterStateTO_NodesEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
-    internal_static_heimdallr_NodeDefinitionTO_descriptor =
+    internal_static_heimdallr_ClusterStateDiffTO_descriptor =
       getDescriptor().getMessageTypes().get(1);
+    internal_static_heimdallr_ClusterStateDiffTO_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_heimdallr_ClusterStateDiffTO_descriptor,
+        new java.lang.String[] { "Nodes", });
+    internal_static_heimdallr_ClusterStateDiffTO_NodesEntry_descriptor =
+      internal_static_heimdallr_ClusterStateDiffTO_descriptor.getNestedTypes().get(0);
+    internal_static_heimdallr_ClusterStateDiffTO_NodesEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_heimdallr_ClusterStateDiffTO_NodesEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
+    internal_static_heimdallr_NodeDefinitionTO_descriptor =
+      getDescriptor().getMessageTypes().get(2);
     internal_static_heimdallr_NodeDefinitionTO_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_heimdallr_NodeDefinitionTO_descriptor,
