@@ -1,11 +1,9 @@
 package com.github.igorperikov.heimdallr;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-// TODO: move to integration test
 public class PeerNodeTest {
     @Test
     public void shouldCorrectlyRegisterNewNode() throws InterruptedException {

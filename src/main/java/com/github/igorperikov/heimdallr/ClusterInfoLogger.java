@@ -1,7 +1,6 @@
 package com.github.igorperikov.heimdallr;
 
 import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
-import io.netty.channel.EventLoop;
 import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.ScheduledFuture;
 import lombok.AllArgsConstructor;
