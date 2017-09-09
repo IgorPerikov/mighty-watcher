@@ -1,9 +1,7 @@
 package com.github.igorperikov.heimdallr.domain;
 
-import com.github.igorperikov.heimdallr.generated.Type;
 import lombok.Getter;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,8 +19,7 @@ public class ClusterState {
     }
 
     public ClusterState(String label, String address) {
-        NodeDefinition nodeDefinition = new NodeDefinition(label, address, Instant.now(), Type.LIVE);
-        nodes.put(label, nodeDefinition);
+        nodes.put(label, NodeDefinition.buildLiveDefinition(label, address));
     }
 
     /**

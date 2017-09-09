@@ -17,4 +17,8 @@ public class NodeDefinition {
     private final String address;
     private final Instant timestamp;
     private final Type type;
+
+    public static NodeDefinition buildLiveDefinition(String label, String address) {
+        return new NodeDefinition(label, address, Instant.now(), Type.LIVE);
+    }
 }

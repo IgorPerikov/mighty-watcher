@@ -10,8 +10,7 @@ import java.util.stream.Collectors;
 
 public class ClusterStateDiffConverter {
     public static ClusterStateDiff convertToDomain(ClusterStateDiffTO diffTO) {
-        Map<String, NodeDefinition> domainNodesMap = diffTO.getNodesMap().values()
-                .stream()
+        Map<String, NodeDefinition> domainNodesMap = diffTO.getNodesMap().values().stream()
                 .collect(Collectors.toMap(NodeDefinitionTO::getLabel, NodeDefinitionConverter::convertToDomain));
         return new ClusterStateDiff(domainNodesMap);
     }

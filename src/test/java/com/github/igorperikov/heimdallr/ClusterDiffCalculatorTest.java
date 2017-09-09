@@ -1,12 +1,8 @@
 package com.github.igorperikov.heimdallr;
 
-import com.github.igorperikov.heimdallr.converter.ClusterStateConverter;
 import com.github.igorperikov.heimdallr.domain.ClusterState;
 import com.github.igorperikov.heimdallr.domain.ClusterStateDiff;
 import com.github.igorperikov.heimdallr.domain.NodeDefinition;
-import com.github.igorperikov.heimdallr.generated.ClusterStateDiffTO;
-import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
-import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
 import com.github.igorperikov.heimdallr.generated.Type;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,8 +10,6 @@ import org.junit.Test;
 import java.net.InetSocketAddress;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -56,10 +50,10 @@ public class ClusterDiffCalculatorTest {
 
     @Test
     public void shouldAlwaysAddInfoAboutAbsentNodes() {
-        NodeDefinition firstDef = new NodeDefinition(label1, address1, Instant.now(), Type.LIVE);
+        NodeDefinition firstDef = NodeDefinition.buildLiveDefinition(label1, address1);
         ClusterState firstState = new ClusterState(firstDef);
 
-        NodeDefinition secondDef = new NodeDefinition(label2, address2, Instant.now(), Type.LIVE);
+        NodeDefinition secondDef = NodeDefinition.buildLiveDefinition(label2, address2);
         ClusterState secondState = new ClusterState(secondDef);
 
         ClusterStateDiff diff = ClusterDiffCalculator.calculate(firstState, secondState);
@@ -71,7 +65,7 @@ public class ClusterDiffCalculatorTest {
 
     @Test
     public void sameNodeDefinitionShouldNotBeAddedToDiff() {
-        NodeDefinition nodeDef = new NodeDefinition(label1, address1, Instant.now(), Type.LIVE);
+        NodeDefinition nodeDef = NodeDefinition.buildLiveDefinition(label1, address1);
 
         ClusterState firstState = new ClusterState(nodeDef);
         ClusterState secondState = new ClusterState(nodeDef);
