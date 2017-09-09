@@ -1,12 +1,13 @@
 package com.github.igorperikov.heimdallr;
 
-import com.github.igorperikov.heimdallr.generated.*;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import com.github.igorperikov.heimdallr.epidemics.AntiEntropyMechanism;
+import com.github.igorperikov.heimdallr.epidemics.RandomNodeAntiEntropyMechanism;
+import com.github.igorperikov.heimdallr.generated.ClusterStateDiffTO;
+import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
+import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
+import com.github.igorperikov.heimdallr.generated.Type;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.netty.channel.EventLoopGroup;
-import io.netty.util.concurrent.ScheduledFuture;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -48,12 +49,8 @@ public class HeimdallrNode {
         log.info("{} start and listening on {}", label, port);
 
         if (peerNodeAddress != null) {
-            ManagedChannelBuilder<?> channelBuilder = ManagedChannelBuilder
-                    .forAddress(peerNodeAddress.getHostString(), peerNodeAddress.getPort())
-                    .usePlaintext(true);
-            ManagedChannel channel = channelBuilder.build();
-            HeimdallrServiceGrpc.HeimdallrServiceBlockingStub call = HeimdallrServiceGrpc.newBlockingStub(channel);
-            ClusterStateDiffTO diff = call.getDiffWithOtherNodesState(clusterState);
+            ClusterStateDiffTO diff = new InterNodeCommunicator()
+                    .getClusterStateDiff(this, peerNodeAddress.getHostString(), peerNodeAddress.getPort());
             clusterState = new ClusterStateMerger().merge(clusterState, diff);
         }
 
@@ -62,6 +59,9 @@ public class HeimdallrNode {
         } catch (IOException e) {
             log.error("", e);
         }
+
+        AntiEntropyMechanism antiEntropyMechanism = new RandomNodeAntiEntropyMechanism(this);
+        antiEntropyMechanism.launch();
 
         new ClusterInfoLogger(this).startPrintingClusterInfo();
 

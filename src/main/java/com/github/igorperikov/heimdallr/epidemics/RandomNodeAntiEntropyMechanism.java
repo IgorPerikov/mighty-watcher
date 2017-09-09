@@ -2,7 +2,6 @@ package com.github.igorperikov.heimdallr.epidemics;
 
 import com.github.igorperikov.heimdallr.HeimdallrNode;
 import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
-import io.netty.channel.EventLoopGroup;
 
 import java.util.List;
 import java.util.Random;

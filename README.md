@@ -34,3 +34,6 @@ specify first or all three params, which are:
 * peer node port
 
 peer node specified if at least 1 node is already exists
+
+### Sources
+* [Epidemics algorithms](http://www.bitsavers.org/pdf/xerox/parc/techReports/CSL-89-1_Epidemic_Algorithms_for_Replicated_Database_Maintenance.pdf)

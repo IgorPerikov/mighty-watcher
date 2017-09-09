@@ -1,11 +1,13 @@
 package com.github.igorperikov.heimdallr.epidemics;
 
+import com.github.igorperikov.heimdallr.ClusterStateMerger;
 import com.github.igorperikov.heimdallr.HeimdallrNode;
+import com.github.igorperikov.heimdallr.InterNodeCommunicator;
+import com.github.igorperikov.heimdallr.generated.ClusterStateDiffTO;
 import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
 import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
 import lombok.AllArgsConstructor;
 
-import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -26,17 +28,17 @@ public abstract class AntiEntropyMechanism {
                             .collect(Collectors.toList());
                     send(chooseNode(nodes));
                 },
-                15,
-                15,
+                10,
+                10,
                 TimeUnit.SECONDS);
     }
 
     private void send(NodeDefinitionTO node) {
         Integer port = Integer.valueOf(node.getAddress().split(":")[1]);
-        InetSocketAddress address = new InetSocketAddress("localhost", port);
-//        try {
-//            new InterNodeMessageSender(currentNode, eventLoop, address).send();
-//        } catch (InterruptedException ignored) {}
+        // TODO: localhost
+        ClusterStateDiffTO diff = new InterNodeCommunicator()
+                .getClusterStateDiff(currentNode, "localhost", port);
+        currentNode.setClusterState(new ClusterStateMerger().merge(currentNode.getClusterState(), diff));
     }
 
     protected abstract NodeDefinitionTO chooseNode(List<NodeDefinitionTO> nodes);
