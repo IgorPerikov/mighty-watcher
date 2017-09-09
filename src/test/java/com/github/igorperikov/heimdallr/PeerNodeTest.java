@@ -14,14 +14,8 @@ public class PeerNodeTest {
 
         Thread.sleep(1000); // TODO: better way to wait?
 
-//        assertEquals(mainNode.getClusterState().getNodesMap().values(), secondNode.getClusterState().getNodesMap().values());
-        assertEquals(2, mainNode.getClusterState().getNodesMap().size());
-        assertEquals(2, secondNode.getClusterState().getNodesMap().size());
+        assertEquals(mainNode.getClusterState().getNodes(), secondNode.getClusterState().getNodes());
 
-//        assertThat(mainNode.getClusterState().getNodesMap().values(), CoreMatchers.hasItem(mainNode.getNodeDefinition()));
-//        assertThat(mainNode.getClusterState().getNodesMap().values(), CoreMatchers.hasItem(secondNode.getNodeDefinition()));
-
-//        assertThat(secondNode.getClusterState().getNodesMap().values(), CoreMatchers.hasItem(mainNode.getNodeDefinition()));
-//        assertThat(secondNode.getClusterState().getNodesMap().values(), CoreMatchers.hasItem(mainNode.getNodeDefinition()));
+        assertEquals(2, mainNode.getClusterState().getNodes().size());
     }
 }

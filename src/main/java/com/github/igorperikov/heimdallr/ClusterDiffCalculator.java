@@ -1,30 +1,26 @@
 package com.github.igorperikov.heimdallr;
 
-import com.github.igorperikov.heimdallr.generated.ClusterStateDiffTO;
-import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
-import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
+import com.github.igorperikov.heimdallr.domain.ClusterState;
+import com.github.igorperikov.heimdallr.domain.ClusterStateDiff;
+import com.github.igorperikov.heimdallr.domain.NodeDefinition;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class ClusterDiffCalculator {
-    public ClusterStateDiffTO calculate(ClusterStateTO first, ClusterStateTO second) {
-        Map<String, NodeDefinitionTO> resultDiffMap = new HashMap<>();
+    public static ClusterStateDiff calculate(ClusterState first, ClusterState second) {
+        Map<String, NodeDefinition> resultDiffMap = new HashMap<>();
 
-        Map<String, NodeDefinitionTO> firstNodesMap = first.getNodesMap();
-        Map<String, NodeDefinitionTO> secondNodesMap = second.getNodesMap();
-        for (NodeDefinitionTO firstNode : firstNodesMap.values()) {
+        Map<String, NodeDefinition> firstNodesMap = first.getNodes();
+        Map<String, NodeDefinition> secondNodesMap = second.getNodes();
+        for (NodeDefinition firstNode : firstNodesMap.values()) {
             String label = firstNode.getLabel();
             if (secondNodesMap.containsKey(label)) {
-                NodeDefinitionTO secondNode = secondNodesMap.get(label);
-                if (isSame(firstNode, secondNode)) continue;
-
-                Instant firstDefinitionInstant = Instant.parse(firstNode.getTimestamp());
-                Instant secondDefinitionInstant = Instant.parse(secondNode.getTimestamp());
-                if (firstDefinitionInstant.isAfter(secondDefinitionInstant)) {
+                NodeDefinition secondNode = secondNodesMap.get(label);
+                if (firstNode.equals(secondNode)) continue; // TODO: https://github.com/IgorPerikov/heimdallr/issues/12
+                if (firstNode.getTimestamp().isAfter(secondNode.getTimestamp())) {
                     resultDiffMap.put(label, firstNode);
                 } else {
                     resultDiffMap.put(label, secondNode);
@@ -37,11 +33,6 @@ public class ClusterDiffCalculator {
         labelsInSecondState.removeAll(firstNodesMap.keySet());
         labelsInSecondState.forEach(s -> resultDiffMap.put(s, secondNodesMap.get(s)));
 
-        return ClusterStateDiffTO.newBuilder().putAllNodes(resultDiffMap).build();
-    }
-
-    private boolean isSame(NodeDefinitionTO first, NodeDefinitionTO second) {
-        return first.getLabel().equals(second.getLabel()) &&
-                first.getType().getNumber() == second.getType().getNumber();
+        return new ClusterStateDiff(resultDiffMap);
     }
 }

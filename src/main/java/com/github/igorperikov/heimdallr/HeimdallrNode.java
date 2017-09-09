@@ -1,20 +1,16 @@
 package com.github.igorperikov.heimdallr;
 
+import com.github.igorperikov.heimdallr.domain.ClusterState;
+import com.github.igorperikov.heimdallr.domain.ClusterStateDiff;
+import com.github.igorperikov.heimdallr.domain.NodeDefinition;
 import com.github.igorperikov.heimdallr.epidemics.AntiEntropyMechanism;
 import com.github.igorperikov.heimdallr.epidemics.RandomNodeAntiEntropyMechanism;
-import com.github.igorperikov.heimdallr.generated.ClusterStateDiffTO;
-import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
-import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
-import com.github.igorperikov.heimdallr.generated.Type;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.time.Instant;
 import java.util.UUID;
 
 @Slf4j
@@ -25,10 +21,10 @@ public class HeimdallrNode {
     private final UUID label;
 
     @Getter
-    @Setter
-    private ClusterStateTO clusterState;
+    private ClusterState clusterState;
 
-    private InetSocketAddress peerNodeAddress;
+    private String peerNodeAddress;
+    private Integer peerNodePort;
 
     public HeimdallrNode(int port) {
         this.port = port;
@@ -37,7 +33,8 @@ public class HeimdallrNode {
 
     public HeimdallrNode(int port, String peerAddress, int peerPort) {
         this(port);
-        this.peerNodeAddress = new InetSocketAddress(peerAddress, peerPort);
+        this.peerNodeAddress = peerAddress;
+        this.peerNodePort = peerPort;
     }
 
     public void start() {
@@ -46,18 +43,20 @@ public class HeimdallrNode {
         Server server = ServerBuilder.forPort(port)
                 .addService(new HeimdallrServiceImplementation(this))
                 .build();
-        log.info("{} start and listening on {}", label, port);
 
-        if (peerNodeAddress != null) {
-            ClusterStateDiffTO diff = new InterNodeCommunicator()
-                    .getClusterStateDiff(this, peerNodeAddress.getHostString(), peerNodeAddress.getPort());
-            clusterState = new ClusterStateMerger().merge(clusterState, diff);
+        if (peerNodeAddress != null && peerNodePort != null) {
+            log.info("Peer node {}:{} is provided", peerNodeAddress, peerNodePort);
+            ClusterStateDiff diff = new InterNodeCommunicator(peerNodeAddress, peerNodePort)
+                    .getClusterStateDiff(getClusterState());
+            clusterState.applyDiff(diff);
         }
 
         try {
             server.start();
+            log.info("{} start and listening on {}", label, port);
         } catch (IOException e) {
             log.error("", e);
+            System.exit(1);
         }
 
         AntiEntropyMechanism antiEntropyMechanism = new RandomNodeAntiEntropyMechanism(this);
@@ -73,20 +72,15 @@ public class HeimdallrNode {
     }
 
     private void initOwnClusterState() {
-        clusterState = ClusterStateTO.newBuilder().putNodes(label.toString(), getNodeDefinition()).build();
+        clusterState = new ClusterState(label.toString(), getNodeAddress());
     }
 
-    public NodeDefinitionTO getNodeDefinition() {
-        return NodeDefinitionTO.newBuilder()
-                .setTimestamp(Instant.now().toString())
-                .setType(Type.LIVE)
-                .setLabel(label.toString())
-                .setAddress(getNodeAddress().toString())
-                .build();
-    }
-
-    public InetSocketAddress getNodeAddress() {
+    public String getNodeAddress() {
         // TODO: localhost -> ip detection
-        return new InetSocketAddress("localhost", port);
+        return "localhost:" + port;
+    }
+
+    public NodeDefinition getNodeDefinition() {
+        return clusterState.getNodes().get(label.toString());
     }
 }

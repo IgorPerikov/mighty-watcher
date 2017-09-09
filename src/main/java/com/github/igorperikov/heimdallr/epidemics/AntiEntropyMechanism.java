@@ -1,12 +1,14 @@
 package com.github.igorperikov.heimdallr.epidemics;
 
-import com.github.igorperikov.heimdallr.ClusterStateMerger;
 import com.github.igorperikov.heimdallr.HeimdallrNode;
 import com.github.igorperikov.heimdallr.InterNodeCommunicator;
-import com.github.igorperikov.heimdallr.generated.ClusterStateDiffTO;
-import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
-import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
+import com.github.igorperikov.heimdallr.domain.ClusterState;
+import com.github.igorperikov.heimdallr.domain.ClusterStateDiff;
+import com.github.igorperikov.heimdallr.domain.NodeDefinition;
+import com.github.igorperikov.heimdallr.exception.NoOtherNodesInClusterException;
+import io.grpc.StatusRuntimeException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
@@ -16,30 +18,37 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Slf4j
 public abstract class AntiEntropyMechanism {
     private final HeimdallrNode currentNode;
 
     public ScheduledFuture launch() {
         return Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() -> {
-                    ClusterStateTO clusterState = currentNode.getClusterState();
-                    List<NodeDefinitionTO> nodes = clusterState.getNodesMap().entrySet().stream()
-                            .filter(entry -> !entry.getKey().equals(currentNode.getLabel().toString()))
+                    ClusterState clusterState = currentNode.getClusterState();
+                    List<NodeDefinition> nodes = clusterState.getNodes().entrySet().stream()
+                            .filter(entry -> !entry.getValue().equals(currentNode.getNodeDefinition()))
                             .map(Map.Entry::getValue)
                             .collect(Collectors.toList());
-                    send(chooseNode(nodes));
+                    try {
+                        send(chooseNode(nodes));
+                    } catch (StatusRuntimeException e) {
+                        log.error("Anti entropy request failed", e);
+                    } catch (NoOtherNodesInClusterException e) {
+                        log.info("No other nodes in cluster");
+                    }
                 },
-                10,
-                10,
+                5,
+                5,
                 TimeUnit.SECONDS);
     }
 
-    private void send(NodeDefinitionTO node) {
+    private void send(NodeDefinition node) {
         Integer port = Integer.valueOf(node.getAddress().split(":")[1]);
         // TODO: localhost
-        ClusterStateDiffTO diff = new InterNodeCommunicator()
-                .getClusterStateDiff(currentNode, "localhost", port);
-        currentNode.setClusterState(new ClusterStateMerger().merge(currentNode.getClusterState(), diff));
+        log.info("Sending anti entropy request to localhost:{}", port);
+        ClusterStateDiff diff = new InterNodeCommunicator("localhost", port).getClusterStateDiff(currentNode.getClusterState());
+        currentNode.getClusterState().applyDiff(diff);
     }
 
-    protected abstract NodeDefinitionTO chooseNode(List<NodeDefinitionTO> nodes);
+    protected abstract NodeDefinition chooseNode(List<NodeDefinition> nodes) throws NoOtherNodesInClusterException;
 }

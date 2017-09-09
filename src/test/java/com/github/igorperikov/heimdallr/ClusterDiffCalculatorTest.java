@@ -1,5 +1,9 @@
 package com.github.igorperikov.heimdallr;
 
+import com.github.igorperikov.heimdallr.converter.ClusterStateConverter;
+import com.github.igorperikov.heimdallr.domain.ClusterState;
+import com.github.igorperikov.heimdallr.domain.ClusterStateDiff;
+import com.github.igorperikov.heimdallr.domain.NodeDefinition;
 import com.github.igorperikov.heimdallr.generated.ClusterStateDiffTO;
 import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
 import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
@@ -10,13 +14,13 @@ import org.junit.Test;
 import java.net.InetSocketAddress;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
 public class ClusterDiffCalculatorTest {
-    private final ClusterDiffCalculator diffCalculator = new ClusterDiffCalculator();
-
     private String label1;
     private String label2;
     private String address1;
@@ -32,82 +36,50 @@ public class ClusterDiffCalculatorTest {
 
     @Test
     public void newEventsShouldOverrideOld() {
-        String past = Instant.now().minus(1, ChronoUnit.DAYS).toString();
-        String now = Instant.now().toString();
+        Instant past = Instant.now().minus(1, ChronoUnit.DAYS);
+        Instant now = Instant.now();
 
-        NodeDefinitionTO oldDef = NodeDefinitionTO.newBuilder()
-                .setLabel(label1)
-                .setAddress(address1)
-                .setTimestamp(past)
-                .setType(Type.LIVE)
-                .build();
-        ClusterStateTO oldState = ClusterStateTO.newBuilder()
-                .putNodes(oldDef.getLabel(), oldDef)
-                .build();
+        NodeDefinition oldDef = new NodeDefinition(label1, address1, past, Type.LIVE);
+        ClusterState oldState = new ClusterState(oldDef);
 
-        NodeDefinitionTO newDef = NodeDefinitionTO.newBuilder()
-                .setLabel(label1)
-                .setAddress(address1)
-                .setTimestamp(now)
-                .setType(Type.TOMBSTONE)
-                .build();
-        ClusterStateTO newState = ClusterStateTO.newBuilder()
-                .putNodes(newDef.getLabel(), newDef)
-                .build();
+        NodeDefinition newDef = new NodeDefinition(label1, address1, now, Type.TOMBSTONE);
+        ClusterState newState = new ClusterState(newDef);
 
-        ClusterStateDiffTO diff = diffCalculator.calculate(oldState, newState);
-        assertEquals(now, diff.getNodesMap().get(label1).getTimestamp());
-        assertEquals(Type.TOMBSTONE, diff.getNodesMap().get(label1).getType());
+        ClusterStateDiff diff = ClusterDiffCalculator.calculate(oldState, newState);
+        assertEquals(now, diff.getNodes().get(label1).getTimestamp());
+        assertEquals(Type.TOMBSTONE, diff.getNodes().get(label1).getType());
 
-        ClusterStateDiffTO invertedParametersDiff = diffCalculator.calculate(newState, oldState);
-        assertEquals(now, invertedParametersDiff.getNodesMap().get(label1).getTimestamp());
-        assertEquals(Type.TOMBSTONE, invertedParametersDiff.getNodesMap().get(label1).getType());
+        ClusterStateDiff invertedParametersDiff = ClusterDiffCalculator.calculate(newState, oldState);
+        assertEquals(now, invertedParametersDiff.getNodes().get(label1).getTimestamp());
+        assertEquals(Type.TOMBSTONE, invertedParametersDiff.getNodes().get(label1).getType());
     }
 
     @Test
     public void shouldAlwaysAddInfoAboutAbsentNodes() {
-        NodeDefinitionTO firstDef = NodeDefinitionTO.newBuilder()
-                .setLabel(label1)
-                .setAddress(address1)
-                .build();
-        ClusterStateTO firstState = ClusterStateTO.newBuilder()
-                .putNodes(firstDef.getLabel(), firstDef)
-                .build();
+        NodeDefinition firstDef = new NodeDefinition(label1, address1, Instant.now(), Type.LIVE);
+        ClusterState firstState = new ClusterState(firstDef);
 
-        NodeDefinitionTO secondDef = NodeDefinitionTO.newBuilder()
-                .setLabel(label2)
-                .setAddress(address2)
-                .build();
-        ClusterStateTO secondState = ClusterStateTO.newBuilder()
-                .putNodes(secondDef.getLabel(), secondDef)
-                .build();
+        NodeDefinition secondDef = new NodeDefinition(label2, address2, Instant.now(), Type.LIVE);
+        ClusterState secondState = new ClusterState(secondDef);
 
-        ClusterStateDiffTO diff = diffCalculator.calculate(firstState, secondState);
-        assertEquals(2, diff.getNodesMap().values().size());
+        ClusterStateDiff diff = ClusterDiffCalculator.calculate(firstState, secondState);
+        assertEquals(2, diff.getNodes().values().size());
 
-        ClusterStateDiffTO invertedParametersDiff = diffCalculator.calculate(secondState, firstState);
-        assertEquals(2, invertedParametersDiff.getNodesMap().values().size());
+        ClusterStateDiff invertedParametersDiff = ClusterDiffCalculator.calculate(secondState, firstState);
+        assertEquals(2, invertedParametersDiff.getNodes().values().size());
     }
 
     @Test
     public void sameNodeDefinitionShouldNotBeAddedToDiff() {
-        NodeDefinitionTO nodeDef = NodeDefinitionTO.newBuilder()
-                .setLabel(label1)
-                .setAddress(address1)
-                .build();
+        NodeDefinition nodeDef = new NodeDefinition(label1, address1, Instant.now(), Type.LIVE);
 
-        ClusterStateTO firstState = ClusterStateTO.newBuilder()
-                .putNodes(nodeDef.getLabel(), nodeDef)
-                .build();
+        ClusterState firstState = new ClusterState(nodeDef);
+        ClusterState secondState = new ClusterState(nodeDef);
 
-        ClusterStateTO secondState = ClusterStateTO.newBuilder()
-                .putNodes(nodeDef.getLabel(), nodeDef)
-                .build();
+        ClusterStateDiff diff = ClusterDiffCalculator.calculate(firstState, secondState);
+        assertEquals(0, diff.getNodes().values().size());
 
-        ClusterStateDiffTO diff = diffCalculator.calculate(firstState, secondState);
-        assertEquals(0, diff.getNodesMap().values().size());
-
-        ClusterStateDiffTO invertedParametersDiff = diffCalculator.calculate(secondState, firstState);
-        assertEquals(0, invertedParametersDiff.getNodesMap().values().size());
+        ClusterStateDiff invertedParametersDiff = ClusterDiffCalculator.calculate(secondState, firstState);
+        assertEquals(0, invertedParametersDiff.getNodes().values().size());
     }
 }

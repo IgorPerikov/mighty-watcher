@@ -1,5 +1,8 @@
 package com.github.igorperikov.heimdallr;
 
+import com.github.igorperikov.heimdallr.converter.ClusterStateConverter;
+import com.github.igorperikov.heimdallr.converter.ClusterStateDiffConverter;
+import com.github.igorperikov.heimdallr.domain.ClusterStateDiff;
 import com.github.igorperikov.heimdallr.generated.ClusterStateDiffTO;
 import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
 import com.github.igorperikov.heimdallr.generated.HeimdallrServiceGrpc;
@@ -12,19 +15,21 @@ import lombok.extern.slf4j.Slf4j;
 public class HeimdallrServiceImplementation extends HeimdallrServiceGrpc.HeimdallrServiceImplBase {
     private final HeimdallrNode node;
 
-    private final ClusterStateMerger merger = new ClusterStateMerger();
-    private final ClusterDiffCalculator resolver = new ClusterDiffCalculator();
-
     @Override
     public void getDiffWithOtherNodesState(
             ClusterStateTO request,
             StreamObserver<ClusterStateDiffTO> responseObserver
     ) {
         log.info("Other node sent her cluster state and asking for a merged state");
-        ClusterStateDiffTO diff = resolver.calculate(node.getClusterState(), request);
-        node.setClusterState(merger.merge(node.getClusterState(), diff));
+        ClusterStateTO currentNodeState = ClusterStateConverter.convertDomain(node.getClusterState());
 
-        responseObserver.onNext(diff);
+        ClusterStateDiff diff = ClusterDiffCalculator.calculate(
+                ClusterStateConverter.convertToDomain(currentNodeState),
+                ClusterStateConverter.convertToDomain(request)
+        );
+        node.getClusterState().applyDiff(diff);
+
+        responseObserver.onNext(ClusterStateDiffConverter.convertDomain(diff));
         responseObserver.onCompleted();
     }
 }

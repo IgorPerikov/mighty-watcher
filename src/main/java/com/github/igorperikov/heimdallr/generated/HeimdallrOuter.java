@@ -56,12 +56,12 @@ public final class HeimdallrOuter {
       "TO\0227\n\005nodes\030\001 \003(\0132(.heimdallr.ClusterSta" +
       "teDiffTO.NodesEntry\032I\n\nNodesEntry\022\013\n\003key" +
       "\030\001 \001(\t\022*\n\005value\030\002 \001(\0132\033.heimdallr.NodeDe" +
-      "finitionTO:\0028\001\"d\n\020NodeDefinitionTO\022\r\n\005la" +
-      "bel\030\001 \001(\t\022\017\n\007address\030\002 \001(\t\022\021\n\ttimestamp\030",
-      "\003 \001(\t\022\035\n\004type\030\004 \001(\0162\017.heimdallr.Type*\037\n\004" +
-      "Type\022\010\n\004LIVE\020\000\022\r\n\tTOMBSTONE\020\001B>\n*com.git" +
-      "hub.igorperikov.heimdallr.generatedB\016Hei" +
-      "mdallrOuterP\001b\006proto3"
+      "finitionTO:\0028\001\"r\n\020NodeDefinitionTO\022\r\n\005la" +
+      "bel\030\001 \001(\t\022\017\n\007address\030\002 \001(\t\022\014\n\004port\030\003 \001(\005",
+      "\022\021\n\ttimestamp\030\004 \001(\t\022\035\n\004type\030\005 \001(\0162\017.heim" +
+      "dallr.Type*\037\n\004Type\022\010\n\004LIVE\020\000\022\r\n\tTOMBSTON" +
+      "E\020\001B>\n*com.github.igorperikov.heimdallr." +
+      "generatedB\016HeimdallrOuterP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -104,7 +104,7 @@ public final class HeimdallrOuter {
     internal_static_heimdallr_NodeDefinitionTO_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_heimdallr_NodeDefinitionTO_descriptor,
-        new java.lang.String[] { "Label", "Address", "Timestamp", "Type", });
+        new java.lang.String[] { "Label", "Address", "Port", "Timestamp", "Type", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
