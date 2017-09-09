@@ -1,19 +1,18 @@
 package com.github.igorperikov.heimdallr;
 
+import com.github.igorperikov.heimdallr.epidemics.AntiEntropyMechanism;
 import com.github.igorperikov.heimdallr.epidemics.RandomNodeAntiEntropyMechanism;
+import com.github.igorperikov.heimdallr.generated.ClusterStateDiffTO;
 import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
 import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
 import com.github.igorperikov.heimdallr.generated.Type;
-import com.github.igorperikov.heimdallr.init.ServerBootstrapHelper;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.util.concurrent.ScheduledFuture;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.Instant;
 import java.util.UUID;
@@ -34,7 +33,6 @@ public class HeimdallrNode {
     public HeimdallrNode(int port) {
         this.port = port;
         this.label = UUID.randomUUID();
-        log.info("My name is {}", label);
     }
 
     public HeimdallrNode(int port, String peerAddress, int peerPort) {
@@ -43,47 +41,39 @@ public class HeimdallrNode {
     }
 
     public void start() {
-        ScheduledFuture<?> infoPrintingFuture = null;
-        ScheduledFuture<?> antiEntropyFuture = null;
-        EventLoopGroup parentEventLoopGroup = new NioEventLoopGroup(1);
-        EventLoopGroup childEventLoopGroup = new NioEventLoopGroup();
+        initOwnClusterState();
+
+        Server server = ServerBuilder.forPort(port)
+                .addService(new HeimdallrServiceImplementation(this))
+                .build();
+        log.info("{} start and listening on {}", label, port);
+
+        if (peerNodeAddress != null) {
+            ClusterStateDiffTO diff = new InterNodeCommunicator()
+                    .getClusterStateDiff(this, peerNodeAddress.getHostString(), peerNodeAddress.getPort());
+            clusterState = new ClusterStateMerger().merge(clusterState, diff);
+        }
+
         try {
-            ServerBootstrap b = ServerBootstrapHelper.build(parentEventLoopGroup, childEventLoopGroup, port, this);
-            Channel serverChannel = b.bind().sync().channel();
-            log.info("Current node started listening on port {}", port);
-            initOwnClusterState();
-            if (peerNodeAddress != null) {
-                new InterNodeMessageSender(this, childEventLoopGroup, peerNodeAddress).send();
-            }
-            infoPrintingFuture = new ClusterInfoLogger(this, childEventLoopGroup).startPrintingClusterInfo();
-            antiEntropyFuture = new RandomNodeAntiEntropyMechanism(this, childEventLoopGroup).launch();
-            serverChannel.closeFuture().sync();
-            log.info("Shutting down node {}", label);
+            server.start();
+        } catch (IOException e) {
+            log.error("", e);
+        }
+
+        AntiEntropyMechanism antiEntropyMechanism = new RandomNodeAntiEntropyMechanism(this);
+        antiEntropyMechanism.launch();
+
+        new ClusterInfoLogger(this).startPrintingClusterInfo();
+
+        try {
+            server.awaitTermination();
         } catch (InterruptedException e) {
-            log.error("Interrupted", e);
-        } finally {
-            releaseResources(infoPrintingFuture, antiEntropyFuture, parentEventLoopGroup, childEventLoopGroup);
+            log.error("", e);
         }
     }
 
     private void initOwnClusterState() {
         clusterState = ClusterStateTO.newBuilder().putNodes(label.toString(), getNodeDefinition()).build();
-    }
-
-    private void releaseResources(
-            ScheduledFuture<?> infoPrintingFuture,
-            ScheduledFuture<?> antiEntropyFuture,
-            EventLoopGroup parentEventLoopGroup,
-            EventLoopGroup childEventLoopGroup
-    ) {
-        if (infoPrintingFuture != null) {
-            infoPrintingFuture.cancel(true);
-        }
-        if (antiEntropyFuture != null) {
-            antiEntropyFuture.cancel(true);
-        }
-        parentEventLoopGroup.shutdownGracefully().syncUninterruptibly();
-        childEventLoopGroup.shutdownGracefully().syncUninterruptibly();
     }
 
     public NodeDefinitionTO getNodeDefinition() {

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class HeimdallrStarter {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         switch (args.length) {
             case 1:
                 new HeimdallrNode(Integer.parseInt(args[0])).start();

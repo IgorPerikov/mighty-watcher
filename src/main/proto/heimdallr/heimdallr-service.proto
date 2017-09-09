@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package heimdallr;
+
+import "heimdallr/dto.proto";
+
+option java_multiple_files = true;
+option java_package = "com.github.igorperikov.heimdallr.generated";
+option java_outer_classname = "HeimdallrOuterService";
+
+service HeimdallrService {
+    rpc getDiffWithOtherNodesState(ClusterStateTO) returns (ClusterStateDiffTO);
+}
