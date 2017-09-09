@@ -12,18 +12,18 @@ import java.net.InetSocketAddress;
 
 @AllArgsConstructor
 @Slf4j
-public class MessageSender {
-    private final HeimdallrNode node;
+public class InterNodeMessageSender {
+    private final HeimdallrNode sender;
     private final EventLoopGroup eventLoopGroup;
     private final InetSocketAddress address;
 
     public void send() throws InterruptedException {
-        Bootstrap bootstrap = ClientBootstrapHelper.build(eventLoopGroup, address, node);
-        ChannelFuture channelFuture = bootstrap.connect();
+        Bootstrap bootstrap = ClientBootstrapHelper.build(eventLoopGroup, address, sender);
+        ChannelFuture connectFuture = bootstrap.connect();
         log.info("Sending request to node {}", address);
         ClusterStateTO build = ClusterStateTO.newBuilder()
-                .putNodes(node.getLabel().toString(), node.getNodeDefinition())
+                .putNodes(sender.getLabel().toString(), sender.getNodeDefinition())
                 .build();
-        channelFuture.sync().channel().writeAndFlush(build).sync();
+        connectFuture.sync().channel().writeAndFlush(build).sync();
     }
 }

@@ -1,6 +1,6 @@
 package com.github.igorperikov.heimdallr;
 
-import com.github.igorperikov.heimdallr.epidemics.AntiEntropyMechanism;
+import com.github.igorperikov.heimdallr.epidemics.RandomNodeAntiEntropyMechanism;
 import com.github.igorperikov.heimdallr.generated.ClusterStateTO;
 import com.github.igorperikov.heimdallr.generated.NodeDefinitionTO;
 import com.github.igorperikov.heimdallr.generated.Type;
@@ -53,10 +53,10 @@ public class HeimdallrNode {
             log.info("Current node started listening on port {}", port);
             initOwnClusterState();
             if (peerNodeAddress != null) {
-                new MessageSender(this, childEventLoopGroup, peerNodeAddress).send();
+                new InterNodeMessageSender(this, childEventLoopGroup, peerNodeAddress).send();
             }
             infoPrintingFuture = new ClusterInfoLogger(this, childEventLoopGroup).startPrintingClusterInfo();
-            antiEntropyFuture = new AntiEntropyMechanism(this, childEventLoopGroup).launch();
+            antiEntropyFuture = new RandomNodeAntiEntropyMechanism(this, childEventLoopGroup).launch();
             serverChannel.closeFuture().sync();
             log.info("Shutting down node {}", label);
         } catch (InterruptedException e) {

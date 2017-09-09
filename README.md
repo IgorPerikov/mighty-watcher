@@ -11,8 +11,9 @@ different distribution algorithms and inter-cluster communication coming in,
 
 * [x] init cluster creation
 * [x] anti-entropy mechanism
+* [x] sending diffs where possible(initiator send whole state, other node sends back diff)
 * [ ] direct mail mechanism
-* [ ] rumor mongering epidemic (push/pull, counters/feedback, etc)
+* [ ] push rumor mongering epidemic with configurable feedback + counter system
 * [ ] heartbeat
 * [ ] quorum calculation
 * [ ] raft
