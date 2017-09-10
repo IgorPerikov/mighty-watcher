@@ -19,7 +19,7 @@ public class ClusterDiffCalculator {
             String label = firstNode.getLabel();
             if (secondNodesMap.containsKey(label)) {
                 NodeDefinition secondNode = secondNodesMap.get(label);
-                if (firstNode.equals(secondNode)) continue; // TODO: https://github.com/IgorPerikov/heimdallr/issues/12
+                if (firstNode.equals(secondNode)) continue;
                 if (firstNode.getTimestamp().isAfter(secondNode.getTimestamp())) {
                     resultDiffMap.put(label, firstNode);
                 } else {

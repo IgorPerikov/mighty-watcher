@@ -17,7 +17,6 @@ public  final class NodeDefinitionTO extends
   private NodeDefinitionTO() {
     label_ = "";
     address_ = "";
-    port_ = 0;
     timestamp_ = "";
     type_ = 0;
   }
@@ -59,18 +58,13 @@ public  final class NodeDefinitionTO extends
             address_ = s;
             break;
           }
-          case 24: {
-
-            port_ = input.readInt32();
-            break;
-          }
-          case 34: {
+          case 26: {
             java.lang.String s = input.readStringRequireUtf8();
 
             timestamp_ = s;
             break;
           }
-          case 40: {
+          case 32: {
             int rawValue = input.readEnum();
 
             type_ = rawValue;
@@ -167,19 +161,10 @@ public  final class NodeDefinitionTO extends
     }
   }
 
-  public static final int PORT_FIELD_NUMBER = 3;
-  private int port_;
-  /**
-   * <code>int32 port = 3;</code>
-   */
-  public int getPort() {
-    return port_;
-  }
-
-  public static final int TIMESTAMP_FIELD_NUMBER = 4;
+  public static final int TIMESTAMP_FIELD_NUMBER = 3;
   private volatile java.lang.Object timestamp_;
   /**
-   * <code>string timestamp = 4;</code>
+   * <code>string timestamp = 3;</code>
    */
   public java.lang.String getTimestamp() {
     java.lang.Object ref = timestamp_;
@@ -194,7 +179,7 @@ public  final class NodeDefinitionTO extends
     }
   }
   /**
-   * <code>string timestamp = 4;</code>
+   * <code>string timestamp = 3;</code>
    */
   public com.google.protobuf.ByteString
       getTimestampBytes() {
@@ -210,16 +195,16 @@ public  final class NodeDefinitionTO extends
     }
   }
 
-  public static final int TYPE_FIELD_NUMBER = 5;
+  public static final int TYPE_FIELD_NUMBER = 4;
   private int type_;
   /**
-   * <code>.heimdallr.Type type = 5;</code>
+   * <code>.heimdallr.Type type = 4;</code>
    */
   public int getTypeValue() {
     return type_;
   }
   /**
-   * <code>.heimdallr.Type type = 5;</code>
+   * <code>.heimdallr.Type type = 4;</code>
    */
   public com.github.igorperikov.heimdallr.generated.Type getType() {
     com.github.igorperikov.heimdallr.generated.Type result = com.github.igorperikov.heimdallr.generated.Type.valueOf(type_);
@@ -244,14 +229,11 @@ public  final class NodeDefinitionTO extends
     if (!getAddressBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, address_);
     }
-    if (port_ != 0) {
-      output.writeInt32(3, port_);
-    }
     if (!getTimestampBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, timestamp_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, timestamp_);
     }
     if (type_ != com.github.igorperikov.heimdallr.generated.Type.LIVE.getNumber()) {
-      output.writeEnum(5, type_);
+      output.writeEnum(4, type_);
     }
   }
 
@@ -266,16 +248,12 @@ public  final class NodeDefinitionTO extends
     if (!getAddressBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, address_);
     }
-    if (port_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, port_);
-    }
     if (!getTimestampBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, timestamp_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, timestamp_);
     }
     if (type_ != com.github.igorperikov.heimdallr.generated.Type.LIVE.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(5, type_);
+        .computeEnumSize(4, type_);
     }
     memoizedSize = size;
     return size;
@@ -297,8 +275,6 @@ public  final class NodeDefinitionTO extends
         .equals(other.getLabel());
     result = result && getAddress()
         .equals(other.getAddress());
-    result = result && (getPort()
-        == other.getPort());
     result = result && getTimestamp()
         .equals(other.getTimestamp());
     result = result && type_ == other.type_;
@@ -316,8 +292,6 @@ public  final class NodeDefinitionTO extends
     hash = (53 * hash) + getLabel().hashCode();
     hash = (37 * hash) + ADDRESS_FIELD_NUMBER;
     hash = (53 * hash) + getAddress().hashCode();
-    hash = (37 * hash) + PORT_FIELD_NUMBER;
-    hash = (53 * hash) + getPort();
     hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
     hash = (53 * hash) + getTimestamp().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
@@ -455,8 +429,6 @@ public  final class NodeDefinitionTO extends
 
       address_ = "";
 
-      port_ = 0;
-
       timestamp_ = "";
 
       type_ = 0;
@@ -485,7 +457,6 @@ public  final class NodeDefinitionTO extends
       com.github.igorperikov.heimdallr.generated.NodeDefinitionTO result = new com.github.igorperikov.heimdallr.generated.NodeDefinitionTO(this);
       result.label_ = label_;
       result.address_ = address_;
-      result.port_ = port_;
       result.timestamp_ = timestamp_;
       result.type_ = type_;
       onBuilt();
@@ -536,9 +507,6 @@ public  final class NodeDefinitionTO extends
       if (!other.getAddress().isEmpty()) {
         address_ = other.address_;
         onChanged();
-      }
-      if (other.getPort() != 0) {
-        setPort(other.getPort());
       }
       if (!other.getTimestamp().isEmpty()) {
         timestamp_ = other.timestamp_;
@@ -711,35 +679,9 @@ public  final class NodeDefinitionTO extends
       return this;
     }
 
-    private int port_ ;
-    /**
-     * <code>int32 port = 3;</code>
-     */
-    public int getPort() {
-      return port_;
-    }
-    /**
-     * <code>int32 port = 3;</code>
-     */
-    public Builder setPort(int value) {
-      
-      port_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 port = 3;</code>
-     */
-    public Builder clearPort() {
-      
-      port_ = 0;
-      onChanged();
-      return this;
-    }
-
     private java.lang.Object timestamp_ = "";
     /**
-     * <code>string timestamp = 4;</code>
+     * <code>string timestamp = 3;</code>
      */
     public java.lang.String getTimestamp() {
       java.lang.Object ref = timestamp_;
@@ -754,7 +696,7 @@ public  final class NodeDefinitionTO extends
       }
     }
     /**
-     * <code>string timestamp = 4;</code>
+     * <code>string timestamp = 3;</code>
      */
     public com.google.protobuf.ByteString
         getTimestampBytes() {
@@ -770,7 +712,7 @@ public  final class NodeDefinitionTO extends
       }
     }
     /**
-     * <code>string timestamp = 4;</code>
+     * <code>string timestamp = 3;</code>
      */
     public Builder setTimestamp(
         java.lang.String value) {
@@ -783,7 +725,7 @@ public  final class NodeDefinitionTO extends
       return this;
     }
     /**
-     * <code>string timestamp = 4;</code>
+     * <code>string timestamp = 3;</code>
      */
     public Builder clearTimestamp() {
       
@@ -792,7 +734,7 @@ public  final class NodeDefinitionTO extends
       return this;
     }
     /**
-     * <code>string timestamp = 4;</code>
+     * <code>string timestamp = 3;</code>
      */
     public Builder setTimestampBytes(
         com.google.protobuf.ByteString value) {
@@ -808,13 +750,13 @@ public  final class NodeDefinitionTO extends
 
     private int type_ = 0;
     /**
-     * <code>.heimdallr.Type type = 5;</code>
+     * <code>.heimdallr.Type type = 4;</code>
      */
     public int getTypeValue() {
       return type_;
     }
     /**
-     * <code>.heimdallr.Type type = 5;</code>
+     * <code>.heimdallr.Type type = 4;</code>
      */
     public Builder setTypeValue(int value) {
       type_ = value;
@@ -822,14 +764,14 @@ public  final class NodeDefinitionTO extends
       return this;
     }
     /**
-     * <code>.heimdallr.Type type = 5;</code>
+     * <code>.heimdallr.Type type = 4;</code>
      */
     public com.github.igorperikov.heimdallr.generated.Type getType() {
       com.github.igorperikov.heimdallr.generated.Type result = com.github.igorperikov.heimdallr.generated.Type.valueOf(type_);
       return result == null ? com.github.igorperikov.heimdallr.generated.Type.UNRECOGNIZED : result;
     }
     /**
-     * <code>.heimdallr.Type type = 5;</code>
+     * <code>.heimdallr.Type type = 4;</code>
      */
     public Builder setType(com.github.igorperikov.heimdallr.generated.Type value) {
       if (value == null) {
@@ -841,7 +783,7 @@ public  final class NodeDefinitionTO extends
       return this;
     }
     /**
-     * <code>.heimdallr.Type type = 5;</code>
+     * <code>.heimdallr.Type type = 4;</code>
      */
     public Builder clearType() {
       

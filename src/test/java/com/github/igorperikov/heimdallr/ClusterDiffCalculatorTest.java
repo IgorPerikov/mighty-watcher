@@ -32,20 +32,17 @@ public class ClusterDiffCalculatorTest {
     public void newEventsShouldOverrideOld() {
         Instant past = Instant.now().minus(1, ChronoUnit.DAYS);
         Instant now = Instant.now();
+        NodeDefinition nodeDef1 = new NodeDefinition(label1, address1, now, Type.LIVE);
+        NodeDefinition nodeDef2 = new NodeDefinition(label1, address1, past, Type.LIVE);
 
-        NodeDefinition oldDef = new NodeDefinition(label1, address1, past, Type.LIVE);
-        ClusterState oldState = new ClusterState(oldDef);
+        ClusterState firstState = new ClusterState(nodeDef1);
+        ClusterState secondState = new ClusterState(nodeDef2);
 
-        NodeDefinition newDef = new NodeDefinition(label1, address1, now, Type.TOMBSTONE);
-        ClusterState newState = new ClusterState(newDef);
-
-        ClusterStateDiff diff = ClusterDiffCalculator.calculate(oldState, newState);
+        ClusterStateDiff diff = ClusterDiffCalculator.calculate(firstState, secondState);
         assertEquals(now, diff.getNodes().get(label1).getTimestamp());
-        assertEquals(Type.TOMBSTONE, diff.getNodes().get(label1).getType());
 
-        ClusterStateDiff invertedParametersDiff = ClusterDiffCalculator.calculate(newState, oldState);
+        ClusterStateDiff invertedParametersDiff = ClusterDiffCalculator.calculate(secondState, firstState);
         assertEquals(now, invertedParametersDiff.getNodes().get(label1).getTimestamp());
-        assertEquals(Type.TOMBSTONE, invertedParametersDiff.getNodes().get(label1).getType());
     }
 
     @Test

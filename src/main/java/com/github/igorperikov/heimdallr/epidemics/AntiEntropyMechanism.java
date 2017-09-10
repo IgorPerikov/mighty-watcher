@@ -6,12 +6,12 @@ import com.github.igorperikov.heimdallr.domain.ClusterState;
 import com.github.igorperikov.heimdallr.domain.ClusterStateDiff;
 import com.github.igorperikov.heimdallr.domain.NodeDefinition;
 import com.github.igorperikov.heimdallr.exception.NoOtherNodesInClusterException;
+import com.github.igorperikov.heimdallr.generated.Type;
 import io.grpc.StatusRuntimeException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -25,9 +25,9 @@ public abstract class AntiEntropyMechanism {
     public ScheduledFuture launch() {
         return Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() -> {
                     ClusterState clusterState = currentNode.getClusterState();
-                    List<NodeDefinition> nodes = clusterState.getNodes().entrySet().stream()
-                            .filter(entry -> !entry.getValue().equals(currentNode.getNodeDefinition()))
-                            .map(Map.Entry::getValue)
+                    List<NodeDefinition> nodes = clusterState.getNodes().values().stream()
+                            .filter(node -> node.getType() == Type.LIVE)
+                            .filter(node -> !node.equals(currentNode.getNodeDefinition()))
                             .collect(Collectors.toList());
                     try {
                         send(chooseNode(nodes));
@@ -37,8 +37,8 @@ public abstract class AntiEntropyMechanism {
                         log.info("No other nodes in cluster");
                     }
                 },
-                5,
-                5,
+                10,
+                10,
                 TimeUnit.SECONDS);
     }
 

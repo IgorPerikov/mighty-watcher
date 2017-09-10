@@ -28,26 +28,21 @@ public interface NodeDefinitionTOOrBuilder extends
       getAddressBytes();
 
   /**
-   * <code>int32 port = 3;</code>
-   */
-  int getPort();
-
-  /**
-   * <code>string timestamp = 4;</code>
+   * <code>string timestamp = 3;</code>
    */
   java.lang.String getTimestamp();
   /**
-   * <code>string timestamp = 4;</code>
+   * <code>string timestamp = 3;</code>
    */
   com.google.protobuf.ByteString
       getTimestampBytes();
 
   /**
-   * <code>.heimdallr.Type type = 5;</code>
+   * <code>.heimdallr.Type type = 4;</code>
    */
   int getTypeValue();
   /**
-   * <code>.heimdallr.Type type = 5;</code>
+   * <code>.heimdallr.Type type = 4;</code>
    */
   com.github.igorperikov.heimdallr.generated.Type getType();
 }
