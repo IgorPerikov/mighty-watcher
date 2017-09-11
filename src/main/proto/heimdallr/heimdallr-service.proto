@@ -11,3 +11,7 @@ option java_outer_classname = "HeimdallrOuterService";
 service HeimdallrService {
     rpc getDiffWithOtherNodesState(ClusterStateTO) returns (ClusterStateDiffTO);
 }
+
+service HeartbeatService {
+    rpc heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+}

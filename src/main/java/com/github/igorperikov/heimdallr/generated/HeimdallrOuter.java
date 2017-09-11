@@ -39,6 +39,16 @@ public final class HeimdallrOuter {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_heimdallr_NodeDefinitionTO_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_heimdallr_HeartbeatRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_heimdallr_HeartbeatRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_heimdallr_HeartbeatResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_heimdallr_HeartbeatResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -58,10 +68,11 @@ public final class HeimdallrOuter {
       "\030\001 \001(\t\022*\n\005value\030\002 \001(\0132\033.heimdallr.NodeDe" +
       "finitionTO:\0028\001\"d\n\020NodeDefinitionTO\022\r\n\005la" +
       "bel\030\001 \001(\t\022\017\n\007address\030\002 \001(\t\022\021\n\ttimestamp\030",
-      "\003 \001(\t\022\035\n\004type\030\004 \001(\0162\017.heimdallr.Type*\037\n\004" +
-      "Type\022\010\n\004LIVE\020\000\022\r\n\tTOMBSTONE\020\001B>\n*com.git" +
-      "hub.igorperikov.heimdallr.generatedB\016Hei" +
-      "mdallrOuterP\001b\006proto3"
+      "\003 \001(\t\022\035\n\004type\030\004 \001(\0162\017.heimdallr.Type\"\022\n\020" +
+      "HeartbeatRequest\"\023\n\021HeartbeatResponse*\037\n" +
+      "\004Type\022\010\n\004LIVE\020\000\022\r\n\tTOMBSTONE\020\001B>\n*com.gi" +
+      "thub.igorperikov.heimdallr.generatedB\016He" +
+      "imdallrOuterP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -105,6 +116,18 @@ public final class HeimdallrOuter {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_heimdallr_NodeDefinitionTO_descriptor,
         new java.lang.String[] { "Label", "Address", "Timestamp", "Type", });
+    internal_static_heimdallr_HeartbeatRequest_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_heimdallr_HeartbeatRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_heimdallr_HeartbeatRequest_descriptor,
+        new java.lang.String[] { });
+    internal_static_heimdallr_HeartbeatResponse_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_heimdallr_HeartbeatResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_heimdallr_HeartbeatResponse_descriptor,
+        new java.lang.String[] { });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

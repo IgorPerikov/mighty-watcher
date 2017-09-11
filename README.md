@@ -12,7 +12,7 @@ different distribution algorithms and inter-cluster communication coming in,
 * [x] init cluster creation
 * [x] anti-entropy mechanism
 * [x] sending diffs where possible(initiator send whole state, other node sends back diff)
-* [ ] heartbeat
+* [x] heartbeat
 * [ ] direct mail mechanism
 * [ ] push rumor mongering epidemic with configurable feedback + counter system
 * [ ] quorum calculation
@@ -35,5 +35,5 @@ specify first or all three params, which are:
 
 peer node specified if at least 1 node is already exists
 
-### Sources
+### Whitepapers used:
 * [Epidemic algorithms](http://www.bitsavers.org/pdf/xerox/parc/techReports/CSL-89-1_Epidemic_Algorithms_for_Replicated_Database_Maintenance.pdf)

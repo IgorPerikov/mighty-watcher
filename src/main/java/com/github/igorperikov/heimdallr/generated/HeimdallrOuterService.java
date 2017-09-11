@@ -27,9 +27,11 @@ public final class HeimdallrOuterService {
       "mdallr\032\023heimdallr/dto.proto2j\n\020Heimdallr" +
       "Service\022V\n\032getDiffWithOtherNodesState\022\031." +
       "heimdallr.ClusterStateTO\032\035.heimdallr.Clu" +
-      "sterStateDiffTOBE\n*com.github.igorperiko" +
-      "v.heimdallr.generatedB\025HeimdallrOuterSer" +
-      "viceP\001b\006proto3"
+      "sterStateDiffTO2Z\n\020HeartbeatService\022F\n\th" +
+      "eartbeat\022\033.heimdallr.HeartbeatRequest\032\034." +
+      "heimdallr.HeartbeatResponseBE\n*com.githu" +
+      "b.igorperikov.heimdallr.generatedB\025Heimd" +
+      "allrOuterServiceP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

@@ -25,3 +25,11 @@ enum Type {
     LIVE = 0;
     TOMBSTONE = 1;
 }
+
+message HeartbeatRequest {
+
+}
+
+message HeartbeatResponse {
+
+}

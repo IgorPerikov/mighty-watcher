@@ -1,11 +1,16 @@
 package com.github.igorperikov.heimdallr.domain;
 
+import com.github.igorperikov.heimdallr.generated.Type;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
+// TODO: cluster state taking too much functionality?
 public class ClusterState {
     @Getter
     private final Map<String, NodeDefinition> nodes = new HashMap<>();
@@ -27,6 +32,16 @@ public class ClusterState {
      */
     public void applyDiff(ClusterStateDiff diff) {
         nodes.putAll(diff.getNodes());
+    }
+
+    public void markWithTombstone(String label) {
+        NodeDefinition nodeDefinition = nodes.get(label);
+        if (nodeDefinition == null) {
+            log.warn("No node with given label found");
+        } else {
+            nodeDefinition.setType(Type.TOMBSTONE);
+            nodeDefinition.setTimestamp(Instant.now());
+        }
     }
 
     @Override

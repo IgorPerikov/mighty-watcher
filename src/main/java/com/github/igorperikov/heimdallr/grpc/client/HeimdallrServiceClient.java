@@ -1,4 +1,4 @@
-package com.github.igorperikov.heimdallr;
+package com.github.igorperikov.heimdallr.grpc.client;
 
 import com.github.igorperikov.heimdallr.converter.ClusterStateConverter;
 import com.github.igorperikov.heimdallr.converter.ClusterStateDiffConverter;
@@ -10,11 +10,11 @@ import com.github.igorperikov.heimdallr.generated.HeimdallrServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
-public class InterNodeCommunicator {
+public class HeimdallrServiceClient {
     // TODO: convert to async stub
     private final HeimdallrServiceGrpc.HeimdallrServiceBlockingStub blockingStub;
 
-    public InterNodeCommunicator(String otherNodeAddress, int otherNodePort) {
+    public HeimdallrServiceClient(String otherNodeAddress, int otherNodePort) {
         ManagedChannelBuilder<?> channelBuilder = ManagedChannelBuilder
                 .forAddress(otherNodeAddress, otherNodePort)
                 .usePlaintext(true);

@@ -1,5 +1,7 @@
-package com.github.igorperikov.heimdallr;
+package com.github.igorperikov.heimdallr.grpc.server;
 
+import com.github.igorperikov.heimdallr.ClusterDiffCalculator;
+import com.github.igorperikov.heimdallr.HeimdallrNode;
 import com.github.igorperikov.heimdallr.converter.ClusterStateConverter;
 import com.github.igorperikov.heimdallr.converter.ClusterStateDiffConverter;
 import com.github.igorperikov.heimdallr.domain.ClusterStateDiff;

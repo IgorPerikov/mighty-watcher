@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class ClusterInfoLogger {
     private HeimdallrNode node;
 
-    public ScheduledFuture startPrintingClusterInfo() {
+    public ScheduledFuture launch() {
         return Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(
                 () -> {
                     String clusterStateString = node.getClusterState().toString();
