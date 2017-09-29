@@ -19,7 +19,6 @@ public class HeartbeatMechanism {
         return Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(
                 () -> {
                     List<NodeDefinition> otherNodes = node.getOtherLiveNodeDefinitions();
-                    // TODO: add deadline and timeout to client call
                     for (NodeDefinition nodeDefinition : otherNodes) {
                         Integer port = Integer.valueOf(nodeDefinition.getAddress().split(":")[1]);
                         // TODO: localhost

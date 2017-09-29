@@ -15,14 +15,6 @@ different distribution algorithms and inter-cluster communication coming in,
 * [x] heartbeat
 * [ ] direct mail mechanism
 * [ ] push rumor mongering epidemic with configurable feedback + counter system
-* [ ] quorum calculation
-* [ ] raft
-* [ ] jepsen tests for raft
-* [ ] byzantine fault injection
-* [ ] byzantine fault tolerance
-* [ ] jepsen tests for byzantine fault tolerance
-* [ ] multiple dc 
-* [ ] database recovery from backup
 
 ### How to launch
 

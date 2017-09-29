@@ -1,12 +1,12 @@
 package com.github.igorperikov.heimdallr;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PeerNodeTest {
     @Test
-    public void shouldCorrectlyRegisterNewNode() throws InterruptedException {
+    void shouldCorrectlyRegisterNewNode() throws InterruptedException {
         HeimdallrNode mainNode = new HeimdallrNode(10000);
         HeimdallrNode secondNode = new HeimdallrNode(10001, "localhost", 10000);
         new Thread(mainNode::start).start();

@@ -4,15 +4,15 @@ import com.github.igorperikov.heimdallr.domain.ClusterState;
 import com.github.igorperikov.heimdallr.domain.ClusterStateDiff;
 import com.github.igorperikov.heimdallr.domain.NodeDefinition;
 import com.github.igorperikov.heimdallr.generated.Type;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.net.InetSocketAddress;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClusterDiffCalculatorTest {
     private String label1;
@@ -20,7 +20,7 @@ public class ClusterDiffCalculatorTest {
     private String address1;
     private String address2;
 
-    @Before
+    @BeforeEach
     public void setup() {
         label1 = UUID.randomUUID().toString();
         label2 = UUID.randomUUID().toString();
@@ -29,7 +29,7 @@ public class ClusterDiffCalculatorTest {
     }
 
     @Test
-    public void newEventsShouldOverrideOld() {
+    void newEventsShouldOverrideOld() {
         Instant past = Instant.now().minus(1, ChronoUnit.DAYS);
         Instant now = Instant.now();
         NodeDefinition nodeDef1 = new NodeDefinition(label1, address1, now, Type.LIVE);
@@ -46,7 +46,7 @@ public class ClusterDiffCalculatorTest {
     }
 
     @Test
-    public void shouldAlwaysAddInfoAboutAbsentNodes() {
+    void shouldAlwaysAddInfoAboutAbsentNodes() {
         NodeDefinition firstDef = NodeDefinition.buildLiveDefinition(label1, address1);
         ClusterState firstState = new ClusterState(firstDef);
 
@@ -61,7 +61,7 @@ public class ClusterDiffCalculatorTest {
     }
 
     @Test
-    public void sameNodeDefinitionShouldNotBeAddedToDiff() {
+    void sameNodeDefinitionShouldNotBeAddedToDiff() {
         NodeDefinition nodeDef = NodeDefinition.buildLiveDefinition(label1, address1);
 
         ClusterState firstState = new ClusterState(nodeDef);
