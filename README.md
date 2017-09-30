@@ -13,15 +13,13 @@ different distribution algorithms and inter-cluster communication coming in,
 * [x] anti-entropy mechanism
 * [x] sending diffs where possible(initiator send whole state, other node sends back diff)
 * [x] heartbeat
-* [ ] direct mail mechanism
 * [ ] push rumor mongering epidemic with configurable feedback + counter system
 
 ### How to launch
 
 simply an executable .jar file, launch with `java -jar`
 
-specify first two or all four params, which are:
-* port which node will listen for handling kv-storage api
+specify first or all three params, which are:
 * port which node will listen for inter-node communication
 * peer node address
 * peer node port

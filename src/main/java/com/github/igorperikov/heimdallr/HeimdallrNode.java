@@ -8,18 +8,10 @@ import com.github.igorperikov.heimdallr.generated.Type;
 import com.github.igorperikov.heimdallr.grpc.client.HeimdallrServiceClient;
 import com.github.igorperikov.heimdallr.grpc.server.HeartbeatServiceImplementation;
 import com.github.igorperikov.heimdallr.grpc.server.HeimdallrServiceImplementation;
-import com.github.igorperikov.heimdallr.storage.HeimdallrStorage;
-import com.github.igorperikov.heimdallr.storage.HeimdallrStorageMapImplementation;
-import com.github.igorperikov.heimdallr.storage.HeimdallrStorageValue;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.server.reactive.HttpHandler;
-import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter;
-import org.springframework.web.reactive.function.server.*;
-import reactor.core.publisher.Mono;
-import reactor.ipc.netty.http.server.HttpServer;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,17 +19,12 @@ import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-
 @Slf4j
 public class HeimdallrNode {
     private final int port;
-    private final int apiPort;
 
     @Getter
-    private final UUID label;
-
-    private final HeimdallrStorage storage;
+    private final UUID label = UUID.randomUUID();
 
     @Getter
     private ClusterState clusterState;
@@ -45,22 +32,18 @@ public class HeimdallrNode {
     private String peerNodeAddress;
     private Integer peerNodePort;
 
-    public HeimdallrNode(int apiPort, int port) {
-        this.apiPort = apiPort;
+    public HeimdallrNode(int port) {
         this.port = port;
-        this.label = UUID.randomUUID();
-        this.storage = new HeimdallrStorageMapImplementation();
     }
 
-    public HeimdallrNode(int apiPort, int port, String peerAddress, int peerPort) {
-        this(apiPort, port);
+    public HeimdallrNode(int port, String peerAddress, int peerPort) {
+        this(port);
         this.peerNodeAddress = peerAddress;
         this.peerNodePort = peerPort;
     }
 
     public void start() {
         setupPersonalClusterState();
-        setupApi();
 
         Server server = ServerBuilder.forPort(port)
                 .addService(new HeimdallrServiceImplementation(this))
@@ -94,42 +77,6 @@ public class HeimdallrNode {
         } catch (InterruptedException e) {
             log.error("", e);
         }
-    }
-
-    private void setupApi() {
-        HandlerFunction<ServerResponse> getValueHandlerFunction = request -> {
-            return storage.get(request.pathVariable("key"))
-                    .flatMap(stringValue -> ServerResponse.ok()
-                            .contentType(APPLICATION_JSON)
-                            .body(
-                                    Mono.just(new HeimdallrStorageValue(stringValue)),
-                                    HeimdallrStorageValue.class
-                            )
-                    ).switchIfEmpty(ServerResponse.notFound().build());
-        };
-
-        HandlerFunction<ServerResponse> putValueHandlerFunction = request -> {
-            return request.bodyToMono(HeimdallrStorageValue.class)
-                    .flatMap(requestBody -> storage.put(request.pathVariable("key"), requestBody.getValue()))
-                    .flatMap(aVoid -> ServerResponse.ok().build());
-        };
-
-        HandlerFunction<ServerResponse> deleteValueHandlerFunction = request -> {
-            return storage.remove(request.pathVariable("key")).flatMap(aVoid -> ServerResponse.noContent().build());
-        };
-
-        RouterFunction<ServerResponse> route = RouterFunctions
-                .route(RequestPredicates.GET("/value/{key}"), getValueHandlerFunction)
-                .andRoute(
-                        RequestPredicates.PUT("/value/{key}").and(RequestPredicates.accept(APPLICATION_JSON)),
-                        putValueHandlerFunction
-                )
-                .andRoute(RequestPredicates.DELETE("/value/{key}"), deleteValueHandlerFunction);
-
-        HttpHandler httpHandler = RouterFunctions.toHttpHandler(route);
-        ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(httpHandler);
-        HttpServer.create(apiPort).newHandler(adapter).block();
-        log.info("Client api is now listening on {}", apiPort);
     }
 
     private void setupPersonalClusterState() {
