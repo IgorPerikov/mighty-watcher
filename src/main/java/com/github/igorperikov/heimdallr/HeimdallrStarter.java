@@ -6,11 +6,19 @@ import lombok.extern.slf4j.Slf4j;
 public class HeimdallrStarter {
     public static void main(String[] args) throws Exception {
         switch (args.length) {
-            case 1:
-                new HeimdallrNode(Integer.parseInt(args[0])).start();
+            case 2:
+                new HeimdallrNode(
+                        Integer.parseInt(args[0]),
+                        Integer.parseInt(args[1])
+                ).start();
                 break;
-            case 3:
-                new HeimdallrNode(Integer.parseInt(args[0]), args[1], Integer.parseInt(args[2])).start();
+            case 4:
+                new HeimdallrNode(
+                        Integer.parseInt(args[0]),
+                        Integer.parseInt(args[1]),
+                        args[2],
+                        Integer.parseInt(args[3])
+                ).start();
                 break;
             default:
                 log.error("Specify input params!");
