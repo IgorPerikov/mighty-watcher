@@ -1,6 +1,7 @@
 package com.github.igorperikov.heimdallr.grpc.server;
 
 import com.github.igorperikov.heimdallr.ClusterDiffCalculator;
+import com.github.igorperikov.heimdallr.ClusterStateDiffApplier;
 import com.github.igorperikov.heimdallr.HeimdallrNode;
 import com.github.igorperikov.heimdallr.converter.ClusterStateConverter;
 import com.github.igorperikov.heimdallr.converter.ClusterStateDiffConverter;
@@ -29,7 +30,7 @@ public class HeimdallrServiceImplementation extends HeimdallrServiceGrpc.Heimdal
                 ClusterStateConverter.convertToDomain(currentNodeState),
                 ClusterStateConverter.convertToDomain(request)
         );
-        node.getClusterState().applyDiff(diff);
+        ClusterStateDiffApplier.applyDiff(node, diff);
 
         responseObserver.onNext(ClusterStateDiffConverter.convertDomain(diff));
         responseObserver.onCompleted();

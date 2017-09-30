@@ -4,6 +4,8 @@ heimdallr
 
 ### Description
 
+cluster work possible only in deployment, where every node see every other node as `localhost`
+
 project with ability to ~~illuminate the world~~ create nodes and build cluster upon them, kv database in future
 
 different distribution algorithms and inter-cluster communication coming in,

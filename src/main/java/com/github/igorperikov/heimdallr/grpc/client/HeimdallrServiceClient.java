@@ -11,20 +11,19 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
 public class HeimdallrServiceClient {
-    // TODO: convert to async stub
-    private final HeimdallrServiceGrpc.HeimdallrServiceBlockingStub blockingStub;
-
-    public HeimdallrServiceClient(String otherNodeAddress, int otherNodePort) {
+    public ClusterStateDiff getClusterStateDiff(
+            ClusterState clusterState,
+            String otherNodeAddress,
+            int otherNodePort
+    ) {
         ManagedChannelBuilder<?> channelBuilder = ManagedChannelBuilder
                 .forAddress(otherNodeAddress, otherNodePort)
                 .usePlaintext(true);
         ManagedChannel channel = channelBuilder.build();
-        blockingStub = HeimdallrServiceGrpc.newBlockingStub(channel);
-    }
-
-    public ClusterStateDiff getClusterStateDiff(ClusterState clusterState) {
         ClusterStateTO clusterStateTO = ClusterStateConverter.convertDomain(clusterState);
-        ClusterStateDiffTO diffTO = blockingStub.getDiffWithOtherNodesState(clusterStateTO);
-        return ClusterStateDiffConverter.convertToDomain(diffTO);
+        return ClusterStateDiffConverter.convertToDomain(
+                HeimdallrServiceGrpc.newBlockingStub(channel)
+                        .getDiffWithOtherNodesState(clusterStateTO)
+        );
     }
 }

@@ -9,8 +9,8 @@ import java.util.Random;
 public class RandomNodeAntiEntropyMechanism extends AntiEntropyMechanism {
     private static final Random RANDOM = new Random();
 
-    public RandomNodeAntiEntropyMechanism(HeimdallrNode mainNode) {
-        super(mainNode);
+    public RandomNodeAntiEntropyMechanism(int antiEntropyDelayInSeconds, HeimdallrNode currentNode) {
+        super(antiEntropyDelayInSeconds, currentNode);
     }
 
     @Override

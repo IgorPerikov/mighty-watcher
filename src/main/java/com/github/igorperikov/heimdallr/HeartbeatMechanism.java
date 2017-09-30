@@ -13,7 +13,9 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 @Slf4j
 public class HeartbeatMechanism {
-    private HeimdallrNode node;
+    private final int heartbeatDelayInSeconds;
+    private final HeimdallrNode node;
+    private final HeartbeatServiceClient client = new HeartbeatServiceClient();
 
     public ScheduledFuture launch() {
         return Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(
@@ -21,12 +23,10 @@ public class HeartbeatMechanism {
                     List<NodeDefinition> otherNodes = node.getOtherLiveNodeDefinitions();
                     for (NodeDefinition nodeDefinition : otherNodes) {
                         Integer port = Integer.valueOf(nodeDefinition.getAddress().split(":")[1]);
-                        // TODO: localhost
                         String address = "localhost";
-                        log.info("Sending heartbeat request to localhost:{}", port);
-                        HeartbeatServiceClient client = new HeartbeatServiceClient(address, port);
+                        log.info("Sending heartbeat request to {}:{}", address, port);
                         try {
-                            client.call();
+                            client.call(address, port);
                             log.info("Heartbeat to {}:{} was successful", address, port);
                         } catch (Exception e) {
                             log.warn("Heartbeat to {}:{} failed", address, port);
@@ -34,8 +34,8 @@ public class HeartbeatMechanism {
                         }
                     }
                 },
-                5,
-                5,
+                heartbeatDelayInSeconds,
+                heartbeatDelayInSeconds,
                 TimeUnit.SECONDS
         );
     }

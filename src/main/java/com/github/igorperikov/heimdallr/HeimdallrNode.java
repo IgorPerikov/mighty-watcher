@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class HeimdallrNode {
+    private final String address = "localhost";
     private final int port;
 
     @Getter
@@ -31,6 +32,8 @@ public class HeimdallrNode {
 
     private String peerNodeAddress;
     private Integer peerNodePort;
+
+    private final HeimdallrServiceClient client = new HeimdallrServiceClient();
 
     public HeimdallrNode(int port) {
         this.port = port;
@@ -52,8 +55,7 @@ public class HeimdallrNode {
 
         if (peerNodeAddress != null && peerNodePort != null) {
             log.info("Peer node {}:{} is provided", peerNodeAddress, peerNodePort);
-            ClusterStateDiff diff = new HeimdallrServiceClient(peerNodeAddress, peerNodePort)
-                    .getClusterStateDiff(getClusterState());
+            ClusterStateDiff diff = client.getClusterStateDiff(getClusterState(), peerNodeAddress, peerNodePort);
             clusterState.applyDiff(diff);
         }
 
@@ -65,9 +67,9 @@ public class HeimdallrNode {
             System.exit(1);
         }
 
-        ScheduledFuture antiEntropyFuture = new RandomNodeAntiEntropyMechanism(this).launch();
-        ScheduledFuture clusterInfoFuture = new ClusterInfoLogger(this).launch();
-        ScheduledFuture heartbeatFuture = new HeartbeatMechanism(this).launch();
+        ScheduledFuture antiEntropyFuture = new RandomNodeAntiEntropyMechanism(60, this).launch();
+        ScheduledFuture clusterInfoFuture = new ClusterInfoLogger(15, this).launch();
+        ScheduledFuture heartbeatFuture = new HeartbeatMechanism(5, this).launch();
 
         try {
             server.awaitTermination();
@@ -75,7 +77,7 @@ public class HeimdallrNode {
             clusterInfoFuture.cancel(true);
             heartbeatFuture.cancel(true);
         } catch (InterruptedException e) {
-            log.error("", e);
+            log.error("Interrupted", e);
         }
     }
 
@@ -84,8 +86,7 @@ public class HeimdallrNode {
     }
 
     public String getNodeAddress() {
-        // TODO: localhost -> ip detection
-        return "localhost:" + port;
+        return address + ":" + port;
     }
 
     public List<NodeDefinition> getOtherLiveNodeDefinitions() {

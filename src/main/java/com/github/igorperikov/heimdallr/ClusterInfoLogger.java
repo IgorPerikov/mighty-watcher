@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @AllArgsConstructor
 public class ClusterInfoLogger {
-    private HeimdallrNode node;
+    private final int clusterInfoLoggingDelayInSeconds;
+    private final HeimdallrNode node;
 
     public ScheduledFuture launch() {
         return Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(
@@ -18,8 +19,8 @@ public class ClusterInfoLogger {
                     String clusterStateString = node.getClusterState().toString();
                     log.info("Cluster state: \r\n[{}]", clusterStateString);
                 },
-                5,
-                5,
+                clusterInfoLoggingDelayInSeconds,
+                clusterInfoLoggingDelayInSeconds,
                 TimeUnit.SECONDS
         );
     }

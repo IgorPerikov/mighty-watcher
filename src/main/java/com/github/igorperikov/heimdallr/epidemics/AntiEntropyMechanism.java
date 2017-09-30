@@ -16,10 +16,13 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 @Slf4j
 public abstract class AntiEntropyMechanism {
+    private final int antiEntropyDelayInSeconds;
     private final HeimdallrNode currentNode;
+    private final HeimdallrServiceClient client = new HeimdallrServiceClient();
 
     public ScheduledFuture launch() {
-        return Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() -> {
+        return Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(
+                () -> {
                     List<NodeDefinition> otherNodes = currentNode.getOtherLiveNodeDefinitions();
                     if (otherNodes.isEmpty()) {
                         log.info("No other nodes in cluster");
@@ -33,16 +36,17 @@ public abstract class AntiEntropyMechanism {
                         }
                     }
                 },
-                10,
-                10,
-                TimeUnit.SECONDS);
+                antiEntropyDelayInSeconds,
+                antiEntropyDelayInSeconds,
+                TimeUnit.SECONDS
+        );
     }
 
     private void send(NodeDefinition node) {
         Integer port = Integer.valueOf(node.getAddress().split(":")[1]);
-        // TODO: localhost
-        log.info("Sending anti entropy request to localhost:{}", port);
-        ClusterStateDiff diff = new HeimdallrServiceClient("localhost", port).getClusterStateDiff(currentNode.getClusterState());
+        String address = "localhost";
+        log.info("Sending anti entropy request to {}:{}", address, port);
+        ClusterStateDiff diff = client.getClusterStateDiff(currentNode.getClusterState(), address, port);
         currentNode.getClusterState().applyDiff(diff);
     }
 
