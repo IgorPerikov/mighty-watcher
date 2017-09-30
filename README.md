@@ -20,8 +20,9 @@ different distribution algorithms and inter-cluster communication coming in,
 
 simply an executable .jar file, launch with `java -jar`
 
-specify first or all three params, which are: 
-* port which will new node will listen
+specify first two or all four params, which are:
+* port which node will listen for handling kv-storage api
+* port which node will listen for inter-node communication
 * peer node address
 * peer node port
 
