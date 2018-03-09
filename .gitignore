@@ -1,11 +1,7 @@
-*.bat
-
 *.iml
 .idea/
-
 build/
 *.class
-
-build
-
+.gradle
+gradle
 .gradletasknamecache
