@@ -5,3 +5,5 @@ build/
 gradle
 .gradletasknamecache
 /src/main/resources/token
+/src/main/resources/tracked-repos
+/src/main/resources/result
