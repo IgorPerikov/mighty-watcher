@@ -2,11 +2,13 @@ package com.github.igorperikov.mighty.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.Instant
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Issue(
-        @JsonProperty("html_url") val htmlUrl: String,
-        val title: String
+    @JsonProperty("html_url") val htmlUrl: String,
+    val title: String,
+    @JsonProperty("created_at") val createdAt: Instant
 ) {
     override fun toString(): String {
         return "${getRepoName()}  $title  $htmlUrl"

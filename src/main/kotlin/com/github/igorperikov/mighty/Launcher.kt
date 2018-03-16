@@ -25,22 +25,22 @@ object Launcher {
             val ignoredRepos = mutableSetOf<String>()
 
             readResourceFile("languages")
-                    .lines()
-                    .forEach { languages.add(it.toLowerCase()) }
+                .lines()
+                .forEach { languages.add(it.toLowerCase()) }
 
             readResourceFile("ignored-repos")
-                    .lines()
-                    .forEach { ignoredRepos.add(it) }
+                .lines()
+                .forEach { ignoredRepos.add(it) }
 
             val file = File("src/main/resources/tracked-repos")
             file.delete()
             file.createNewFile()
 
             repositories
-                    .filter { it.hasIssues }
-                    .filter { it.fullName !in ignoredRepos }
-                    .filter { it.language?.toLowerCase() in languages }
-                    .forEach { file.appendText(it.fullName + "\r\n") }
+                .filter { it.hasIssues }
+                .filter { it.fullName !in ignoredRepos }
+                .filter { it.language?.toLowerCase() in languages }
+                .forEach { file.appendText(it.fullName + "\r\n") }
         }
 
         val labelsSet = readResourceFile("labels").lines().toSet()
@@ -49,22 +49,24 @@ object Launcher {
         val issues = mutableSetOf<Issue>()
 
         readResourceFile("tracked-repos")
-                .lines()
-                .filter { it.isNotBlank() }
-                .forEach { repoFullName ->
-                    labelsSet.forEach { label ->
-                        val notIgnoredIssues = client.getIssues(repoFullName, label).filter { it.htmlUrl !in ignoredIssues }
-                        issues.addAll(notIgnoredIssues)
-                    }
+            .lines()
+            .filter { it.isNotBlank() }
+            .forEach { repoFullName ->
+                labelsSet.forEach { label ->
+                    val notIgnoredIssues = client.getIssues(repoFullName, label).filter { it.htmlUrl !in ignoredIssues }
+                    issues.addAll(notIgnoredIssues)
                 }
+            }
 
         val resultFile = File("src/main/resources/result")
         resultFile.delete()
         resultFile.createNewFile()
 
-        issues.forEach {
-            resultFile.appendText(it.toString() + "\r\n")
-        }
+        issues
+            .sortedByDescending { it.createdAt }
+            .forEach {
+                resultFile.appendText(it.toString() + "\r\n")
+            }
         println("finish at ${ZonedDateTime.now(ZoneId.of("Europe/Moscow"))}")
     }
 
