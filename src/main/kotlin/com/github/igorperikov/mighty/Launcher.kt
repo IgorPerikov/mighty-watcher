@@ -43,7 +43,7 @@ object Launcher {
                 .forEach { file.appendText(it.fullName + "\r\n") }
         }
 
-        val labelsSet = readResourceFile("labels").lines().toSet()
+        val labelsSet = readResourceFile("labels").lines().filter { it.isNotBlank() }.toSet()
         val ignoredIssues = readResourceFile("ignored-issues").lines().toSet()
 
         val issues = mutableSetOf<Issue>()
