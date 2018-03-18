@@ -19,12 +19,11 @@ object Launcher {
     fun main(args: Array<String>) {
         println("start at  ${ZonedDateTime.now(ZoneId.of("Europe/Moscow"))}")
         if (importRepositories) {
-            val languages = readResourceFile("languages")
-                .lines()
+            val languages = getFileContent("languages")
                 .map { it.toLowerCase() }
                 .toSet()
 
-            val ignoredRepos = readResourceFile("ignored-repos").lines().toSet()
+            val ignoredRepos = getFileContent("ignored-repos")
 
             val repositories = client.getStarredRepositories(username)
                 .filter { it.hasIssues }
@@ -38,11 +37,10 @@ object Launcher {
             repositories.forEach { file.appendText(it.fullName + "\r\n") }
         }
 
-        val labelsSet = readResourceFile("labels").lines().filter { it.isNotBlank() }.toSet()
-        val ignoredIssues = readResourceFile("ignored-issues").lines().toSet()
+        val labelsSet = getFileContent("labels")
+        val ignoredIssues = getFileContent("ignored-issues")
 
-        val issues = readResourceFile("tracked-repos")
-            .lines()
+        val issues = getFileContent("tracked-repos")
             .filter { it.isNotBlank() }
             .flatMap { repoFullName ->
                 labelsSet.map { label ->
@@ -64,5 +62,10 @@ object Launcher {
         println("finish at ${ZonedDateTime.now(ZoneId.of("Europe/Moscow"))}")
     }
 
-    private fun readResourceFile(name: String): String = Launcher::class.java.classLoader.getResource(name).readText()
+    private fun getFileContent(name: String): Set<String> {
+        return Utils.readResourceFile(name)
+            .lines()
+            .filter { it.isNotBlank() }
+            .toSet()
+    }
 }

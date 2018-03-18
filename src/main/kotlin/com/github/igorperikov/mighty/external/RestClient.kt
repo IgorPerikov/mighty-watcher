@@ -21,7 +21,7 @@ class RestClient : Client {
     }
 
     private val authorizationHeaderValue: String by lazy {
-        "token ${Utils.readToken()}"
+        "token ${Utils.readResourceFile("token")}"
     }
 
     private val mapper = jacksonObjectMapper().findAndRegisterModules()
