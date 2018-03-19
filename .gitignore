@@ -2,8 +2,9 @@
 build/
 *.class
 .gradle
-gradle
 .gradletasknamecache
 /src/main/resources/token
 /src/main/resources/tracked-repos
 /src/main/resources/result
+/src/main/resources/ignored-repos
+/src/main/resources/ignored-issues

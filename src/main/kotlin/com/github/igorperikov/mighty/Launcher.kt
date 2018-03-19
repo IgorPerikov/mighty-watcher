@@ -49,6 +49,7 @@ object Launcher {
             }
             .flatMap { client.getIssues(it.first, it.second) }
             .filter { it.htmlUrl !in ignoredIssues }
+            .distinctBy { it.htmlUrl }
             .sortedByDescending { it.createdAt }
 
         val resultFile = File("src/main/resources/result")
