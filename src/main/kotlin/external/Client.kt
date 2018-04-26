@@ -1,7 +1,7 @@
-package com.github.igorperikov.mighty.external
+package external
 
-import com.github.igorperikov.mighty.entity.Issue
-import com.github.igorperikov.mighty.entity.Repository
+import entity.Issue
+import entity.Repository
 
 interface Client {
     fun getIssues(repoFullName: String, label: String): Set<Issue>

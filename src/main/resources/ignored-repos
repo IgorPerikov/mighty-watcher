@@ -4,3 +4,5 @@ AdoptOpenJDK/jsplitpkgscan
 Devskiller/jfairy
 testcontainers/testcontainers-java
 confluentinc/ksql
+gradle/kotlin-dsl
+davidmoten/rxjava-file

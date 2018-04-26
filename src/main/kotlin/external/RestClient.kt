@@ -1,10 +1,10 @@
-package com.github.igorperikov.mighty.external
+package external
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.github.igorperikov.mighty.Utils
-import com.github.igorperikov.mighty.entity.Issue
-import com.github.igorperikov.mighty.entity.Repository
+import ResourceFilesUtils
+import entity.Issue
+import entity.Repository
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,7 +21,7 @@ class RestClient : Client {
     }
 
     private val authorizationHeaderValue: String by lazy {
-        "token ${Utils.readResourceFile("token")}"
+        "token ${ResourceFilesUtils.readResourceFile("token")}"
     }
 
     private val mapper = jacksonObjectMapper().findAndRegisterModules()
