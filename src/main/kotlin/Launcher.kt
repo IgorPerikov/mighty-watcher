@@ -5,8 +5,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 object Launcher {
-    private val importRepositories = (System.getProperty("import.repositories") ?: "false").toBoolean()
-
     private val client: Client = RestClient()
 
     private val username: String by lazy {
@@ -16,24 +14,23 @@ object Launcher {
     @JvmStatic
     fun main(args: Array<String>) {
         println("start at  ${ZonedDateTime.now(ZoneId.of("Europe/Moscow"))}")
-        if (importRepositories) {
-            println("importing repositories")
-            val languages = getFileContent("languages")
-                .map { it.toLowerCase() }
-                .toSet()
 
-            val ignoredRepos = getFileContent("ignored-repos")
+        println("importing repositories")
+        val languages = getFileContent("languages")
+            .map { it.toLowerCase() }
+            .toSet()
 
-            val file = File("src/main/resources/tracked-repos")
-            file.delete()
-            file.createNewFile()
+        val ignoredRepos = getFileContent("ignored-repos")
 
-            client.getStarredRepositories(username)
-                .filter { it.hasIssues }
-                .filter { it.fullName !in ignoredRepos }
-                .filter { it.language?.toLowerCase() in languages }
-                .forEach { file.appendText(it.fullName + "\r\n") }
-        }
+        val file = File("src/main/resources/tracked-repos")
+        file.delete()
+        file.createNewFile()
+
+        client.getStarredRepositories(username)
+            .filter { it.hasIssues }
+            .filter { it.fullName !in ignoredRepos }
+            .filter { it.language?.toLowerCase() in languages }
+            .forEach { file.appendText(it.fullName + "\r\n") }
 
         val labelsSet = getFileContent("labels")
         val ignoredIssues = getFileContent("ignored-issues")
