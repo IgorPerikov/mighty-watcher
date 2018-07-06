@@ -11,20 +11,23 @@ object Launcher {
         ResourceFilesUtils.readResourceFile("username")
     }
 
+    private val recreateFile: (File) -> Unit = {
+        it.delete()
+        it.createNewFile()
+    }
+
     @JvmStatic
     fun main(args: Array<String>) {
         println("start at  ${ZonedDateTime.now(ZoneId.of("Europe/Moscow"))}")
 
         println("importing repositories")
-        val languages = getFileContent("languages")
+        val languages = readLines("languages")
             .map { it.toLowerCase() }
             .toSet()
 
-        val ignoredRepos = getFileContent("ignored-repos")
+        val ignoredRepos = readLines("ignored-repos")
 
-        val file = File("src/main/resources/tracked-repos")
-        file.delete()
-        file.createNewFile()
+        val file = File("src/main/resources/tracked-repos").also(recreateFile)
 
         client.getStarredRepositories(username)
             .filter { it.hasIssues }
@@ -32,14 +35,12 @@ object Launcher {
             .filter { it.language?.toLowerCase() in languages }
             .forEach { file.appendText(it.fullName + "\r\n") }
 
-        val labelsSet = getFileContent("labels")
-        val ignoredIssues = getFileContent("ignored-issues")
+        val labelsSet = readLines("labels")
+        val ignoredIssues = readLines("ignored-issues")
 
-        val resultFile = File("src/main/resources/result")
-        resultFile.delete()
-        resultFile.createNewFile()
+        val resultFile = File("src/main/resources/result").also(recreateFile)
 
-        getFileContent("tracked-repos")
+        readLines("tracked-repos")
             .filter { it.isNotBlank() }
             .flatMap { repoFullName ->
                 labelsSet.map { label ->
@@ -54,10 +55,8 @@ object Launcher {
         println("finish at ${ZonedDateTime.now(ZoneId.of("Europe/Moscow"))}")
     }
 
-    private fun getFileContent(name: String): Set<String> {
-        return ResourceFilesUtils.readResourceFile(name)
-            .lines()
-            .filter { it.isNotBlank() }
-            .toSet()
-    }
+    private fun readLines(name: String) = ResourceFilesUtils.readResourceFile(name)
+        .lines()
+        .filter { it.isNotBlank() }
+        .toSet()
 }
