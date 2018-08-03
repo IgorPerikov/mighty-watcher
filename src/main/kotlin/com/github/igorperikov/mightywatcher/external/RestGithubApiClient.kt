@@ -1,10 +1,9 @@
-package external
+package com.github.igorperikov.mightywatcher.external
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import ResourceFilesUtils
-import entity.Issue
-import entity.Repository
+import com.github.igorperikov.mightywatcher.entity.Issue
+import com.github.igorperikov.mightywatcher.entity.Repository
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -13,22 +12,20 @@ import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
-class RestClient : Client {
-    private val httpClient: OkHttpClient by lazy {
-        OkHttpClient.Builder()
-            .readTimeout(5, TimeUnit.SECONDS)
-            .build()
-    }
+/**
+ * v3 entity api client, full specification - https://developer.entity.com/v3/
+ */
+class RestGithubApiClient : GithubApiClient {
+    private val httpClient = OkHttpClient.Builder()
+        .readTimeout(5, TimeUnit.SECONDS)
+        .build()
 
-    private val authorizationHeaderValue: String by lazy {
-        "token ${ResourceFilesUtils.readResourceFile("token")}"
-    }
+    private val authHeaderValue = "token ${System.getenv("GITHUB_TOKEN")}"
 
     private val mapper = jacksonObjectMapper().findAndRegisterModules()
 
     override fun getIssues(repoFullName: String, label: String): Set<Issue> {
-        val owner = repoFullName.split("/")[0]
-        val name = repoFullName.split("/")[1]
+        val (owner, name) = repoFullName.split("/")
         val url = HttpUrl.Builder()
             .scheme("https")
             .host("api.github.com")
@@ -43,10 +40,10 @@ class RestClient : Client {
         val request = Request.Builder()
             .url(url)
             .header("Accept", "application/vnd.github.v3+json")
-            .header("Authorization", authorizationHeaderValue)
+            .header("Authorization", authHeaderValue)
             .build()
         val response: Response = httpClient.newCall(request).execute()
-        val jsonBody: String = response.body()?.string() ?: throw RuntimeException("Empty response body")
+        val jsonBody = response.body()?.string() ?: throw RuntimeException("Empty response body")
         return mapper.readValue(jsonBody)
     }
 
@@ -61,11 +58,11 @@ class RestClient : Client {
         val request = Request.Builder()
             .url(url)
             .header("Accept", "application/vnd.github.v3+json")
-            .header("Authorization", authorizationHeaderValue)
+            .header("Authorization", authHeaderValue)
             .build()
 
         val response: Response = httpClient.newCall(request).execute()
-        val jsonBody: String = response.body()?.string() ?: throw RuntimeException("Empty response body")
+        val jsonBody = response.body()?.string() ?: throw RuntimeException("Empty response body")
         return mapper.readValue(jsonBody)
     }
 }
