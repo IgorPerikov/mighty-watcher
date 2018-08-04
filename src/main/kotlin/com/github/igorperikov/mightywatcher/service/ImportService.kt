@@ -6,7 +6,7 @@ import com.github.igorperikov.mightywatcher.external.GithubApiClient
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 
 class ImportService {
-    private val githubApiClient: GithubApiClient = RestGithubApiClient()
+    private val githubApiClient: GithubApiClient = RestGithubApiClient(System.getenv("GITHUB_TOKEN"))
 
     fun fetchStarredRepositories(
         username: String,

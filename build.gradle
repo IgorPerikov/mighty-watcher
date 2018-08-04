@@ -24,17 +24,22 @@ repositories {
 }
 
 ext {
-    okHttpVersion = '3.10.0'
-    jacksonVersion = '2.9.4'
+    kotlin_coroutines_version = '0.24.0'
+    ok_http_version = '3.11.0'
+    jackson_version = '2.9.6'
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    compile "com.squareup.okhttp3:okhttp:${okHttpVersion}"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$kotlin_coroutines_version"
+
+    compile "com.squareup.okhttp3:okhttp:$ok_http_version"
+
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version"
 }
 
 compileKotlin {

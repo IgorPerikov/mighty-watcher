@@ -15,12 +15,12 @@ import java.util.concurrent.TimeUnit
 /**
  * v3 entity api client, full specification - https://developer.entity.com/v3/
  */
-class RestGithubApiClient : GithubApiClient {
+class RestGithubApiClient(githubToken: String) : GithubApiClient {
     private val httpClient = OkHttpClient.Builder()
-        .readTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(3, TimeUnit.SECONDS)
         .build()
 
-    private val authHeaderValue = "token ${System.getenv("GITHUB_TOKEN")}"
+    private val authHeaderValue = "token $githubToken"
 
     private val mapper = jacksonObjectMapper().findAndRegisterModules()
 
