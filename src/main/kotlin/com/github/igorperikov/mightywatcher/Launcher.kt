@@ -2,12 +2,12 @@ package com.github.igorperikov.mightywatcher
 
 import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.service.ImportService
+import kotlinx.coroutines.experimental.*
 import java.io.File
 import java.time.Instant
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
-import java.util.function.Supplier
 
+@Suppress("EXPERIMENTAL_FEATURE_WARNING")
 object Launcher {
     private val importService = ImportService()
     private val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
@@ -18,15 +18,15 @@ object Launcher {
         val (username, languages, ignoredRepos, labels, ignoredIssues) = parseInputParameters()
         val repositories = importService.fetchStarredRepositories(username, languages, ignoredRepos)
         val issues = ArrayList<Issue>()
-        val cfs = ArrayList<CompletableFuture<List<Issue>>>()
-        for (repository in repositories) {
-            CompletableFuture.supplyAsync(
-                Supplier { importService.fetchIssues(repository, labels) },
-                executor
-            ).also { cfs.add(it) }
+        runBlocking {
+            val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
+            for (repository in repositories) {
+                async(context = newSingleThreadContext("issues-fetcher")) {
+                    importService.fetchIssues(repository, labels)
+                }.also { listOfDeferredIssues.add(it) }
+            }
+            listOfDeferredIssues.awaitAll().forEach { issues.addAll(it) }
         }
-        CompletableFuture.allOf(*cfs.toTypedArray()).get()
-        cfs.map { it.get() }.forEach { issues.addAll(it) }
         issues.removeIf { ignoredIssues.contains(it.title) }
         writeResult(issues.distinctBy { it.htmlUrl }.sortedByDescending { it.createdAt })
         println("end ${Instant.now()}")
