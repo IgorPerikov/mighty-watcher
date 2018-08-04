@@ -15,7 +15,7 @@ version '0.0.1'
 apply plugin: 'kotlin'
 apply plugin: 'application'
 
-mainClassName = 'com.github.igorperikov.mighty.Launcher'
+mainClassName = 'com.github.igorperikov.mightywatcher.Launcher'
 
 sourceCompatibility = 1.8
 
