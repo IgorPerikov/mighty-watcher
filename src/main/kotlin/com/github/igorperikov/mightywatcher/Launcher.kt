@@ -4,33 +4,31 @@ import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.service.ImportService
 import kotlinx.coroutines.experimental.*
 import java.io.File
-import java.time.Instant
-import java.util.concurrent.Executors
+import kotlin.system.measureTimeMillis
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 object Launcher {
     private val importService = ImportService()
-    private val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
 
     @JvmStatic
     fun main(args: Array<String>) {
-        println("start ${Instant.now()}")
-        val (username, languages, ignoredRepos, labels, ignoredIssues) = parseInputParameters()
-        val repositories = importService.fetchStarredRepositories(username, languages, ignoredRepos)
-        val issues = ArrayList<Issue>()
-        runBlocking {
-            val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
-            for (repository in repositories) {
-                async(context = newSingleThreadContext("issues-fetcher")) {
-                    importService.fetchIssues(repository, labels)
-                }.also { listOfDeferredIssues.add(it) }
+        val ms = measureTimeMillis {
+            val (username, languages, ignoredRepos, labels, ignoredIssues) = parseInputParameters()
+            val repositories = importService.fetchStarredRepositories(username, languages, ignoredRepos)
+            val issues = ArrayList<Issue>()
+            runBlocking {
+                val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
+                for (repository in repositories) {
+                    async(context = newSingleThreadContext("issues-fetcher")) {
+                        importService.fetchIssues(repository, labels)
+                    }.also { listOfDeferredIssues.add(it) }
+                }
+                listOfDeferredIssues.awaitAll().forEach { issues.addAll(it) }
             }
-            listOfDeferredIssues.awaitAll().forEach { issues.addAll(it) }
+            issues.removeIf { ignoredIssues.contains(it.title) }
+            writeResult(issues.distinctBy { it.htmlUrl }.sortedByDescending { it.createdAt })
         }
-        issues.removeIf { ignoredIssues.contains(it.title) }
-        writeResult(issues.distinctBy { it.htmlUrl }.sortedByDescending { it.createdAt })
-        println("end ${Instant.now()}")
-        executor.shutdownNow()
+        println("Import took ${ms}ms")
     }
 
     private fun writeResult(issues: List<Issue>) {
