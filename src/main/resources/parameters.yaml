@@ -1,0 +1,21 @@
+username: IgorPerikov
+languages:
+- kotlin
+- java
+labels:
+- adoptme
+- contributions welcome
+- help wanted
+- enhancement
+- good first issue
+- PR welcome
+- noob friendly
+- ideal for contribution
+- easy
+ignored-repos:
+- balamaci/rxjava-walkthrough
+- platan/idea-gradle-dependencies-formatter
+- AdoptOpenJDK/jsplitpkgscan
+- gradle/kotlin-dsl
+ignored-issues:
+- https://github.com/apache/incubator-dubbo/issues/2089

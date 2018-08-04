@@ -1,6 +1,11 @@
 package com.github.igorperikov.mightywatcher
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.github.igorperikov.mightywatcher.entity.InputParameters
 import com.github.igorperikov.mightywatcher.entity.Issue
+import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.ImportService
 import kotlinx.coroutines.experimental.*
 import java.io.File
@@ -8,12 +13,12 @@ import kotlin.system.measureTimeMillis
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 object Launcher {
-    private val importService = ImportService()
+    private val importService = ImportService(RestGithubApiClient(System.getenv("GITHUB_TOKEN")))
 
     @JvmStatic
     fun main(args: Array<String>) {
         val ms = measureTimeMillis {
-            val (username, languages, ignoredRepos, labels, ignoredIssues) = parseInputParameters()
+            val (username, languages, labels, ignoredRepos, ignoredIssues) = parseInputParameters()
             val repositories = importService.fetchStarredRepositories(username, languages, ignoredRepos)
             val issues = ArrayList<Issue>()
             runBlocking {
@@ -25,7 +30,7 @@ object Launcher {
                 }
                 listOfDeferredIssues.awaitAll().forEach { issues.addAll(it) }
             }
-            issues.removeIf { ignoredIssues.contains(it.title) }
+            issues.removeIf { ignoredIssues.contains(it.htmlUrl) }
             writeResult(issues.distinctBy { it.htmlUrl }.sortedByDescending { it.createdAt })
         }
         println("Import took ${ms}ms")
@@ -38,31 +43,12 @@ object Launcher {
     }
 
     private fun parseInputParameters(): InputParameters {
-        return InputParameters(
-            readResourceFile("username"),
-            readFileLines("languages"),
-            readFileLines("ignored-repos"),
-            readFileLines("labels"),
-            readFileLines("ignored-issues")
+        val objectMapper = ObjectMapper(YAMLFactory())
+        return objectMapper.readValue(
+            this::class.java.classLoader.getResource("parameters.yaml")?.readText()
+                ?: throw IllegalArgumentException("parameters.yaml not found")
         )
     }
-
-    private fun readResourceFile(filename: String): String =
-        this::class.java.classLoader.getResource(filename)?.readText()
-            ?: throw IllegalArgumentException("File $filename doesn't exist")
-
-    private fun readFileLines(filename: String): Set<String> = readResourceFile(filename)
-        .lines()
-        .filter { it.isNotBlank() }
-        .toSet()
-
-    private data class InputParameters(
-        val username: String,
-        val languages: Set<String>,
-        val ignoredRepos: Set<String>,
-        val labels: Set<String>,
-        val ignoredIssues: Set<String>
-    )
 }
 
 internal fun File.recreate(): File {

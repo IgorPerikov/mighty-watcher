@@ -3,11 +3,8 @@ package com.github.igorperikov.mightywatcher.service
 import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
-import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 
-class ImportService {
-    private val githubApiClient: GithubApiClient = RestGithubApiClient(System.getenv("GITHUB_TOKEN"))
-
+class ImportService(private val githubApiClient: GithubApiClient) {
     fun fetchStarredRepositories(
         username: String,
         languages: Set<String>,
