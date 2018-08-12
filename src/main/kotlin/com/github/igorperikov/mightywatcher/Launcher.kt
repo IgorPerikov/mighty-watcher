@@ -21,13 +21,13 @@ object Launcher {
             val (username, languages, labels, ignoredRepos, ignoredIssues) = parseInputParameters()
             val repositories = importService.fetchStarredRepositories(username, languages, ignoredRepos)
             val issues = ArrayList<Issue>()
-            runBlocking {
-                val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
-                for (repository in repositories) {
-                    async(context = newSingleThreadContext("issues-fetcher")) {
-                        importService.fetchIssues(repository, labels)
-                    }.also { listOfDeferredIssues.add(it) }
+            val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
+            for (repository in repositories) {
+                listOfDeferredIssues += async(context = newSingleThreadContext("issues-fetcher")) {
+                    importService.fetchIssues(repository, labels)
                 }
+            }
+            runBlocking {
                 listOfDeferredIssues.awaitAll().forEach { issues.addAll(it) }
             }
             issues.removeIf { ignoredIssues.contains(it.htmlUrl) }
@@ -43,8 +43,7 @@ object Launcher {
     }
 
     private fun parseInputParameters(): InputParameters {
-        val objectMapper = ObjectMapper(YAMLFactory())
-        return objectMapper.readValue(
+        return ObjectMapper(YAMLFactory()).readValue(
             this::class.java.classLoader.getResource("parameters.yaml")?.readText()
                 ?: throw IllegalArgumentException("parameters.yaml not found")
         )

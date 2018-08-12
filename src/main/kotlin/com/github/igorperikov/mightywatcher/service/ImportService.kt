@@ -20,6 +20,6 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         repository: Repository,
         labels: Set<String>
     ): List<Issue> {
-        return labels.map { githubApiClient.getIssues(repository.fullName, it) }.flatMap { it }
+        return labels.flatMap { githubApiClient.getIssues(repository.fullName, it) }
     }
 }

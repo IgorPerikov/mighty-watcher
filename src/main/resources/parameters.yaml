@@ -18,4 +18,4 @@ ignored-repos:
 - AdoptOpenJDK/jsplitpkgscan
 - gradle/kotlin-dsl
 ignored-issues:
-- https://github.com/apache/incubator-dubbo/issues/2089
+- https://github.com/crate/crate/issues/882
