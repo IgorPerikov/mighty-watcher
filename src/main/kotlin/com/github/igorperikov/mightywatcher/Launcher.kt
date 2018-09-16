@@ -17,21 +17,29 @@ object Launcher {
 
     @JvmStatic
     fun main(args: Array<String>) {
+
         val ms = measureTimeMillis {
             val (username, languages, labels, ignoredRepos, ignoredIssues) = parseInputParameters()
             val repositories = importService.fetchStarredRepositories(username, languages, ignoredRepos)
             val issues = ArrayList<Issue>()
             val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
             for (repository in repositories) {
-                listOfDeferredIssues += async(context = newSingleThreadContext("issues-fetcher")) {
-                    importService.fetchIssues(repository, labels)
-                }
+                listOfDeferredIssues += CoroutineScope(newSingleThreadContext("issues-fetcher")).async(
+                    block = {
+                        importService.fetchIssues(repository, labels)
+                    }
+                )
             }
             runBlocking {
                 listOfDeferredIssues.awaitAll().forEach { issues.addAll(it) }
             }
             issues.removeIf { ignoredIssues.contains(it.htmlUrl) }
-            writeResult(issues.distinctBy { it.htmlUrl }.sortedByDescending { it.createdAt })
+            writeResult(
+                issues.asSequence()
+                    .distinctBy { it.htmlUrl }
+                    .sortedByDescending { it.createdAt }
+                    .toList()
+            )
         }
         println("Import took ${ms}ms")
     }
