@@ -11,9 +11,11 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         ignoredRepos: Set<String>
     ): List<Repository> {
         return githubApiClient.getStarredRepositories(username)
+            .asSequence()
             .filter { it.hasIssues }
             .filter { it.fullName !in ignoredRepos }
             .filter { it.language?.toLowerCase() in languages }
+            .toList()
     }
 
     fun fetchIssues(

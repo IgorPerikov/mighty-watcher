@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.70'
+    ext.kotlin_version = '1.2.71'
 
     repositories {
         mavenCentral()
@@ -24,9 +24,9 @@ repositories {
 }
 
 ext {
-    kotlin_coroutines_version = '0.26.0'
+    kotlin_coroutines_version = '0.30.2'
     ok_http_version = '3.11.0'
-    jackson_version = '2.9.6'
+    jackson_version = '2.9.7'
 }
 
 dependencies {
