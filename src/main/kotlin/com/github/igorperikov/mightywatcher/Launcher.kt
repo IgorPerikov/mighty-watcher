@@ -7,17 +7,15 @@ import com.github.igorperikov.mightywatcher.entity.InputParameters
 import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.ImportService
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-@Suppress("EXPERIMENTAL_FEATURE_WARNING")
 object Launcher {
     private val importService = ImportService(RestGithubApiClient(System.getenv("GITHUB_TOKEN")))
 
     @JvmStatic
     fun main(args: Array<String>) {
-
         val ms = measureTimeMillis {
             val (username, languages, labels, ignoredRepos, ignoredIssues) = parseInputParameters()
             val repositories = importService.fetchStarredRepositories(username, languages, ignoredRepos)
