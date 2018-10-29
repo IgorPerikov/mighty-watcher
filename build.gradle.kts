@@ -1,9 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-    val kotlinVersion = "1.3.0-rc-190"
+    val kotlinVersion = "1.3.0"
     repositories {
-        maven("https://kotlin.bintray.com/kotlin-eap")
         maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
@@ -27,12 +26,11 @@ tasks.withType<KotlinCompile> {
 
 repositories {
     mavenLocal()
-    maven("https://kotlin.bintray.com/kotlin-eap")
     jcenter()
     mavenCentral()
 }
 
-val kotlinCoroutinesVersion = "0.30.2-eap13"
+val kotlinCoroutinesVersion = "1.0.0"
 val okHttpVersion = "3.11.0"
 val jacksonVersion = "2.9.7"
 
