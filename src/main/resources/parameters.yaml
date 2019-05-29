@@ -2,6 +2,7 @@ username: IgorPerikov
 languages:
 - kotlin
 - java
+- go
 labels:
 - adoptme
 - contributions welcome
