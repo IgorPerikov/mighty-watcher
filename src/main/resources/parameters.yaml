@@ -12,9 +12,9 @@ labels:
 - PR welcome
 - noob friendly
 - ideal for contribution
+- low hanging fruit
 - easy
 ignored-repos:
-- balamaci/rxjava-walkthrough
 - platan/idea-gradle-dependencies-formatter
 - AdoptOpenJDK/jsplitpkgscan
 - gradle/kotlin-dsl
