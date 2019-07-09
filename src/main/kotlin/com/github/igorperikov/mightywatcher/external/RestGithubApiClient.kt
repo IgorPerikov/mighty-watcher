@@ -24,11 +24,11 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
     override fun getStarredRepositories(): Set<Repository> {
         return proceedRequestForUrl {
             HttpUrl.Builder()
-                .scheme("https")
-                .host("api.github.com")
+                    .scheme("https")
+                    .host("api.github.com")
                     .addPathSegment("user")
-                .addPathSegment("starred")
-                .build()
+                    .addPathSegment("starred")
+                    .build()
         }
     }
 
@@ -36,16 +36,16 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
         return proceedRequestForUrl {
             val (owner, name) = repoFullName.split("/")
             HttpUrl.Builder()
-                .scheme("https")
-                .host("api.github.com")
-                .addPathSegment("repos")
-                .addPathSegment(owner)
-                .addPathSegment(name)
-                .addPathSegment("issues")
-                .addQueryParameter("assignee", "none")
-                .addQueryParameter("since", Instant.now().minus(Duration.ofDays(365)).toString())
-                .addQueryParameter("labels", label)
-                .build()
+                    .scheme("https")
+                    .host("api.github.com")
+                    .addPathSegment("repos")
+                    .addPathSegment(owner)
+                    .addPathSegment(name)
+                    .addPathSegment("issues")
+                    .addQueryParameter("assignee", "none")
+                    .addQueryParameter("since", Instant.now().minus(Duration.ofDays(365)).toString())
+                    .addQueryParameter("labels", label)
+                    .build()
         }
     }
 
@@ -53,17 +53,17 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
         val request = buildRequest(urlSupplier)
         val jsonBody = getResponseBody(request)
         return jsonMapper.readValue(
-            jsonBody,
-            jsonMapper.typeFactory.constructCollectionType(HashSet::class.java, T::class.java)
+                jsonBody,
+                jsonMapper.typeFactory.constructCollectionType(HashSet::class.java, T::class.java)
         )
     }
 
     private inline fun buildRequest(urlSupplier: () -> HttpUrl): Request {
         return Request.Builder()
-            .url(urlSupplier())
-            .header("Accept", "application/vnd.github.v3+json")
-            .header("Authorization", authHeaderValue)
-            .build()
+                .url(urlSupplier())
+                .header("Accept", "application/vnd.github.v3+json")
+                .header("Authorization", authHeaderValue)
+                .build()
     }
 
     private fun getResponseBody(request: Request): String {

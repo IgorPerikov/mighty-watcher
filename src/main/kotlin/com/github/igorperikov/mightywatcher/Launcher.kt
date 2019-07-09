@@ -16,6 +16,7 @@ object Launcher {
 
     @JvmStatic
     fun main(args: Array<String>) {
+        System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2")
         val ms = measureTimeMillis {
             val (languages, labels, ignoredRepos, ignoredIssues) = parseInputParameters()
             val repositories = importService.fetchStarredRepositories(languages, ignoredRepos)
