@@ -8,7 +8,6 @@ import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.ImportService
 import kotlinx.coroutines.*
-import java.io.File
 import kotlin.system.measureTimeMillis
 
 object Launcher {
@@ -16,7 +15,6 @@ object Launcher {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2")
         val ms = measureTimeMillis {
             val (languages, labels, ignoredRepos, ignoredIssues) = parseInputParameters()
             val repositories = importService.fetchStarredRepositories(languages, ignoredRepos)
