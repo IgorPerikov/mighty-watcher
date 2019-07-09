@@ -1,19 +1,17 @@
-username: IgorPerikov
 languages:
 - kotlin
 - java
-- go
 labels:
 - adoptme
 - contributions welcome
 - help wanted
-- enhancement
 - good first issue
 - PR welcome
 - noob friendly
 - ideal for contribution
 - low hanging fruit
 - easy
+- E-easy
 ignored-repos:
 - platan/idea-gradle-dependencies-formatter
 - AdoptOpenJDK/jsplitpkgscan

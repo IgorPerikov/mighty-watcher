@@ -21,13 +21,12 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
     private val jsonMapper = jacksonObjectMapper().findAndRegisterModules()
     private val authHeaderValue = "token $githubToken"
 
-    override fun getStarredRepositories(username: String): Set<Repository> {
+    override fun getStarredRepositories(): Set<Repository> {
         return proceedRequestForUrl {
             HttpUrl.Builder()
                 .scheme("https")
                 .host("api.github.com")
-                .addPathSegment("users")
-                .addPathSegment(username)
+                    .addPathSegment("user")
                 .addPathSegment("starred")
                 .build()
         }

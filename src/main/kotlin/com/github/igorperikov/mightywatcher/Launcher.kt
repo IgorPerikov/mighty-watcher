@@ -12,13 +12,13 @@ import java.io.File
 import kotlin.system.measureTimeMillis
 
 object Launcher {
-    private val importService = ImportService(RestGithubApiClient(System.getenv("GITHUB_TOKEN")))
+    private val importService = ImportService(RestGithubApiClient(System.getenv("MIGHTY_WATCHER_GITHUB_TOKEN")))
 
     @JvmStatic
     fun main(args: Array<String>) {
         val ms = measureTimeMillis {
-            val (username, languages, labels, ignoredRepos, ignoredIssues) = parseInputParameters()
-            val repositories = importService.fetchStarredRepositories(username, languages, ignoredRepos)
+            val (languages, labels, ignoredRepos, ignoredIssues) = parseInputParameters()
+            val repositories = importService.fetchStarredRepositories(languages, ignoredRepos)
             val issues = ArrayList<Issue>()
             val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
             for (repository in repositories) {

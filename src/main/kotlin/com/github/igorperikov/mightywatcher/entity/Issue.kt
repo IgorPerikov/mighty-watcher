@@ -6,10 +6,11 @@ import java.time.Instant
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Issue(
-    @JsonProperty("html_url") val htmlUrl: String,
-    @JsonProperty("created_at") val createdAt: Instant,
-    val title: String,
-    val labels: Set<Label>
+        @JsonProperty("html_url") val htmlUrl: String,
+        @JsonProperty("created_at") val createdAt: Instant,
+        @JsonProperty("updated_at") val updatedAt: Instant,
+        val title: String,
+        val labels: Set<Label>
 ) {
     override fun toString(): String {
         return "${getRepoName()}  $title  ${labels.joinToString("; ", "[", "]") { it.name }}  $htmlUrl"
