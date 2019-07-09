@@ -1,7 +1,9 @@
-languages:
+include-languages:
 - kotlin
 - java
-labels:
+exclude-languages:
+  - go
+include-labels:
 - adoptme
 - contributions welcome
 - help wanted
@@ -12,9 +14,9 @@ labels:
 - low hanging fruit
 - easy
 - E-easy
-ignored-repos:
+exclude-repositories:
 - platan/idea-gradle-dependencies-formatter
 - AdoptOpenJDK/jsplitpkgscan
 - gradle/kotlin-dsl
-ignored-issues:
+exclude-issues:
 - https://github.com/crate/crate/issues/882

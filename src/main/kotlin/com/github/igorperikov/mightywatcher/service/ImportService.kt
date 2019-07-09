@@ -6,21 +6,20 @@ import com.github.igorperikov.mightywatcher.external.GithubApiClient
 
 class ImportService(private val githubApiClient: GithubApiClient) {
     fun fetchStarredRepositories(
-        languages: Set<String>,
-        ignoredRepos: Set<String>
+            includedLanguages: Set<String>,
+            excludedLanguages: Set<String>,
+            excludedRepositories: Set<String>
     ): List<Repository> {
         return githubApiClient.getStarredRepositories()
-            .asSequence()
-            .filter { it.hasIssues }
-            .filter { it.fullName !in ignoredRepos }
-            .filter { it.language?.toLowerCase() in languages }
-            .toList()
+                .asSequence()
+                .filter { it.hasIssues }
+                .filter { it.fullName !in excludedRepositories }
+                .filter { it.language?.toLowerCase() !in excludedLanguages }
+                .filter { it.language?.toLowerCase() in includedLanguages }
+                .toList()
     }
 
-    fun fetchIssues(
-        repository: Repository,
-        labels: Set<String>
-    ): List<Issue> {
+    fun fetchIssues(repository: Repository, labels: Set<String>): List<Issue> {
         return labels.flatMap { githubApiClient.getIssues(repository.fullName, it) }
     }
 }

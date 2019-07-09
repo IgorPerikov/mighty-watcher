@@ -2,5 +2,4 @@
 build/
 *.class
 .gradle
-/src/main/resources/result
 .gradletasknamecache

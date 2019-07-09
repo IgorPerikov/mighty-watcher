@@ -16,21 +16,25 @@ object Launcher {
     @JvmStatic
     fun main(args: Array<String>) {
         val ms = measureTimeMillis {
-            val (languages, labels, ignoredRepos, ignoredIssues) = parseInputParameters()
-            val repositories = importService.fetchStarredRepositories(languages, ignoredRepos)
+            val (includedLanguages, includedLabels, excludedLanguages, excludedRepositories, excludedIssues) = parseInputParameters()
+            val repositories = importService.fetchStarredRepositories(
+                    includedLanguages,
+                    excludedLanguages,
+                    excludedRepositories
+            )
             val issues = ArrayList<Issue>()
             val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
             for (repository in repositories) {
                 listOfDeferredIssues += CoroutineScope(newSingleThreadContext("issues-fetcher")).async(
                     block = {
-                        importService.fetchIssues(repository, labels)
+                        importService.fetchIssues(repository, includedLabels)
                     }
                 )
             }
             runBlocking {
                 listOfDeferredIssues.awaitAll().forEach { issues.addAll(it) }
             }
-            issues.removeIf { ignoredIssues.contains(it.htmlUrl) }
+            issues.removeIf { excludedIssues.contains(it.htmlUrl) }
             writeResult(
                 issues.asSequence()
                     .distinctBy { it.htmlUrl }
@@ -42,9 +46,7 @@ object Launcher {
     }
 
     private fun writeResult(issues: List<Issue>) {
-        File("src/main/resources/result").recreate().appendText(
-            issues.joinToString(separator = "\r\n") { it.toString() }
-        )
+        println(issues.joinToString(separator = "\r\n") { it.toString() })
     }
 
     private fun parseInputParameters(): InputParameters {
@@ -53,10 +55,4 @@ object Launcher {
                 ?: throw IllegalArgumentException("parameters.yaml not found")
         )
     }
-}
-
-internal fun File.recreate(): File {
-    delete()
-    createNewFile()
-    return this
 }
