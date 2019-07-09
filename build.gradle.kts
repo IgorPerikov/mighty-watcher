@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-    val kotlinVersion = "1.3.0"
+    val kotlinVersion = "1.3.41"
     repositories {
         maven("https://plugins.gradle.org/m2/")
     }
@@ -21,7 +21,7 @@ application {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.majorVersion
 }
 
 repositories {
@@ -30,9 +30,9 @@ repositories {
     mavenCentral()
 }
 
-val kotlinCoroutinesVersion = "1.0.0"
-val okHttpVersion = "3.11.0"
-val jacksonVersion = "2.9.7"
+val kotlinCoroutinesVersion = "1.3.0-M2"
+val okHttpVersion = "3.14.2"
+val jacksonVersion = "2.9.9"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
