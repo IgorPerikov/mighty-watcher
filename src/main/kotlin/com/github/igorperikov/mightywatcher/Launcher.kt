@@ -22,7 +22,7 @@ object Launcher {
             val inputParameters = parseInputParameters()
             val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
             val rateLimiter = Semaphore(parallelismLevel)
-            val coroutineScope = CoroutineScope(newFixedThreadPoolContext(parallelismLevel, "issues-fetcher"))
+            val coroutineScope = CoroutineScope(Dispatchers.IO)
             for ((repository, label) in generateTasks(inputParameters)) {
                 listOfDeferredIssues += coroutineScope.async(
                         block = {
