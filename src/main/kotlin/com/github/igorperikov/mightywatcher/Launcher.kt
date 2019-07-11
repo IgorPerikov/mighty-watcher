@@ -8,50 +8,49 @@ import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.ImportService
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Semaphore
 import kotlin.system.measureTimeMillis
 
 object Launcher {
+    private const val parallelismLevel = 30
     private val importService = ImportService(RestGithubApiClient(System.getenv("MIGHTY_WATCHER_GITHUB_TOKEN")))
 
     @JvmStatic
+    @ObsoleteCoroutinesApi
     fun main(args: Array<String>) {
         val ms = measureTimeMillis {
-            val (
-                    includedLanguages,
-                    includedLabels,
-                    excludedLanguages,
-                    excludedRepositories,
-                    excludedIssues
-            ) = parseInputParameters()
-            val repositories = importService.fetchStarredRepositories(
-                    includedLanguages,
-                    excludedLanguages,
-                    excludedRepositories
-            )
-            val issues = ArrayList<Issue>()
+            val inputParameters = parseInputParameters()
             val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
-            for (repository in repositories.filter { it.hasIssues }) {
-                listOfDeferredIssues += CoroutineScope(newSingleThreadContext("issues-fetcher")).async(
-                    block = {
-                        importService.fetchIssues(repository.fullName, includedLabels)
-                    }
+            val rateLimiter = Semaphore(parallelismLevel)
+            val coroutineScope = CoroutineScope(newFixedThreadPoolContext(parallelismLevel, "issues-fetcher"))
+            for ((repository, label) in generateTasks(inputParameters)) {
+                listOfDeferredIssues += coroutineScope.async(
+                        block = {
+                            try {
+                                rateLimiter.acquire()
+                                return@async importService.fetchIssues(repository, label)
+                            } finally {
+                                rateLimiter.release()
+                            }
+                        }
                 )
             }
             runBlocking {
-                listOfDeferredIssues.awaitAll().forEach { issues.addAll(it) }
+                printResult(
+                        listOfDeferredIssues.awaitAll()
+                                .flatten()
+                                .asSequence()
+                                .distinctBy { it.htmlUrl }
+                                .filterNot { inputParameters.excludedIssues.contains(it.htmlUrl) }
+                                .sortedByDescending { it.createdAt }
+                )
             }
-            issues.removeIf { excludedIssues.contains(it.htmlUrl) }
-            writeResult(
-                issues.asSequence()
-                    .distinctBy { it.htmlUrl }
-                    .sortedByDescending { it.createdAt }
-                    .toList()
-            )
         }
         println("Import took ${ms}ms")
     }
 
-    private fun writeResult(issues: List<Issue>) {
+    // TODO: https://github.com/IgorPerikov/mighty-watcher/issues/25
+    private fun printResult(issues: Sequence<Issue>) {
         for (issue in issues) {
             println(issue)
         }
@@ -59,8 +58,21 @@ object Launcher {
 
     private fun parseInputParameters(): InputParameters {
         return ObjectMapper(YAMLFactory()).readValue(
-            this::class.java.classLoader.getResource("parameters.yaml")?.readText()
-                ?: throw IllegalArgumentException("parameters.yaml not found")
+                this::class.java.classLoader.getResource("parameters.yaml")?.readText()
+                        ?: throw IllegalArgumentException("parameters.yaml not found")
         )
     }
+
+    private fun generateTasks(inputParameters: InputParameters): List<SearchTask> {
+        val repositories = importService.fetchStarredRepositories(
+                inputParameters.includedLanguages,
+                inputParameters.excludedLanguages,
+                inputParameters.excludedRepositories
+        ).filter { it.hasIssues }
+        return repositories.flatMap { repository ->
+            inputParameters.includedLabels.map { label -> SearchTask(repository.fullName, label) }
+        }
+    }
+
+    data class SearchTask(val repository: String, val label: String)
 }

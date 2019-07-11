@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 /**
  * v3 entity api client, full specification - https://developer.entity.com/v3/
  */
+// TODO: https://github.com/IgorPerikov/mighty-watcher/issues/26
 class RestGithubApiClient(githubToken: String) : GithubApiClient {
     private val httpClient = OkHttpClient.Builder()
         .readTimeout(3, TimeUnit.SECONDS)
@@ -21,7 +22,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
     private val jsonMapper = jacksonObjectMapper().findAndRegisterModules()
     private val authHeaderValue = "token $githubToken"
 
-    override fun getStarredRepositories(): Set<Repository> {
+    override fun getStarredRepositories(): List<Repository> {
         return proceedRequestForUrl {
             HttpUrl.Builder()
                     .scheme("https")
@@ -32,7 +33,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
         }
     }
 
-    override fun getIssues(repoFullName: String, label: String): Set<Issue> {
+    override fun getIssues(repoFullName: String, label: String): List<Issue> {
         return proceedRequestForUrl {
             val (owner, name) = repoFullName.split("/")
             HttpUrl.Builder()
@@ -49,12 +50,12 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
         }
     }
 
-    private inline fun <reified T> proceedRequestForUrl(urlSupplier: () -> HttpUrl): Set<T> {
+    private inline fun <reified T> proceedRequestForUrl(urlSupplier: () -> HttpUrl): List<T> {
         val request = buildRequest(urlSupplier)
         val jsonBody = getResponseBody(request)
         return jsonMapper.readValue(
                 jsonBody,
-                jsonMapper.typeFactory.constructCollectionType(HashSet::class.java, T::class.java)
+                jsonMapper.typeFactory.constructCollectionType(ArrayList::class.java, T::class.java)
         )
     }
 
