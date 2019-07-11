@@ -19,7 +19,7 @@ class ImportService(private val githubApiClient: GithubApiClient) {
                 .toList()
     }
 
-    fun fetchIssues(repository: Repository, labels: Set<String>): List<Issue> {
-        return labels.flatMap { githubApiClient.getIssues(repository.fullName, it) }
+    fun fetchIssues(repoFullName: String, labels: Set<String>): List<Issue> {
+        return labels.flatMap { githubApiClient.getIssues(repoFullName, it) }
     }
 }

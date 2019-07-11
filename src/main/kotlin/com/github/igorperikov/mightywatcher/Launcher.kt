@@ -16,7 +16,13 @@ object Launcher {
     @JvmStatic
     fun main(args: Array<String>) {
         val ms = measureTimeMillis {
-            val (includedLanguages, includedLabels, excludedLanguages, excludedRepositories, excludedIssues) = parseInputParameters()
+            val (
+                    includedLanguages,
+                    includedLabels,
+                    excludedLanguages,
+                    excludedRepositories,
+                    excludedIssues
+            ) = parseInputParameters()
             val repositories = importService.fetchStarredRepositories(
                     includedLanguages,
                     excludedLanguages,
@@ -24,10 +30,10 @@ object Launcher {
             )
             val issues = ArrayList<Issue>()
             val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
-            for (repository in repositories) {
+            for (repository in repositories.filter { it.hasIssues }) {
                 listOfDeferredIssues += CoroutineScope(newSingleThreadContext("issues-fetcher")).async(
                     block = {
-                        importService.fetchIssues(repository, includedLabels)
+                        importService.fetchIssues(repository.fullName, includedLabels)
                     }
                 )
             }
@@ -46,7 +52,9 @@ object Launcher {
     }
 
     private fun writeResult(issues: List<Issue>) {
-        println(issues.joinToString(separator = "\r\n") { it.toString() })
+        for (issue in issues) {
+            println(issue)
+        }
     }
 
     private fun parseInputParameters(): InputParameters {
