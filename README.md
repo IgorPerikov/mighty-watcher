@@ -5,7 +5,7 @@ Utility serves purpose to find issues available for contributing
  - non-assigned 
  - open
  - created less than 2 years ago
- - labeled as `easy` or similar, default list can be found [here](/src/main/resources/parameters.yaml)
+ - labeled as `easy` or similar, default list can be found [here](/src/main/kotlin/com/github/igorperikov/mightywatcher/service/ImportService.kt)
  - starred by account, which issued api access token 
 
 #### How to use:
