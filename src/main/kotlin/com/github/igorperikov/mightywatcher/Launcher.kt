@@ -1,7 +1,6 @@
 package com.github.igorperikov.mightywatcher
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.igorperikov.mightywatcher.entity.InputParameters
 import com.github.igorperikov.mightywatcher.entity.Issue
@@ -9,69 +8,81 @@ import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.ImportService
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Semaphore
-import kotlin.system.measureTimeMillis
+import org.slf4j.LoggerFactory
 
 object Launcher {
+    @JvmStatic
+    private val log = LoggerFactory.getLogger(this.javaClass)
+
     private const val parallelismLevel = 30
-    private val importService = ImportService(RestGithubApiClient(System.getenv("MIGHTY_WATCHER_GITHUB_TOKEN")))
+    private const val tokenEnvName = "MIGHTY_WATCHER_GITHUB_TOKEN"
+
+    private val easyLabels = listOf(
+            "adoptme",
+            "contributions welcome",
+            "help wanted",
+            "good first issue",
+            "PR welcome",
+            "noob friendly",
+            "ideal for contribution",
+            "low hanging fruit",
+            "easy",
+            "E-easy"
+    )
+    private val importService = ImportService(
+            RestGithubApiClient(
+                    System.getenv(tokenEnvName) ?: throw RuntimeException("$tokenEnvName should be set")
+            )
+    )
 
     @JvmStatic
     @ObsoleteCoroutinesApi
     fun main(args: Array<String>) {
-        val ms = measureTimeMillis {
-            val inputParameters = parseInputParameters()
-            val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
-            val rateLimiter = Semaphore(parallelismLevel)
-            val coroutineScope = CoroutineScope(Dispatchers.IO)
-            for ((repository, label) in generateTasks(inputParameters)) {
-                listOfDeferredIssues += coroutineScope.async(
-                        block = {
-                            try {
-                                rateLimiter.acquire()
-                                return@async importService.fetchIssues(repository, label)
-                            } finally {
-                                rateLimiter.release()
-                            }
+        val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
+        val rateLimiter = Semaphore(parallelismLevel)
+        val coroutineScope = CoroutineScope(Dispatchers.IO)
+        for ((repository, label) in generateTasks()) {
+            listOfDeferredIssues += coroutineScope.async(
+                    block = {
+                        try {
+                            rateLimiter.acquire()
+                            return@async importService.fetchIssues(repository, label)
+                        } finally {
+                            rateLimiter.release()
                         }
-                )
-            }
-            runBlocking {
-                printResult(
-                        listOfDeferredIssues.awaitAll()
-                                .flatten()
-                                .asSequence()
-                                .distinctBy { it.htmlUrl }
-                                .filterNot { inputParameters.excludedIssues.contains(it.htmlUrl) }
-                                .sortedByDescending { it.createdAt }
-                )
-            }
+                    }
+            )
         }
-        println("Import took ${ms}ms")
+        runBlocking {
+            printResult(
+                    listOfDeferredIssues.awaitAll()
+                            .flatten()
+                            .asSequence()
+                            .distinctBy { it.htmlUrl }
+                            .sortedByDescending { it.createdAt }
+            )
+        }
     }
 
     // TODO: https://github.com/IgorPerikov/mighty-watcher/issues/25
     private fun printResult(issues: Sequence<Issue>) {
         for (issue in issues) {
-            println(issue)
+            log.info(issue.toString())
         }
     }
 
     private fun parseInputParameters(): InputParameters {
-        return ObjectMapper(YAMLFactory()).readValue(
-                this::class.java.classLoader.getResource("parameters.yaml")?.readText()
-                        ?: throw IllegalArgumentException("parameters.yaml not found")
+        val objectMapper = ObjectMapper()
+        return objectMapper.readValue(
+                this::class.java.classLoader.getResource("parameters.json")?.readText()
+                        ?: throw IllegalArgumentException("parameters.json not found")
         )
     }
 
-    private fun generateTasks(inputParameters: InputParameters): List<SearchTask> {
-        val repositories = importService.fetchStarredRepositories(
-                inputParameters.includedLanguages,
-                inputParameters.excludedLanguages,
-                inputParameters.excludedRepositories
-        ).filter { it.hasIssues }
-        return repositories.flatMap { repository ->
-            inputParameters.includedLabels.map { label -> SearchTask(repository.fullName, label) }
-        }
+    private fun generateTasks(): List<SearchTask> {
+        val inputParameters = parseInputParameters()
+        val repositories = importService.fetchStarredRepositories(inputParameters)
+        return repositories.flatMap { repository -> easyLabels.map { label -> SearchTask(repository.fullName, label) } }
     }
 
     data class SearchTask(val repository: String, val label: String)
