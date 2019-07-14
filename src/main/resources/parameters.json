@@ -4,7 +4,6 @@
     "java"
   ],
   "exclude-languages": [
-    "ruby"
   ],
   "exclude-repositories": [
     "AdoptOpenJDK/jsplitpkgscan"
