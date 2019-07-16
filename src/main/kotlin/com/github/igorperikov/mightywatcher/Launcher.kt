@@ -78,7 +78,7 @@ object Launcher {
         val thisWeek = today.minus(Duration.ofDays(7))
         val older = Instant.MIN
 
-        val timeGroups: Array<TimeGroup> = arrayOf(
+        val timeGroups = arrayOf(
             TimeGroup(older, "older"),
             TimeGroup(thisWeek, "this week"),
             TimeGroup(yesterday, "yesterday"),

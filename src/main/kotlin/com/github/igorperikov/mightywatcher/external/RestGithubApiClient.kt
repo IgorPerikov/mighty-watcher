@@ -6,7 +6,6 @@ import com.github.igorperikov.mightywatcher.entity.Repository
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -67,7 +66,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
     }
 
     private fun getResponseBody(request: Request): String {
-        val response: Response = httpClient.newCall(request).execute()
+        val response = httpClient.newCall(request).execute()
         return response.body()?.string() ?: throw RuntimeException("Empty response body")
     }
 }
