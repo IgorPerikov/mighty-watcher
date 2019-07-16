@@ -1,6 +1,6 @@
 package com.github.igorperikov.mightywatcher.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.igorperikov.mightywatcher.entity.InputParameters
 import com.github.igorperikov.mightywatcher.entity.Issue
@@ -50,7 +50,7 @@ class ImportService(private val githubApiClient: GithubApiClient) {
     }
 
     private fun parseInputParameters(): InputParameters {
-        val objectMapper = ObjectMapper()
+        val objectMapper = jacksonObjectMapper().findAndRegisterModules()
         return objectMapper.readValue(
             this::class.java.classLoader.getResource("parameters.json")?.readText()
                 ?: throw IllegalArgumentException("parameters.json not found")
