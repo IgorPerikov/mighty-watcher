@@ -1,7 +1,8 @@
 {
   "include-languages": [
     "kotlin",
-    "java"
+    "java",
+    "go"
   ],
   "exclude-languages": [
   ],

@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit
 // TODO: https://github.com/IgorPerikov/mighty-watcher/issues/26
 class RestGithubApiClient(githubToken: String) : GithubApiClient {
     private val httpClient = OkHttpClient.Builder()
-        .readTimeout(3, TimeUnit.SECONDS)
+        .connectTimeout(1, TimeUnit.SECONDS)
+        .readTimeout(4, TimeUnit.SECONDS)
         .build()
     private val jsonMapper = jacksonObjectMapper().findAndRegisterModules()
     private val authHeaderValue = "token $githubToken"
@@ -29,6 +30,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
                 .host("api.github.com")
                 .addPathSegment("user")
                 .addPathSegment("starred")
+                .addQueryParameter("per_page", "1000")
                 .build()
         }
     }
