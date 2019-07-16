@@ -1,7 +1,7 @@
 package com.github.igorperikov.mightywatcher.external
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.github.igorperikov.mightywatcher.entity.Issue
+import com.github.igorperikov.mightywatcher.Issues
 import com.github.igorperikov.mightywatcher.entity.Repository
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
@@ -32,7 +32,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
         }
     }
 
-    override fun getIssues(repoFullName: String, label: String): List<Issue> {
+    override fun getIssues(repoFullName: String, label: String): Issues {
         return proceedRequestForUrl {
             val (owner, name) = repoFullName.split("/")
             HttpUrl.Builder()
@@ -49,7 +49,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
         }
     }
 
-    private inline fun <reified T> proceedRequestForUrl(urlSupplier: () -> HttpUrl): List<T> {
+    private inline fun <reified T> proceedRequestForUrl(urlSupplier: () -> HttpUrl): MutableList<T> {
         val request = buildRequest(urlSupplier)
         val jsonBody = getResponseBody(request)
         return jsonMapper.readValue(

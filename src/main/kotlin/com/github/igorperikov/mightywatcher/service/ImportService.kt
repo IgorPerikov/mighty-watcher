@@ -2,8 +2,8 @@ package com.github.igorperikov.mightywatcher.service
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.github.igorperikov.mightywatcher.Issues
 import com.github.igorperikov.mightywatcher.entity.InputParameters
-import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.entity.SearchTask
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
@@ -35,7 +35,7 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         }
     }
 
-    fun fetchIssues(repoFullName: String, label: String): List<Issue> {
+    fun fetchIssues(repoFullName: String, label: String): Issues {
         return githubApiClient.getIssues(repoFullName, label)
     }
 

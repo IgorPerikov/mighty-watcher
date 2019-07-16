@@ -14,6 +14,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
+typealias Issues = MutableList<Issue>
+
 object Launcher {
     @JvmStatic
     private val log = LoggerFactory.getLogger(this.javaClass)
@@ -30,7 +32,7 @@ object Launcher {
     @JvmStatic
     @ObsoleteCoroutinesApi
     fun main(args: Array<String>) {
-        val listOfDeferredIssues = ArrayList<Deferred<List<Issue>>>()
+        val listOfDeferredIssues = ArrayList<Deferred<Issues>>()
         val rateLimiter = Semaphore(parallelismLevel)
         val coroutineScope = CoroutineScope(Dispatchers.IO)
         for ((repository, label) in importService.getSearchTasks()) {
@@ -65,7 +67,7 @@ object Launcher {
         }
     }
 
-    private fun groupByTime(issues: Sequence<Issue>): LinkedHashMap<TimeGroup, MutableList<Issue>> {
+    private fun groupByTime(issues: Sequence<Issue>): LinkedHashMap<TimeGroup, Issues> {
         val today = LocalDateTime.now(ZoneOffset.UTC)
             .withHour(0)
             .withMinute(0)
@@ -82,7 +84,7 @@ object Launcher {
             TimeGroup(yesterday, "yesterday"),
             TimeGroup(today, "today")
         )
-        val issuesByTimeGroup = LinkedHashMap<TimeGroup, MutableList<Issue>>()
+        val issuesByTimeGroup = LinkedHashMap<TimeGroup, Issues>()
         for (issue in issues) {
             issuesByTimeGroup.computeIfAbsent(findTimeGroup(timeGroups, issue)) { mutableListOf() }.add(issue)
         }
