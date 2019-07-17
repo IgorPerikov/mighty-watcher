@@ -50,8 +50,8 @@ object Launcher {
         runBlocking {
             printResult(
                 listOfDeferredIssues.awaitAll()
-                    .flatten()
                     .asSequence()
+                    .flatten()
                     .distinctBy { it.htmlUrl }
                     .sortedByDescending { it.createdAt }
                     .toMutableList()
@@ -96,7 +96,7 @@ object Launcher {
         }
     }
 
-    private data class TimeGroup(val time: Instant, val name: String = "") : Comparable<TimeGroup> {
+    private class TimeGroup(val time: Instant, val name: String = "") : Comparable<TimeGroup> {
         override fun compareTo(other: TimeGroup): Int {
             return time.compareTo(other.time)
         }
