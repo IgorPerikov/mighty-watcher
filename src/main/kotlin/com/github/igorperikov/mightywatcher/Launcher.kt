@@ -54,11 +54,12 @@ object Launcher {
                     .asSequence()
                     .distinctBy { it.htmlUrl }
                     .sortedByDescending { it.createdAt }
+                    .toMutableList()
             )
         }
     }
 
-    private fun printResult(issues: Sequence<Issue>) {
+    private fun printResult(issues: Issues) {
         for ((timeGroup, issuesInTimeGroup) in groupByTime(issues)) {
             log.info("{}", timeGroup)
             for (issue in issuesInTimeGroup) {
@@ -67,7 +68,7 @@ object Launcher {
         }
     }
 
-    private fun groupByTime(issues: Sequence<Issue>): LinkedHashMap<TimeGroup, Issues> {
+    private fun groupByTime(issues: Issues): LinkedHashMap<TimeGroup, Issues> {
         val today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC)
         val yesterday = today.minus(Duration.ofDays(1))
         val thisWeek = today.minus(Duration.ofDays(7))
