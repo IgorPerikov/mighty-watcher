@@ -8,7 +8,7 @@ import kotlinx.coroutines.sync.Semaphore
 import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.*
 import kotlin.collections.ArrayList
@@ -68,12 +68,7 @@ object Launcher {
     }
 
     private fun groupByTime(issues: Sequence<Issue>): LinkedHashMap<TimeGroup, Issues> {
-        val today = LocalDateTime.now(ZoneOffset.UTC)
-            .withHour(0)
-            .withMinute(0)
-            .withSecond(0)
-            .withNano(0)
-            .toInstant(ZoneOffset.UTC)
+        val today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC)
         val yesterday = today.minus(Duration.ofDays(1))
         val thisWeek = today.minus(Duration.ofDays(7))
         val older = Instant.MIN

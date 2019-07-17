@@ -44,6 +44,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
                 .addQueryParameter("assignee", "none")
                 .addQueryParameter("since", Instant.now().minus(Duration.ofDays(365)).toString())
                 .addQueryParameter("labels", label)
+                .addQueryParameter("per_page", "1000")
                 .build()
         }
     }
