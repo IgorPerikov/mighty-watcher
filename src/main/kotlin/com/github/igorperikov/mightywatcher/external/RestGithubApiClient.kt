@@ -1,12 +1,11 @@
 package com.github.igorperikov.mightywatcher.external
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.github.igorperikov.mightywatcher.entity.Issue
+import com.github.igorperikov.mightywatcher.Issues
 import com.github.igorperikov.mightywatcher.entity.Repository
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -16,9 +15,7 @@ import java.util.concurrent.TimeUnit
  */
 // TODO: https://github.com/IgorPerikov/mighty-watcher/issues/26
 class RestGithubApiClient(githubToken: String) : GithubApiClient {
-    private val httpClient = OkHttpClient.Builder()
-        .readTimeout(3, TimeUnit.SECONDS)
-        .build()
+    private val httpClient = OkHttpClient.Builder().callTimeout(4, TimeUnit.SECONDS).build()
     private val jsonMapper = jacksonObjectMapper().findAndRegisterModules()
     private val authHeaderValue = "token $githubToken"
 
@@ -29,11 +26,12 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
                 .host("api.github.com")
                 .addPathSegment("user")
                 .addPathSegment("starred")
+                .addQueryParameter("per_page", "1000")
                 .build()
         }
     }
 
-    override fun getIssues(repoFullName: String, label: String): List<Issue> {
+    override fun getIssues(repoFullName: String, label: String): Issues {
         return proceedRequestForUrl {
             val (owner, name) = repoFullName.split("/")
             HttpUrl.Builder()
@@ -46,11 +44,12 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
                 .addQueryParameter("assignee", "none")
                 .addQueryParameter("since", Instant.now().minus(Duration.ofDays(365)).toString())
                 .addQueryParameter("labels", label)
+                .addQueryParameter("per_page", "1000")
                 .build()
         }
     }
 
-    private inline fun <reified T> proceedRequestForUrl(urlSupplier: () -> HttpUrl): List<T> {
+    private inline fun <reified T> proceedRequestForUrl(urlSupplier: () -> HttpUrl): MutableList<T> {
         val request = buildRequest(urlSupplier)
         val jsonBody = getResponseBody(request)
         return jsonMapper.readValue(
@@ -68,7 +67,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
     }
 
     private fun getResponseBody(request: Request): String {
-        val response: Response = httpClient.newCall(request).execute()
+        val response = httpClient.newCall(request).execute()
         return response.body()?.string() ?: throw RuntimeException("Empty response body")
     }
 }
