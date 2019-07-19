@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
  */
 // TODO: https://github.com/IgorPerikov/mighty-watcher/issues/26
 class RestGithubApiClient(githubToken: String) : GithubApiClient {
-    private val httpClient = OkHttpClient.Builder().callTimeout(4, TimeUnit.SECONDS).build()
+    private val httpClient = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
     private val jsonMapper = jacksonObjectMapper().findAndRegisterModules()
     private val authHeaderValue = "token $githubToken"
 
