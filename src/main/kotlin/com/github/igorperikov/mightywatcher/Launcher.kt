@@ -72,10 +72,12 @@ object Launcher {
         val today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC)
         val yesterday = today.minus(Duration.ofDays(1))
         val thisWeek = today.minus(Duration.ofDays(7))
+        val thisMonth = today.minus(Duration.ofDays(30))
         val older = Instant.MIN
 
         val timeGroups = arrayOf(
             TimeGroup(older, "older"),
+            TimeGroup(thisMonth, "this month"),
             TimeGroup(thisWeek, "this week"),
             TimeGroup(yesterday, "yesterday"),
             TimeGroup(today, "today")

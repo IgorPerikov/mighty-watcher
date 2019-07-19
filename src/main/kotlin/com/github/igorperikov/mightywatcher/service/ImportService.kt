@@ -19,7 +19,13 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         "ideal for contribution",
         "low hanging fruit",
         "easy",
-        "E-easy"
+        "good-first-issue",
+        "E-easy",
+        "E-help-wanted",
+        "E-mentor",
+        "E-needstest",
+        "E-medium",
+        "hacktoberfest"
     )
 
     fun getSearchTasks(): List<SearchTask> {
