@@ -1,5 +1,6 @@
 package com.github.igorperikov.mightywatcher.external
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.igorperikov.mightywatcher.Issues
 import com.github.igorperikov.mightywatcher.entity.Repository
@@ -15,8 +16,10 @@ import java.util.concurrent.TimeUnit
  */
 // TODO: https://github.com/IgorPerikov/mighty-watcher/issues/26
 class RestGithubApiClient(githubToken: String) : GithubApiClient {
-    private val httpClient = OkHttpClient.Builder().callTimeout(4, TimeUnit.SECONDS).build()
-    private val jsonMapper = jacksonObjectMapper().findAndRegisterModules()
+    private val httpClient = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
+    private val jsonMapper = jacksonObjectMapper()
+        .findAndRegisterModules()
+        .registerModule(JavaTimeModule())
     private val authHeaderValue = "token $githubToken"
 
     override fun getStarredRepositories(): List<Repository> {

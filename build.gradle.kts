@@ -1,19 +1,10 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-    val kotlinVersion = "1.3.41"
-    repositories {
-        maven("https://plugins.gradle.org/m2/")
-    }
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-    }
-}
-
-apply(plugin = "org.jetbrains.kotlin.jvm")
-
 plugins {
+    kotlin("jvm") version "1.3.41"
     application
+    id("com.github.johnrengelman.shadow") version "5.1.0"
 }
 
 application {
@@ -22,6 +13,14 @@ application {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+}
+
+tasks {
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("mighty-watcher")
+        archiveClassifier.set("")
+        archiveVersion.set("")
+    }
 }
 
 repositories {
@@ -47,7 +46,6 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
     implementation("com.fasterxml.jackson.datatype", "jackson-datatype-jsr310", jacksonVersion)
-    implementation("com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml", jacksonVersion)
 
     implementation("org.slf4j", "slf4j-api", slf4jVersion)
     implementation("ch.qos.logback", "logback-core", logbackVersion)

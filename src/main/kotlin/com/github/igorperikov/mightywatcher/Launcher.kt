@@ -16,16 +16,19 @@ import kotlin.collections.LinkedHashMap
 
 typealias Issues = MutableList<Issue>
 
+const val TOKEN_ENV_NAME = "TOKEN"
+const val INCLUDE_LANG_ENV_NAME = "INCLUDE"
+const val EXCLUDE_REPOS_ENV_NAME = "EXCLUDE"
+
 object Launcher {
     @JvmStatic
     private val log = LoggerFactory.getLogger(this.javaClass)
 
     private const val parallelismLevel = 30
-    private const val tokenEnvName = "MIGHTY_WATCHER_GITHUB_TOKEN"
 
     private val importService = ImportService(
         RestGithubApiClient(
-            System.getenv(tokenEnvName) ?: throw RuntimeException("$tokenEnvName should be set")
+            System.getenv(TOKEN_ENV_NAME) ?: throw RuntimeException("$TOKEN_ENV_NAME should be set")
         )
     )
 

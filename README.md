@@ -9,8 +9,10 @@ Utility serves purpose to find issues available for contributing
  - starred by account, which issued api access token 
 
 #### How to use:
- - generate an API access token: go to Settings -> Developer Settings -> Personal access tokens -> Generate new token. Not a single scope is needed. 
- - with docker: ``
+ - generate an API access token: go to Settings -> Developer Settings -> Personal access tokens -> Generate new token. Not a single scope is needed.
+ - add it to env variables as whatever you prefer or pass directly to docker run command  
+ - ` docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go,rust" -e "EXCLUDE=AdoptOpenJDK/jsplitpkgscan" --network host --rm igorperikov/mighty-watcher:latest`
 
 #### Contribution:
- - please mark issues same way in your repositories/PR labels you are using 
+ - please mark issues in your repositories if you are willing to get some help
+ - contribute your own labels, if this utility misses any
