@@ -21,6 +21,11 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         "E-easy"
     )
 
+    private val includedLanguages: Set<String> =
+        System.getenv(INCLUDE_LANG_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
+    private val excludedRepositories: Set<String> =
+        System.getenv(EXCLUDE_REPOS_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
+
     fun getSearchTasks(): List<SearchTask> {
         return fetchStarredRepositories()
             .flatMap { repository ->
@@ -41,16 +46,16 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         return githubApiClient.getStarredRepositories()
             .asSequence()
             .filter { it.hasIssues }
-            .filter { it.language?.toLowerCase() in getIncludedLanguages() }
-            .filter { it.fullName !in getExcludedRepositories() }
+            .filter { languageAllowed(it.language) }
+            .filterNot { it.fullName in excludedRepositories }
             .toList()
     }
 
-    private fun getIncludedLanguages(): Set<String> {
-        return System.getenv(INCLUDE_LANG_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
-    }
-
-    private fun getExcludedRepositories(): Set<String> {
-        return System.getenv(EXCLUDE_REPOS_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
+    private fun languageAllowed(language: String?): Boolean {
+        return if (includedLanguages.isEmpty()) {
+            true
+        } else {
+            includedLanguages.contains(language?.toLowerCase())
+        }
     }
 }
