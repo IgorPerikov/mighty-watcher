@@ -66,7 +66,7 @@ object Launcher {
         for ((timeGroup, issuesInTimeGroup) in groupByTime(issues)) {
             log.info("{}", timeGroup)
             for (issue in issuesInTimeGroup) {
-                log.info("{}", issue)
+                log.info(" {}", issue)
             }
         }
     }

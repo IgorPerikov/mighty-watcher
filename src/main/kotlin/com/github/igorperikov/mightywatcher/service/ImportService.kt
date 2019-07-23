@@ -6,6 +6,11 @@ import com.github.igorperikov.mightywatcher.Issues
 import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.entity.SearchTask
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
+import java.time.Duration
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class ImportService(private val githubApiClient: GithubApiClient) {
     private val easyLabels = listOf(
@@ -27,6 +32,11 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         "hacktoberfest"
     )
 
+    private val since = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+        .withLocale(Locale.ENGLISH)
+        .withZone(ZoneOffset.UTC)
+        .format(Instant.now().minus(Duration.ofDays(365)))
+
     private val includedLanguages: Set<String> =
         System.getenv(INCLUDE_LANG_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
     private val excludedRepositories: Set<String> =
@@ -45,7 +55,7 @@ class ImportService(private val githubApiClient: GithubApiClient) {
     }
 
     fun fetchIssues(repoFullName: String, label: String): Issues {
-        return githubApiClient.getIssues(repoFullName, label)
+        return githubApiClient.getIssues(repoFullName, label, since)
     }
 
     private fun fetchStarredRepositories(): List<Repository> {
