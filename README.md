@@ -21,6 +21,7 @@ This utility helps to find issues available for contributing, based on repositor
  
 #### Example:
 <p align="center"><img src="/example.gif?raw=true"/></p>
+
 **NB**: In this example I intentionally made it to look only 20 days in the past, so output can fit 1 screen :smile:
 
 #### Contribution:
