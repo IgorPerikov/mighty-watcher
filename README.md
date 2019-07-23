@@ -20,7 +20,7 @@ This utility helps to find issues available for contributing, based on repositor
  - Launch docker container from your favourite terminal: `docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go,rust" -e "EXCLUDE=AdoptOpenJDK/jsplitpkgscan" --network host --rm igorperikov/mighty-watcher:latest`
  
 #### Example:
-![](example.gif)
+<p align="center"><img src="/example.gif?raw=true"/></p>
 **NB**: In this example I intentionally made it to look only 20 days in the past, so output can fit 1 screen :smile:
 
 #### Contribution:
