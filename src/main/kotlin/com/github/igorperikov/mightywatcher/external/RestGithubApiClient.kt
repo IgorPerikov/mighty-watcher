@@ -7,8 +7,6 @@ import com.github.igorperikov.mightywatcher.entity.Repository
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.time.Duration
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 /**
@@ -34,7 +32,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
         }
     }
 
-    override fun getIssues(repoFullName: String, label: String): Issues {
+    override fun getIssues(repoFullName: String, label: String, since: String): Issues {
         return proceedRequestForUrl {
             val (owner, name) = repoFullName.split("/")
             HttpUrl.Builder()
@@ -45,7 +43,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
                 .addPathSegment(name)
                 .addPathSegment("issues")
                 .addQueryParameter("assignee", "none")
-                .addQueryParameter("since", Instant.now().minus(Duration.ofDays(365)).toString())
+                .addQueryParameter("since", since)
                 .addQueryParameter("labels", label)
                 .addQueryParameter("per_page", "1000")
                 .build()
