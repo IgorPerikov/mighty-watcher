@@ -15,9 +15,11 @@ This utility helps to find issues available for contributing, based on repositor
   I'd recommend you to save api token in env variable(e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
 
 #### How to use:
- - suggest to prepare envvars **TODO**
- - explain INCLUDE/EXCLUDE variables
- - Launch docker container from your favourite terminal: `docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go,rust" -e "EXCLUDE=AdoptOpenJDK/jsplitpkgscan" --network host --rm igorperikov/mighty-watcher:latest`
+ - There are 3 environment variables you should know about:
+   - `TOKEN` - plain api access token, **the only required parameter** to pass
+   - `INCLUDE` - comma-separated language names to be included(only main language of repository counts), if none passed - include all 
+   - `EXCLUDE` - comma-separated repository names to be fully excluded from analysis in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher`
+ - Launch docker container from your favourite terminal: `docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go,rust" -e "EXCLUDE=IgorPerikov/mighty-watcher" --network host --rm igorperikov/mighty-watcher:latest`
  
 #### Example:
 <p align="center"><img src="/example.gif?raw=true"/></p>
