@@ -12,15 +12,18 @@ This utility helps to find issues available for contributing, based on repositor
  - docker installed
  - github api access token, generate it by going to Settings -> Developer Settings -> Personal access tokens -> Generate new token.
   Mighty-watcher requires no scopes. 
-  I'd recommend you to save api token in env variable(e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
+  I'd recommend you to put api token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
 
 #### How to use:
- - suggest to prepare envvars **TODO**
- - explain INCLUDE/EXCLUDE variables
- - Launch docker container from your favourite terminal: `docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go,rust" -e "EXCLUDE=AdoptOpenJDK/jsplitpkgscan" --network host --rm igorperikov/mighty-watcher:latest`
+ - There are 3 environment variables you should know about:
+   - `TOKEN` - plain api access token, **the only required parameter** to pass
+   - `INCLUDE` - comma-separated language names to be included(only main language of repository counts), if none passed - include all 
+   - `EXCLUDE` - comma-separated repository names to be fully excluded from analysis in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher`
+ - Launch docker container from your favourite terminal: `docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go,rust" -e "EXCLUDE=IgorPerikov/mighty-watcher" --network host --rm igorperikov/mighty-watcher:latest`
  
 #### Example:
-<p align="center"><img src="/example.gif?raw=true"/></p>
+<p align="center"><img src="/docs/example.gif?raw=true"/></p>
+
 **NB**: In this example I intentionally made it to look only 20 days in the past, so output can fit 1 screen :smile:
 
 #### Contribution:
