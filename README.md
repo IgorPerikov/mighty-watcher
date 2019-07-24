@@ -19,8 +19,8 @@ This utility helps to find issues available for contributing, based on repositor
    - `TOKEN` - plain api access token, **the only required parameter** to pass
    - `INCLUDE` - comma-separated language names to be included(only main language of repository counts), if none passed - include all 
    - `EXCLUDE` - comma-separated repository names to be fully excluded from analysis in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher`
- - Launch docker container from your favourite terminal: `docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go,rust" -e "EXCLUDE=IgorPerikov/mighty-watcher" --network host --rm igorperikov/mighty-watcher:latest`
- 
+ - Launch docker container from terminal: `docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go,rust" -e "EXCLUDE=IgorPerikov/mighty-watcher" --network host --rm igorperikov/mighty-watcher:latest`
+
 ### Example:
 <p align="center"><img src="/docs/example.gif?raw=true"/></p>
 
@@ -28,4 +28,4 @@ This utility helps to find issues available for contributing, based on repositor
 
 ### Contribution:
  - please mark issues in your repositories if you are willing to get some help
- - contribute your own labels, if this utility misses any
+ - contribute your own labels, if the list misses any
