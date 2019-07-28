@@ -36,16 +36,16 @@ object Launcher {
     @ObsoleteCoroutinesApi
     fun main(args: Array<String>) {
         val listOfDeferredIssues = ArrayList<Deferred<Issues>>()
-        val rateLimiter = Semaphore(parallelismLevel)
+        val parallelismLimiter = Semaphore(parallelismLevel)
         val coroutineScope = CoroutineScope(Dispatchers.IO)
         for ((repository, label) in importService.getSearchTasks()) {
             listOfDeferredIssues += coroutineScope.async(
                 block = {
                     try {
-                        rateLimiter.acquire()
+                        parallelismLimiter.acquire()
                         return@async importService.fetchIssues(repository, label)
                     } finally {
-                        rateLimiter.release()
+                        parallelismLimiter.release()
                     }
                 }
             )
