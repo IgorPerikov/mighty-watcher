@@ -10,16 +10,14 @@ fun <Input, Result> launchInParallel(inputs: List<Input>, function: Function1<In
     runBlocking {
         val listOfDeferredResults = ArrayList<Deferred<Result>>()
         for (input in inputs) {
-            listOfDeferredResults += coroutineScope.async(
-                block = {
-                    try {
-                        parallelismLimiter.acquire()
-                        return@async function(input)
-                    } finally {
-                        parallelismLimiter.release()
-                    }
+            listOfDeferredResults += coroutineScope.async {
+                try {
+                    parallelismLimiter.acquire()
+                    return@async function(input)
+                } finally {
+                    parallelismLimiter.release()
                 }
-            )
+            }
         }
         listOfDeferredResults.awaitAll()
     }

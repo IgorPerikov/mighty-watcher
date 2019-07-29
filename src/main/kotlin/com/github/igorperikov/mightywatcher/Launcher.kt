@@ -32,7 +32,10 @@ object Launcher {
     fun main(args: Array<String>) {
         printResult(
             launchInParallel(importService.getSearchTasks()) { searchTask ->
-                importService.fetchIssues(searchTask.repository, searchTask.label)
+                importService.fetchIssues(
+                    searchTask.repository,
+                    searchTask.label
+                )
             }
                 .asSequence()
                 .flatten()

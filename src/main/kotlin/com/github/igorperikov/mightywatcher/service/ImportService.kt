@@ -45,8 +45,7 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         System.getenv(EXCLUDE_REPOS_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
 
     fun getSearchTasks(): List<SearchTask> {
-        val starredRepositories: List<Repository> = fetchStarredRepositories()
-        return launchInParallel(starredRepositories) { repository ->
+        return launchInParallel(fetchStarredRepositories()) { repository ->
             val repositoryLabels = getRepositoryLabels(repository).map { it.name }.toHashSet()
             easyLabels.filter { repositoryLabels.contains(it) }.map { label -> SearchTask(repository, label) }
         }.flatten()
