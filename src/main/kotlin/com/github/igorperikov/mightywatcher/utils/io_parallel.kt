@@ -6,7 +6,7 @@ import kotlinx.coroutines.sync.Semaphore
 val coroutineScope = CoroutineScope(Dispatchers.IO)
 val parallelismLimiter = Semaphore(15)
 
-fun <Input, Result> launchInParallel(inputs: List<Input>, function: Function1<Input, Result>): List<Result> =
+fun <Input, Result> executeInParallel(inputs: List<Input>, function: Function1<Input, Result>): List<Result> =
     runBlocking {
         val listOfDeferredResults = ArrayList<Deferred<Result>>()
         for (input in inputs) {

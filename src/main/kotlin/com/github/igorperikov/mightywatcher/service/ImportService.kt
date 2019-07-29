@@ -7,7 +7,7 @@ import com.github.igorperikov.mightywatcher.entity.Label
 import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.entity.SearchTask
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
-import com.github.igorperikov.mightywatcher.utils.launchInParallel
+import com.github.igorperikov.mightywatcher.utils.executeInParallel
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
@@ -45,9 +45,8 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         System.getenv(EXCLUDE_REPOS_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
 
     fun getSearchTasks(): List<SearchTask> {
-        return launchInParallel(fetchStarredRepositories()) { repository ->
-            val repositoryLabels = getRepositoryLabels(repository).map { it.name }.toHashSet()
-            easyLabels.filter { repositoryLabels.contains(it) }.map { label -> SearchTask(repository, label) }
+        return executeInParallel(fetchStarredRepositories()) { repository ->
+            findLabelsConjunction(repository).map { label -> SearchTask(repository, label) }
         }.flatten()
     }
 
@@ -57,6 +56,11 @@ class ImportService(private val githubApiClient: GithubApiClient) {
 
     private fun getRepositoryLabels(repository: Repository): List<Label> {
         return githubApiClient.getRepositoryLabels(repository.getOwner(), repository.getRepo())
+    }
+
+    private fun findLabelsConjunction(repository: Repository): List<String> {
+        val repositoryLabels = getRepositoryLabels(repository).map { it.name }.toHashSet()
+        return easyLabels.filter { repositoryLabels.contains(it) }
     }
 
     private fun fetchStarredRepositories(): List<Repository> {

@@ -3,7 +3,7 @@ package com.github.igorperikov.mightywatcher
 import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.ImportService
-import com.github.igorperikov.mightywatcher.utils.launchInParallel
+import com.github.igorperikov.mightywatcher.utils.executeInParallel
 import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
@@ -31,7 +31,7 @@ object Launcher {
     @JvmStatic
     fun main(args: Array<String>) {
         printResult(
-            launchInParallel(importService.getSearchTasks()) { searchTask ->
+            executeInParallel(importService.getSearchTasks()) { searchTask ->
                 importService.fetchIssues(
                     searchTask.repository,
                     searchTask.label
