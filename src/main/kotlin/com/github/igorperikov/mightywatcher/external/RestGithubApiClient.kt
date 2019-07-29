@@ -42,7 +42,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
                 .addPathSegment(owner)
                 .addPathSegment(repo)
                 .addPathSegment("labels")
-                .addQueryParameter("per_page", "300")
+                .addQueryParameter("per_page", "400")
                 .build()
         }
     }
@@ -60,7 +60,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
                 .addQueryParameter("since", since)
                 .addQueryParameter("labels", label)
                 .addQueryParameter("sort", "created")
-                .addQueryParameter("per_page", "1500")
+                .addQueryParameter("per_page", "2000")
                 .build()
         }
     }

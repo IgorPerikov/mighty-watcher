@@ -7,6 +7,7 @@ import com.github.igorperikov.mightywatcher.entity.Label
 import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.entity.SearchTask
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
+import com.github.igorperikov.mightywatcher.utils.launchInParallel
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
@@ -45,12 +46,10 @@ class ImportService(private val githubApiClient: GithubApiClient) {
 
     fun getSearchTasks(): List<SearchTask> {
         val starredRepositories: List<Repository> = fetchStarredRepositories()
-        return starredRepositories
-            .flatMap { repository ->
-                // TODO: make it parallel + extract to utils, what about `parallelStream()?`
-                val repositoryLabels = getRepositoryLabels(repository).map { it.name }.toHashSet()
-                easyLabels.filter { repositoryLabels.contains(it) }.map { label -> SearchTask(repository, label) }
-            }
+        return launchInParallel(starredRepositories) { repository ->
+            val repositoryLabels = getRepositoryLabels(repository).map { it.name }.toHashSet()
+            easyLabels.filter { repositoryLabels.contains(it) }.map { label -> SearchTask(repository, label) }
+        }.flatten()
     }
 
     fun fetchIssues(repository: Repository, label: String): Issues {

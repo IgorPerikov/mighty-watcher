@@ -3,15 +3,13 @@ package com.github.igorperikov.mightywatcher
 import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.ImportService
-import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Semaphore
+import com.github.igorperikov.mightywatcher.utils.launchInParallel
 import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
 typealias Issues = MutableList<Issue>
@@ -24,8 +22,6 @@ object Launcher {
     @JvmStatic
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    private const val parallelismLevel = 15
-
     private val importService = ImportService(
         RestGithubApiClient(
             System.getenv(TOKEN_ENV_NAME) ?: throw RuntimeException("$TOKEN_ENV_NAME should be set")
@@ -33,33 +29,17 @@ object Launcher {
     )
 
     @JvmStatic
-    @ObsoleteCoroutinesApi
     fun main(args: Array<String>) {
-        val listOfDeferredIssues = ArrayList<Deferred<Issues>>()
-        val parallelismLimiter = Semaphore(parallelismLevel)
-        val coroutineScope = CoroutineScope(Dispatchers.IO)
-        for ((repository, label) in importService.getSearchTasks()) {
-            listOfDeferredIssues += coroutineScope.async(
-                block = {
-                    try {
-                        parallelismLimiter.acquire()
-                        return@async importService.fetchIssues(repository, label)
-                    } finally {
-                        parallelismLimiter.release()
-                    }
-                }
-            )
-        }
-        runBlocking {
-            printResult(
-                listOfDeferredIssues.awaitAll()
-                    .asSequence()
-                    .flatten()
-                    .distinctBy { it.htmlUrl }
-                    .sortedByDescending { it.createdAt }
-                    .toMutableList()
-            )
-        }
+        printResult(
+            launchInParallel(importService.getSearchTasks()) { searchTask ->
+                importService.fetchIssues(searchTask.repository, searchTask.label)
+            }
+                .asSequence()
+                .flatten()
+                .distinctBy { it.htmlUrl }
+                .sortedByDescending { it.createdAt }
+                .toMutableList()
+        )
     }
 
     private fun printResult(issues: Issues) {
