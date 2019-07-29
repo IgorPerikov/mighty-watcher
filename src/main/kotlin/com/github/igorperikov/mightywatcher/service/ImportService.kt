@@ -3,9 +3,11 @@ package com.github.igorperikov.mightywatcher.service
 import com.github.igorperikov.mightywatcher.EXCLUDE_REPOS_ENV_NAME
 import com.github.igorperikov.mightywatcher.INCLUDE_LANG_ENV_NAME
 import com.github.igorperikov.mightywatcher.Issues
+import com.github.igorperikov.mightywatcher.entity.Label
 import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.entity.SearchTask
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
+import com.github.igorperikov.mightywatcher.utils.executeInParallel
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
@@ -16,20 +18,20 @@ class ImportService(private val githubApiClient: GithubApiClient) {
     private val easyLabels = listOf(
         "adoptme",
         "contributions welcome",
-        "help wanted",
-        "good first issue",
-        "PR welcome",
-        "noob friendly",
-        "ideal for contribution",
-        "low hanging fruit",
         "easy",
-        "good-first-issue",
         "E-easy",
         "E-help-wanted",
         "E-mentor",
-        "E-needstest",
         "E-medium",
-        "hacktoberfest"
+        "E-needstest",
+        "good first issue",
+        "good-first-issue",
+        "hacktoberfest",
+        "help wanted",
+        "ideal for contribution",
+        "low hanging fruit",
+        "noob friendly",
+        "PR welcome"
     )
 
     private val since = DateTimeFormatter.ISO_LOCAL_DATE_TIME
@@ -43,19 +45,22 @@ class ImportService(private val githubApiClient: GithubApiClient) {
         System.getenv(EXCLUDE_REPOS_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
 
     fun getSearchTasks(): List<SearchTask> {
-        return fetchStarredRepositories()
-            .flatMap { repository ->
-                easyLabels.map { label ->
-                    SearchTask(
-                        repository.fullName,
-                        label
-                    )
-                }
-            }
+        return executeInParallel(fetchStarredRepositories()) { repository ->
+            findLabelsConjunction(repository).map { label -> SearchTask(repository, label) }
+        }.flatten()
     }
 
-    fun fetchIssues(repoFullName: String, label: String): Issues {
-        return githubApiClient.getIssues(repoFullName, label, since)
+    fun fetchIssues(repository: Repository, label: String): Issues {
+        return githubApiClient.getIssues(repository.getOwner(), repository.getRepo(), label, since)
+    }
+
+    private fun getRepositoryLabels(repository: Repository): List<Label> {
+        return githubApiClient.getRepositoryLabels(repository.getOwner(), repository.getRepo())
+    }
+
+    private fun findLabelsConjunction(repository: Repository): List<String> {
+        val repositoryLabels = getRepositoryLabels(repository).map { it.name }.toHashSet()
+        return easyLabels.filter { repositoryLabels.contains(it) }
     }
 
     private fun fetchStarredRepositories(): List<Repository> {
