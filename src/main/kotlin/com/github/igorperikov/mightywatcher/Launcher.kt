@@ -24,7 +24,7 @@ object Launcher {
     @JvmStatic
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    private const val parallelismLevel = 30
+    private const val parallelismLevel = 15
 
     private val importService = ImportService(
         RestGithubApiClient(
