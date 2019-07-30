@@ -5,7 +5,7 @@ This utility helps to find issues available for contributing, based on repositor
  - non-assigned 
  - open
  - created less than 1 year ago
- - labeled as `easy` or similar, all labels can be found [here](/src/main/kotlin/com/github/igorperikov/mightywatcher/service/ImportService.kt)
+ - labeled as `help wanted` or similar, all labels can be found [here](/src/main/resources/labels)
  - starred by account, which issued api access token 
 
 ### Prerequisites:

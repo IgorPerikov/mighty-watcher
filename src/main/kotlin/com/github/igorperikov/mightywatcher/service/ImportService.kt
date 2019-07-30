@@ -8,6 +8,8 @@ import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.entity.SearchTask
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
 import com.github.igorperikov.mightywatcher.utils.executeInParallel
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
@@ -15,24 +17,11 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ImportService(private val githubApiClient: GithubApiClient) {
-    private val easyLabels = listOf(
-        "adoptme",
-        "contributions welcome",
-        "easy",
-        "E-easy",
-        "E-help-wanted",
-        "E-mentor",
-        "E-medium",
-        "E-needstest",
-        "good first issue",
-        "good-first-issue",
-        "hacktoberfest",
-        "help wanted",
-        "ideal for contribution",
-        "low hanging fruit",
-        "noob friendly",
-        "PR welcome"
-    )
+    private val easyLabels = Files.readAllLines(
+        Paths.get(
+            javaClass.classLoader.getResource("labels")?.toURI() ?: throw RuntimeException("Labels resource not found")
+        )
+    ).filter { it.isNotBlank() }
 
     private val since = DateTimeFormatter.ISO_LOCAL_DATE_TIME
         .withLocale(Locale.ENGLISH)
