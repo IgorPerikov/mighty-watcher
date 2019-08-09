@@ -16,11 +16,16 @@ This utility helps to find issues available for contributing, based on repositor
 
 ### How to use:
  - There are 3 environment variables you should know about:
-   - `TOKEN` - plain api access token, **the only required parameter** to pass
-   - `INCLUDE` - comma-separated language names to be included(only main language of repository counts), if none passed - include all 
-   - `EXCLUDE` - comma-separated repository names to be fully excluded from analysis in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher`
+   - Required
+     - `TOKEN` - GitHub API access token
+   - Optional
+     - `INCLUDE` - comma-separated language names to be included (only main language of repository counts), if none passed - include all 
+     - `EXCLUDE` - comma-separated repository names to be fully excluded from analysis in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher`
  - Launch docker container from terminal: 
- `docker pull igorperikov/mighty-watcher:latest && docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go" -e "EXCLUDE=IgorPerikov/mighty-watcher" --network host --rm igorperikov/mighty-watcher:latest`
+ ```sh
+docker pull igorperikov/mighty-watcher:latest
+docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" -e "INCLUDE=java,kotlin,go" -e "EXCLUDE=IgorPerikov/mighty-watcher" --rm igorperikov/mighty-watcher:latest
+ ```
 
 ### Example:
 <p align="center"><img src="/docs/example.gif?raw=true"/></p>
