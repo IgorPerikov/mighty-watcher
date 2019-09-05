@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/IgorPerikov/mighty-watcher.svg?branch=master)](https://travis-ci.org/IgorPerikov/mighty-watcher)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Mighty Watcher
 This utility helps to find issues available for contributing, based on repositories you starred
 
