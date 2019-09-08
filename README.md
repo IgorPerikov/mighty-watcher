@@ -28,8 +28,8 @@ This utility helps to find issues available for contributing, based on repositor
     - `EXCLUDE` - comma-separated repository names to be fully excluded from analysis in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher`
 - Launch Docker container from terminal: 
  ```sh
-docker pull igorperikov/mighty-watcher:latest
-docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" \
+   docker pull igorperikov/mighty-watcher:latest
+   docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" \
            -e "INCLUDE=java,kotlin,go" \
            -e "EXCLUDE=IgorPerikov/mighty-watcher" \
            --rm igorperikov/mighty-watcher:latest
