@@ -3,21 +3,25 @@ package com.github.igorperikov.mightywatcher.utils
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Semaphore
 
-val coroutineScope = CoroutineScope(Dispatchers.IO)
-val parallelismLimiter = Semaphore(15)
+private val coroutineScope = CoroutineScope(Dispatchers.IO)
+private val parallelismLimiter = Semaphore(15)
 
 fun <Input, Result> executeInParallel(inputs: List<Input>, function: Function1<Input, Result>): List<Result> =
     runBlocking {
         val listOfDeferredResults = ArrayList<Deferred<Result>>()
         for (input in inputs) {
             listOfDeferredResults += coroutineScope.async {
-                try {
-                    parallelismLimiter.acquire()
-                    return@async function(input)
-                } finally {
-                    parallelismLimiter.release()
-                }
+                execWithSemaphore(input, function)
             }
         }
         listOfDeferredResults.awaitAll()
     }
+
+private suspend fun <Input, Result> execWithSemaphore(input: Input, function: Function1<Input, Result>): Result {
+    try {
+        parallelismLimiter.acquire()
+        return function(input)
+    } finally {
+        parallelismLimiter.release()
+    }
+}
