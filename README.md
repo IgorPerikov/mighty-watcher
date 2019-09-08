@@ -7,15 +7,15 @@
 This utility helps to find issues available for contributing, based on repositories you starred
 
 ## It will search for issues that are
-- non-assigned 
-- open
-- created less than 1 year ago
-- labeled as `help wanted` or similar, all labels can be found [here](/src/main/kotlin/com/github/igorperikov/mightywatcher/service/LabelsService.kt)
-- starred by account, which issued API access token 
+-  non-assigned 
+-  open
+-  created less than 1 year ago
+-  labeled as `help wanted` or similar, all labels can be found [here](/src/main/kotlin/com/github/igorperikov/mightywatcher/service/LabelsService.kt)
+-  starred by account, which issued API access token 
 
 ## Prerequisites
-- Docker [installed][1]
-- Github API access token obtained. You could generate it by going to your GitHub [personal access tokens page][2]
+-  Docker [installed][1]
+-  Github API access token obtained. You could generate it by going to your GitHub [personal access tokens page][2]
   Mighty Watcher requires no scopes. 
   I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
 
@@ -28,8 +28,8 @@ This utility helps to find issues available for contributing, based on repositor
     - `EXCLUDE` - comma-separated repository names to be fully excluded from analysis in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher`
 - Launch Docker container from terminal: 
  ```sh
-docker pull igorperikov/mighty-watcher:latest
-docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" \
+   docker pull igorperikov/mighty-watcher:latest
+   docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" \
            -e "INCLUDE=java,kotlin,go" \
            -e "EXCLUDE=IgorPerikov/mighty-watcher" \
            --rm igorperikov/mighty-watcher:latest
@@ -45,8 +45,8 @@ Github lets you make up to 5000 API calls per hour, so you're fine as long as yo
 that match your INCLUDE/EXCLUDE parameters. Let me know if that's a problem for you.
 
 ## Contribution
- - please mark issues in your repositories if you are willing to get some help
- - contribute your own labels, if the list misses any
+-  please mark issues in your repositories if you are willing to get some help
+-  contribute your own labels, if the list misses any
 
 [1]: https://docs.docker.com/install/
 [2]: https://github.com/settings/tokens
