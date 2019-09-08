@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.41"
+    kotlin("jvm") version "1.3.50"
     application
     id("com.github.johnrengelman.shadow") version "5.1.0"
 }
@@ -29,10 +29,10 @@ repositories {
     mavenCentral()
 }
 
-val kotlinCoroutinesVersion = "1.3.0-M2"
+val kotlinCoroutinesVersion = "1.3.1"
 val okHttpVersion = "3.14.2"
 val jacksonVersion = "2.9.9"
-val slf4jVersion = "1.7.26"
+val slf4jVersion = "1.7.28"
 val logbackVersion = "1.2.3"
 
 dependencies {
