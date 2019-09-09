@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "1.3.50"
     application
     id("com.github.johnrengelman.shadow") version "5.1.0"
+    jacoco
 }
 
 application {
@@ -15,11 +16,24 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform {
+        includeEngines("junit-jupiter")
+    }
+}
+
 tasks {
     named<ShadowJar>("shadowJar") {
         archiveBaseName.set("mighty-watcher")
         archiveClassifier.set("")
         archiveVersion.set("")
+    }
+}
+
+tasks.withType<JacocoReport> {
+    reports {
+        xml.isEnabled = true
+        html.isEnabled = false
     }
 }
 
@@ -34,6 +48,8 @@ val okHttpVersion = "3.14.2"
 val jacksonVersion = "2.9.9"
 val slf4jVersion = "1.7.28"
 val logbackVersion = "1.2.3"
+val junit5Version = "5.5.2"
+val hamkrestVersion = "1.7.0.0"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -50,4 +66,9 @@ dependencies {
     implementation("org.slf4j", "slf4j-api", slf4jVersion)
     implementation("ch.qos.logback", "logback-core", logbackVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)
+
+    testImplementation("org.junit.jupiter", "junit-jupiter-api", junit5Version)
+    testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junit5Version)
+
+    testImplementation("com.natpryce", "hamkrest", hamkrestVersion)
 }

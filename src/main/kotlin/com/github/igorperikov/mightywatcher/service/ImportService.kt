@@ -7,7 +7,7 @@ import com.github.igorperikov.mightywatcher.entity.Label
 import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.entity.SearchTask
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
-import com.github.igorperikov.mightywatcher.utils.executeInParallel
+import com.github.igorperikov.mightywatcher.utils.ParallelExecutor
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
@@ -26,7 +26,7 @@ class ImportService(private val githubApiClient: GithubApiClient) {
     private val excludedRepositories: Set<String> =
         System.getenv(EXCLUDE_REPOS_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
     fun getSearchTasks(): List<SearchTask> {
-        return executeInParallel(fetchStarredRepositories()) { repository ->
+        return ParallelExecutor().execute(fetchStarredRepositories()) { repository ->
             findLabelsConjunction(repository).map { label -> SearchTask(repository, label) }
         }.flatten()
     }

@@ -3,7 +3,7 @@ package com.github.igorperikov.mightywatcher
 import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.ImportService
-import com.github.igorperikov.mightywatcher.utils.executeInParallel
+import com.github.igorperikov.mightywatcher.utils.ParallelExecutor
 import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
@@ -30,8 +30,9 @@ object Launcher {
 
     @JvmStatic
     fun main(args: Array<String>) {
+        val parallelExecutor = ParallelExecutor() // TODO: support providing another parallelism level via env variable
         printResult(
-            executeInParallel(importService.getSearchTasks()) { searchTask ->
+            parallelExecutor.execute(importService.getSearchTasks()) { searchTask ->
                 importService.fetchIssues(
                     searchTask.repository,
                     searchTask.label
