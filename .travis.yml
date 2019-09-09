@@ -1,6 +1,12 @@
+language: java # TODO: find cleaner way without adding explicit java
+jdk:
+  - openjdk11
 services:
   - docker
 before_script:
   - chmod a+x ./build.sh
 script:
   - ./build.sh
+  - ./gradlew test jacocoTestReport
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
