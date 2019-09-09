@@ -1,6 +1,6 @@
 ![Codacy grade](https://img.shields.io/codacy/grade/fc40498ca7ee4d1695550e202944f2ab)
-[![codecov](https://codecov.io/gh/IgorPerikov/mighty-watcher/branch/master/graph/badge.svg)](https://codecov.io/gh/IgorPerikov/mighty-watcher)
-[![Build Status](https://travis-ci.org/IgorPerikov/mighty-watcher.svg?branch=master)](https://travis-ci.org/IgorPerikov/mighty-watcher)
+![Codecov](https://img.shields.io/codecov/c/github/igorperikov/mighty-watcher)
+![Travis (.org)](https://img.shields.io/travis/igorperikov/mighty-watcher)
 ![GitHub](https://img.shields.io/github/license/igorperikov/mighty-watcher)
 ![Docker Pulls](https://img.shields.io/docker/pulls/igorperikov/mighty-watcher)
 
