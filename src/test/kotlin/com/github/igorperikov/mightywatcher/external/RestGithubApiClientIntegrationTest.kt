@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.time.Month
 import java.time.ZoneOffset
 
-private const val mightyWatcherGithubIntegrationTokenName = "MIGHTY_WATCHER_GITHUB_TOKEN"
+private const val mightyWatcherGithubIntegrationTokenName = "MIGHTY_WATCHER_GITHUB_INTEGRATION_TOKEN"
 
 class RestGithubApiClientIntegrationTest {
     private fun isIntegrationEnv(): Boolean {
