@@ -11,13 +11,9 @@ class ParallelExecutor(
 
     fun <Input, Result> execute(inputs: List<Input>, function: Function1<Input, Result>): List<Result> =
         runBlocking {
-            val listOfDeferredResults = ArrayList<Deferred<Result>>()
-            for (input in inputs) {
-                listOfDeferredResults += coroutineScope.async {
-                    execWithSemaphore(input, function)
-                }
-            }
-            listOfDeferredResults.awaitAll()
+            inputs
+                .map { input -> coroutineScope.async { execWithSemaphore(input, function) } }
+                .awaitAll()
         }
 
     private suspend fun <Input, Result> execWithSemaphore(input: Input, function: Function1<Input, Result>): Result {
