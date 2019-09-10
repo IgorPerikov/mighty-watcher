@@ -31,9 +31,9 @@ This utility helps to find issues available for contributing, based on repositor
  ```sh
    docker pull igorperikov/mighty-watcher:latest
    docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" \
-           -e "INCLUDE=java,kotlin,go" \
-           -e "EXCLUDE=IgorPerikov/mighty-watcher" \
-           --rm igorperikov/mighty-watcher:latest
+              -e "INCLUDE=java,kotlin,go" \
+              -e "EXCLUDE=IgorPerikov/mighty-watcher" \
+              --rm igorperikov/mighty-watcher:latest
  ```
 
 ## Example
