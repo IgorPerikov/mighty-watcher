@@ -16,9 +16,7 @@ This utility helps to find issues available for contributing, based on repositor
 
 ## Prerequisites
 - Docker [installed][1]
-- Github API access token obtained. You could generate it by going to your GitHub [personal access tokens page][2]
-  Mighty Watcher requires no scopes. 
-  I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
+- Github API access token obtained. You could generate it by going to your GitHub [personal access tokens page][2]. Mighty Watcher requires no scopes. I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
 
 ## How to use
 - Set environment variables:
