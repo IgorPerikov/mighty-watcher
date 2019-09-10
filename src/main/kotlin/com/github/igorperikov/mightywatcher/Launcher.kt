@@ -30,7 +30,7 @@ object Launcher {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val parallelExecutor = ParallelExecutor() // TODO: support providing another parallelism level via env variable
+        val parallelExecutor = ParallelExecutor() // TODO: support providing custom parallelism level via env variable
         printResult(
             parallelExecutor.execute(importService.getSearchTasks()) { searchTask ->
                 importService.fetchIssues(
