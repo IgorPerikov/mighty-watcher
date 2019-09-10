@@ -3,9 +3,11 @@ package com.github.igorperikov.mightywatcher.external
 import com.github.igorperikov.mightywatcher.utils.Iso8601Formatter
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import java.time.Instant
+import java.time.LocalDateTime
+import java.time.Month
+import java.time.ZoneOffset
 
-private const val mightyWatcherGithubIntegrationTokenName = "MIGHTY_WATCHER_GITHUB_INTEGRATION_TOKEN"
+private const val mightyWatcherGithubIntegrationTokenName = "MIGHTY_WATCHER_GITHUB_TOKEN"
 
 class RestGithubApiClientIntegrationTest {
     private fun isIntegrationEnv(): Boolean {
@@ -16,6 +18,8 @@ class RestGithubApiClientIntegrationTest {
     private val testRepoName = "github-api-client-integration-testing"
     private val label1Name = "label1"
     private val label2Name = "label2"
+
+    private val startOfCentury = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1, 1).toInstant(ZoneOffset.UTC)
 
     @Test
     fun testGetStarredRepositories() {
@@ -46,7 +50,7 @@ class RestGithubApiClientIntegrationTest {
                 testRepoOwner,
                 testRepoName,
                 label2Name,
-                Iso8601Formatter.fromInstant(Instant.MIN)
+                Iso8601Formatter.fromInstant(startOfCentury)
             )
             assertTrue(issues.isEmpty())
             assertNull(issues.find { issue -> issue.title == "closed issue" })
@@ -61,7 +65,7 @@ class RestGithubApiClientIntegrationTest {
                 testRepoOwner,
                 testRepoName,
                 label2Name,
-                Iso8601Formatter.fromInstant(Instant.MIN)
+                Iso8601Formatter.fromInstant(startOfCentury)
             )
             assertTrue(issues.isEmpty())
             assertNull(issues.find { issue -> issue.title == "assigned issue" })
@@ -76,7 +80,7 @@ class RestGithubApiClientIntegrationTest {
                 testRepoOwner,
                 testRepoName,
                 label1Name,
-                Iso8601Formatter.fromInstant(Instant.MIN)
+                Iso8601Formatter.fromInstant(startOfCentury)
             )
             assertTrue(issues.size == 1)
             assertNotNull(issues.find { issue -> issue.title == "non-assigned issue" })
