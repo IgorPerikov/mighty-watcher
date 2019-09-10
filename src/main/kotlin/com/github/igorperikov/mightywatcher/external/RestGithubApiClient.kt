@@ -3,6 +3,7 @@ package com.github.igorperikov.mightywatcher.external
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.igorperikov.mightywatcher.Issues
+import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.entity.Label
 import com.github.igorperikov.mightywatcher.entity.Repository
 import okhttp3.HttpUrl
@@ -22,7 +23,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
     private val authHeaderValue = "token $githubToken"
 
     override fun getStarredRepositories(): List<Repository> {
-        return proceedRequestForUrl {
+        return proceedRequestForUrl(Repository::class.java) {
             HttpUrl.Builder()
                 .scheme("https")
                 .host("api.github.com")
@@ -34,7 +35,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
     }
 
     override fun getRepositoryLabels(owner: String, repo: String): List<Label> {
-        return proceedRequestForUrl {
+        return proceedRequestForUrl(Label::class.java) {
             HttpUrl.Builder()
                 .scheme("https")
                 .host("api.github.com")
@@ -48,7 +49,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
     }
 
     override fun getIssues(owner: String, repo: String, label: String, since: String): Issues {
-        return proceedRequestForUrl {
+        return proceedRequestForUrl(Issue::class.java) {
             HttpUrl.Builder()
                 .scheme("https")
                 .host("api.github.com")
@@ -65,16 +66,16 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
         }
     }
 
-    private inline fun <reified T> proceedRequestForUrl(urlSupplier: () -> HttpUrl): MutableList<T> {
+    private fun <T> proceedRequestForUrl(clazz: Class<T>, urlSupplier: () -> HttpUrl): MutableList<T> {
         val request = buildRequest(urlSupplier)
         val jsonBody = getResponseBody(request)
         return jsonMapper.readValue(
             jsonBody,
-            jsonMapper.typeFactory.constructCollectionType(ArrayList::class.java, T::class.java)
+            jsonMapper.typeFactory.constructCollectionType(ArrayList::class.java, clazz)
         )
     }
 
-    private inline fun buildRequest(urlSupplier: () -> HttpUrl): Request {
+    private fun buildRequest(urlSupplier: () -> HttpUrl): Request {
         return Request.Builder()
             .get()
             .url(urlSupplier())
