@@ -50,6 +50,7 @@ val slf4jVersion = "1.7.28"
 val logbackVersion = "1.2.3"
 val junit5Version = "5.5.2"
 val hamkrestVersion = "1.7.0.0"
+val mockitoKotlin2Version = "2.2.0"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -71,4 +72,5 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junit5Version)
 
     testImplementation("com.natpryce", "hamkrest", hamkrestVersion)
+    testImplementation("com.nhaarman.mockitokotlin2", "mockito-kotlin", mockitoKotlin2Version)
 }

@@ -3,7 +3,6 @@ package com.github.igorperikov.mightywatcher.service
 import com.github.igorperikov.mightywatcher.EXCLUDE_REPOS_ENV_NAME
 import com.github.igorperikov.mightywatcher.INCLUDE_LANG_ENV_NAME
 import com.github.igorperikov.mightywatcher.Issues
-import com.github.igorperikov.mightywatcher.entity.Label
 import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.entity.SearchTask
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
@@ -12,7 +11,10 @@ import com.github.igorperikov.mightywatcher.utils.ParallelExecutor
 import java.time.Duration
 import java.time.Instant
 
-class ImportService(private val githubApiClient: GithubApiClient) {
+class ImportService(
+    private val githubApiClient: GithubApiClient,
+    private val labelsService: LabelsService
+) {
     private val since = Iso8601Formatter.fromInstant(Instant.now().minus(Duration.ofDays(365)))
 
     private val includedLanguages: Set<String> =
@@ -23,22 +25,12 @@ class ImportService(private val githubApiClient: GithubApiClient) {
 
     fun getSearchTasks(): List<SearchTask> {
         return ParallelExecutor().execute(fetchStarredRepositories()) { repository ->
-            findLabelsConjunction(repository).map { label -> SearchTask(repository, label) }
+            labelsService.findEasyLabelsForRepository(repository).map { label -> SearchTask(repository, label) }
         }.flatten()
     }
 
     fun fetchIssues(repository: Repository, label: String): Issues {
         return githubApiClient.getIssues(repository.getOwner(), repository.getRepo(), label, since)
-    }
-
-    private fun getRepositoryLabels(repository: Repository): List<Label> {
-        return githubApiClient.getRepositoryLabels(repository.getOwner(), repository.getRepo())
-    }
-
-    private fun findLabelsConjunction(repository: Repository): List<String> {
-        val repositoryLabels = getRepositoryLabels(repository).map { it.name.toLowerCase() }.toList()
-        val easyLabels = LabelsService.getEasyLabels()
-        return repositoryLabels.filter { easyLabels.contains(it) }
     }
 
     private fun fetchStarredRepositories(): List<Repository> {
