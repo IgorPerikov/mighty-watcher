@@ -36,8 +36,9 @@ class ImportService(private val githubApiClient: GithubApiClient) {
     }
 
     private fun findLabelsConjunction(repository: Repository): List<String> {
-        val repositoryLabels = getRepositoryLabels(repository).map { it.name }.toHashSet()
-        return LabelsService.getEasyLabels().filter { repositoryLabels.contains(it) }
+        val repositoryLabels = getRepositoryLabels(repository).map { it.name.toLowerCase() }.toList()
+        val easyLabels = LabelsService.getEasyLabels()
+        return repositoryLabels.filter { easyLabels.contains(it) }
     }
 
     private fun fetchStarredRepositories(): List<Repository> {
