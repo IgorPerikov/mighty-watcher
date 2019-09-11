@@ -1,40 +1,38 @@
 package com.github.igorperikov.mightywatcher.service
 
 object LabelsService {
-    fun getEasyLabels(): List<String> {
-        return listOf(
-            "accepting PRs",
+    fun getEasyLabels(): Set<String> {
+        return hashSetOf(
+            "accepting prs",
             "adoptme",
             "beginner",
-            "Beginner friendly",
+            "beginner friendly",
             "contributions welcome",
             "difficulty:easy",
             "easy",
-            "Easy Fix",
-            "Easy to fix",
-            "Effort-low",
-            "E-easy",
-            "E-help-wanted",
-            "E-mentor",
-            "E-medium",
-            "E-needstest",
-            "Good as First PR",
+            "easy fix",
+            "easy to fix",
+            "effort-low",
+            "e-easy",
+            "e-help-wanted",
+            "e-mentor",
+            "e-medium",
+            "e-needstest",
+            "good as first pr",
             "good first bug",
             "good-first-contribution",
             "good first issue",
             "good-first-issue",
-            "Good First Issue",
             "good for beginners",
             "hacktoberfest",
-            "Hacktoberfest",
             "help wanted",
             "help-wanted",
             "help wanted (easy)",
             "ideal for contribution",
             "low hanging fruit",
-            "Meta: Good First Issue",
+            "meta: good first issue",
             "noob friendly",
-            "PR welcome",
+            "pr welcome",
             "up-for-grabs"
         )
     }
