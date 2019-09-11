@@ -35,6 +35,9 @@ class EasyLabelsStorage {
         "up-for-grabs"
     )
 
+    /**
+     * Return labels appropriate for contributins, all in lower case
+     */
     fun getEasyLabels(): Set<String> {
         return easyLabels
     }
