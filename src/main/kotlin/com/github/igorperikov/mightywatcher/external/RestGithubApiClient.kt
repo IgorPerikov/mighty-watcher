@@ -42,7 +42,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
                 .addPathSegment(owner)
                 .addPathSegment(repo)
                 .addPathSegment("labels")
-                .addQueryParameter("per_page", "400")
+                .addQueryParameter("per_page", "1000")
                 .build()
         }
     }

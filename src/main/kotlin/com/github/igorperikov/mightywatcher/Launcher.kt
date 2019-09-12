@@ -2,7 +2,9 @@ package com.github.igorperikov.mightywatcher
 
 import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
+import com.github.igorperikov.mightywatcher.service.EasyLabelsStorage
 import com.github.igorperikov.mightywatcher.service.ImportService
+import com.github.igorperikov.mightywatcher.service.LabelsService
 import com.github.igorperikov.mightywatcher.utils.ParallelExecutor
 import org.slf4j.LoggerFactory
 import java.time.Duration
@@ -22,11 +24,9 @@ object Launcher {
     @JvmStatic
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    private val importService = ImportService(
-        RestGithubApiClient(
-            requireNotNull(System.getenv(TOKEN_ENV_NAME), { "$TOKEN_ENV_NAME should be set" })
-        )
-    )
+    private val githubApiClient =
+        RestGithubApiClient(requireNotNull(System.getenv(TOKEN_ENV_NAME), { "$TOKEN_ENV_NAME should be set" }))
+    private val importService = ImportService(githubApiClient, LabelsService(githubApiClient, EasyLabelsStorage()))
 
     @JvmStatic
     fun main(args: Array<String>) {
