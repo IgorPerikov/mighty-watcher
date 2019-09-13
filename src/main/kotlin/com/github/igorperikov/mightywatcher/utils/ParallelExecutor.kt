@@ -4,8 +4,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Semaphore
 
 class ParallelExecutor(
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
-    parallelismLevel: Int = 15
+    parallelismLevel: Int,
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) {
     private val parallelismLimiter = Semaphore(parallelismLevel)
 

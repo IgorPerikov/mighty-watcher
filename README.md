@@ -10,8 +10,8 @@ This utility helps to find issues available for contributing, based on repositor
 ## It will search for issues that are
 - non-assigned 
 - open
-- created less than 1 year ago
-- labeled as `help wanted` or similar, all labels can be found [here](/src/main/kotlin/com/github/igorperikov/mightywatcher/service/LabelsService.kt)
+- was updated less than 1 year ago
+- labeled as `help wanted` or similar, all labels can be found [here](/src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt)
 - starred by account, which issued API access token 
 
 ## Prerequisites

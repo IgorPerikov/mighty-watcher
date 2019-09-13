@@ -6,6 +6,7 @@ import com.github.igorperikov.mightywatcher.external.GithubApiClient
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -25,13 +26,14 @@ class LabelsServiceTest {
         val githubApiClient = mock<GithubApiClient> {
             on { getRepositoryLabels(any(), any()) } doReturn listOf(Label("hard label"), Label(easyLabelUpperCase))
         }
+        val githubService = GithubService(githubApiClient, emptySet(), emptySet())
         val easyLabelsStorage = mock<EasyLabelsStorage> {
             on { getEasyLabels() } doReturn setOf(easyLabelLowerCase)
         }
-        val labelsService = LabelsService(githubApiClient, easyLabelsStorage)
+        val labelsService = LabelsService(githubService, easyLabelsStorage)
 
         val easyLabelsForRepo = labelsService.findEasyLabelsForRepository(Repository("lang", "owner/repo", true))
         assertTrue(easyLabelsForRepo.size == 1)
-        assertTrue(easyLabelsForRepo.first() == easyLabelLowerCase)
+        assertEquals(easyLabelLowerCase, easyLabelsForRepo.first())
     }
 }
