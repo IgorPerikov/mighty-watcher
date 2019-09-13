@@ -30,21 +30,21 @@ class GroupingServiceTest {
     fun `complex use case`() {
         val issuesGroupedByTime = groupingService.groupByTime(issues)
 
-        val todayIssues = issuesGroupedByTime[today]!!
+        val todayIssues = issuesGroupedByTime[today] ?: emptyList<Issue>()
         assertTrue(todayIssues.size == 1)
         assertEquals(issue1, todayIssues.first())
 
-        val yesterdayIssues = issuesGroupedByTime[yesterday]!!
+        val yesterdayIssues = issuesGroupedByTime[yesterday] ?: emptyList<Issue>()
         assertTrue(yesterdayIssues.size == 2)
         assertEquals(issue2, yesterdayIssues.first())
         assertEquals(issue3, yesterdayIssues[1])
 
-        val thisWeekIssues = issuesGroupedByTime[thisWeek]!!
+        val thisWeekIssues = issuesGroupedByTime[thisWeek] ?: emptyList<Issue>()
         assertTrue(thisWeekIssues.size == 2)
         assertEquals(issue4, thisWeekIssues.first())
         assertEquals(issue5, thisWeekIssues[1])
 
-        val olderIssues = issuesGroupedByTime[older]!!
+        val olderIssues = issuesGroupedByTime[older] ?: emptyList<Issue>()
         assertTrue(olderIssues.size == 2)
         assertEquals(issue6, olderIssues.first())
         assertEquals(issue7, olderIssues[1])
