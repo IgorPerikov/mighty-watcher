@@ -90,4 +90,11 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
             it.body()?.string() ?: throw RuntimeException("Empty response body")
         }
     }
+
+    companion object {
+        private const val TOKEN_ENV_NAME = "TOKEN"
+
+        fun fromEnv() =
+            RestGithubApiClient(requireNotNull(System.getenv(TOKEN_ENV_NAME), { "$TOKEN_ENV_NAME should be set" }))
+    }
 }
