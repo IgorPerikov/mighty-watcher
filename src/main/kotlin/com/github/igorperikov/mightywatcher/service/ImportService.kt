@@ -12,7 +12,7 @@ class ImportService(
     private val githubService: GithubService,
     private val labelsService: LabelsService,
     parallelismLevel: Int,
-    daysInPast: Long = 365
+    daysInPast: Long
 ) {
     private val since = Iso8601Formatter.fromInstant(Instant.now().minus(Duration.ofDays(daysInPast)))
     private val parallelExecutor = ParallelExecutor(parallelismLevel)

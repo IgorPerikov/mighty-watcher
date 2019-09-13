@@ -13,13 +13,13 @@ class GroupingService(private val namedTimestamps: MutableList<NamedTimestamp>) 
     }
 
     fun groupByTime(issues: Issues): LinkedHashMap<NamedTimestamp, Issues> {
-        issues.sortByDescending { it.createdAt }
+        issues.sortByDescending { it.updatedAt }
         val issuesByNamedTimestamp = LinkedHashMap<NamedTimestamp, Issues>()
         for (namedTimestamp in namedTimestamps) {
             issuesByNamedTimestamp[namedTimestamp] = mutableListOf()
         }
-        for (issue in issues) {
-            issuesByNamedTimestamp[findSmallestTimestampBiggerThanGiven(issue.createdAt)]?.add(issue)
+        issues.forEach {
+            issuesByNamedTimestamp[findSmallestTimestampBiggerThanGiven(it.updatedAt)]?.add(it)
         }
         return issuesByNamedTimestamp
     }

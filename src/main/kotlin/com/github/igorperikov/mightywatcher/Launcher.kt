@@ -1,6 +1,7 @@
 package com.github.igorperikov.mightywatcher
 
 import com.github.igorperikov.mightywatcher.entity.Issue
+import com.github.igorperikov.mightywatcher.entity.NamedTimestamp
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.*
 import org.slf4j.LoggerFactory
@@ -19,16 +20,23 @@ object Launcher {
         System.getenv(INCLUDE_LANG_ENV_NAME)?.split(",")?.toHashSet() ?: setOf(),
         System.getenv(EXCLUDE_REPOS_ENV_NAME)?.split(",")?.toHashSet() ?: setOf()
     )
-    private val importService = ImportService(githubService, LabelsService(githubService, EasyLabelsStorage()), 365)
+    private val importService = ImportService(
+        githubService,
+        LabelsService(githubService, EasyLabelsStorage()),
+        parallelismLevel = 15,
+        daysInPast = 365
+    )
     private val groupingService = GroupingService.withDefaultTimeGroups()
 
     @JvmStatic
     fun main(args: Array<String>) {
-        printResult(importService.findIssues())
+        val issues = importService.findIssues()
+        val groupedIssues = groupingService.groupByTime(issues)
+        printResult(groupedIssues)
     }
 
-    private fun printResult(issues: Issues) {
-        for ((timeGroupName, issuesInTimeGroup) in groupingService.groupByTime(issues)) {
+    private fun printResult(issues: LinkedHashMap<NamedTimestamp, Issues>) {
+        for ((timeGroupName, issuesInTimeGroup) in issues) {
             if (issuesInTimeGroup.isEmpty()) continue
             log.info("{}", timeGroupName)
             for (issue in issuesInTimeGroup) {
