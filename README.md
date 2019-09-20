@@ -1,4 +1,4 @@
-<img src="/docs/logo_deepskyblue.png?raw=true"/>
+<img src="/docs/logo_deepskyblue.png?raw=true" width=520 height=260/>
 
 ![Codacy grade](https://img.shields.io/codacy/grade/fc40498ca7ee4d1695550e202944f2ab)
 ![Codecov](https://img.shields.io/codecov/c/github/igorperikov/mighty-watcher)
