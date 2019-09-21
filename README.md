@@ -23,7 +23,7 @@ This utility helps to find issues available for contributing, based on repositor
 ## How to use
 - Set environment variables:
 
-| variable name | description | required | default behaviour |
+| name          | description | required | default behaviour |
 | ------------- |-------------| -------- | ----------------- |
 | `TOKEN`       | GitHub API access token | :heavy_check_mark: | |
 | `INCLUDE`     | Comma-separated language names to be included (only main language of repository counts) | :heavy_multiplication_x: | include all languages |
