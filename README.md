@@ -12,23 +12,25 @@ This utility helps to find issues available for contributing, based on repositor
 ## It will search for issues that are
 - non-assigned 
 - open
-- was updated less than N days ago(configurable, see how-to section)
+- was updated less than N days ago(configurable, see [how-to](#how-to-use))
 - labeled as `help wanted` or similar, all labels can be found [here](/src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt)
 - starred by account, which issued API access token 
 
 ## Prerequisites
 - Docker [installed][1]
-- Github API access token obtained. You could generate it by going to your GitHub [personal access tokens page][2]. Mighty Watcher requires no scopes. I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
+- Github API access token obtained. You could generate it by going to your GitHub [personal access tokens page][2]. 
+Mighty Watcher requires no scopes. I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
 
 ## How to use
 - Set environment variables:
 
-| name          | description | required | default behaviour |
-| ------------- |-------------| -------- | ----------------- |
-| `TOKEN`       | GitHub API access token | :heavy_check_mark: | |
-| `INCLUDE`     | Comma-separated language names to be included (only main language of repository counts) | :heavy_multiplication_x: | include all languages |
-| `EXCLUDE`     | Comma-separated repository names to be fully excluded from search in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher` | :heavy_multiplication_x: | none will be excluded |
-| `DAYS`        | Defines the amount of days since last update for issue to be included | :heavy_multiplication_x: | 365 days |
+|name         |description                                                                                                                 |required                |default behaviour    |
+|-------------|----------------------------------------------------------------------------------------------------------------------------|------------------------|---------------------|
+|`TOKEN`      |GitHub API access token                                                                                                     |:heavy_check_mark:      |                     |
+|`INCLUDE`    |Comma-separated language names to be included, **nb** only main language counts                                             |:heavy_multiplication_x:|include all languages|
+|`EXCLUDE`    |Comma-separated repositories to be excluded from search, following `$repo/$name` template, e.g. `IgorPerikov/mighty-watcher`|:heavy_multiplication_x:|none will be excluded|
+|`DAYS`       |Days since last issue update to be included                                                                                 |:heavy_multiplication_x:|365                  |
+|`PARALLELISM`|Parallelism level for fetching data from github, [more details below](#parallelism-level)                                   |:heavy_multiplication_x:|12                   |
 - Launch Docker container from terminal: 
  ```sh
    docker pull igorperikov/mighty-watcher:latest
@@ -45,7 +47,11 @@ This utility helps to find issues available for contributing, based on repositor
 
 ## Rate limiting
 Github lets you make up to 5000 API calls per hour, so you're fine as long as you have less than ~1500 starred repositories
-that match your INCLUDE/EXCLUDE parameters. Let me know if that's a problem for you.
+that match your INCLUDE/EXCLUDE parameters. Let me know if that's a problem for you. Also see section on [parallelism](#parallelism-level)
+
+## Parallelism level
+The amount of threads to fetch data from Github. If you're hitting some limits, set lower amount and try again in a few minutes.
+You can increase this value too if no error occurs, but chances are high that you will trigger api abuse mechanisms. I warned you :warning:
 
 ## Contribution
  - please mark issues in your repositories if you are willing to get some help
