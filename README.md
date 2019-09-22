@@ -12,7 +12,7 @@ This utility helps to find issues available for contributing, based on repositor
 ## It will search for issues that are
 - non-assigned 
 - open
-- was updated less than N days ago(configurable, see how-to section)
+- was updated less than N days ago(configurable, see [how-to](#how-to-use))
 - labeled as `help wanted` or similar, all labels can be found [here](/src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt)
 - starred by account, which issued API access token 
 
@@ -28,7 +28,7 @@ This utility helps to find issues available for contributing, based on repositor
 | `TOKEN`       | GitHub API access token | :heavy_check_mark: | |
 | `INCLUDE`     | Comma-separated language names to be included (only main language of repository counts) | :heavy_multiplication_x: | include all languages |
 | `EXCLUDE`     | Comma-separated repository names to be fully excluded from search in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher` | :heavy_multiplication_x: | none will be excluded |
-| `DAYS`        | Amount of days since issue was updated to be considered 'fresh' | :heavy_multiplication_x: | 365 |
+| `DAYS`        | Days since last issue update to be included | :heavy_multiplication_x: | 365 |
 | `PARALLELISM` | Parallelism level for fetching data from github, [more details below](#parallelism-level) | :heavy_multiplication_x: | 12 |
 - Launch Docker container from terminal: 
  ```sh
