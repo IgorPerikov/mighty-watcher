@@ -24,11 +24,12 @@ This utility helps to find issues available for contributing, based on repositor
 - Set environment variables:
 
 | name          | description | required | default behaviour |
-| ------------- |-------------| -------- | ----------------- |
+| ------------- | ----------- | -------- | ----------------- |
 | `TOKEN`       | GitHub API access token | :heavy_check_mark: | |
 | `INCLUDE`     | Comma-separated language names to be included (only main language of repository counts) | :heavy_multiplication_x: | include all languages |
 | `EXCLUDE`     | Comma-separated repository names to be fully excluded from search in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher` | :heavy_multiplication_x: | none will be excluded |
-| `DAYS`        | Defines the amount of days since last update for issue to be included | :heavy_multiplication_x: | 365 days |
+| `DAYS`        | Amount of days since issue was updated to be considered 'fresh' | :heavy_multiplication_x: | 365 |
+| `PARALLELISM` | Parallelism level for fetching data from github, [more details below](#parallelism-level) | :heavy_multiplication_x: | 12 |
 - Launch Docker container from terminal: 
  ```sh
    docker pull igorperikov/mighty-watcher:latest
@@ -45,7 +46,11 @@ This utility helps to find issues available for contributing, based on repositor
 
 ## Rate limiting
 Github lets you make up to 5000 API calls per hour, so you're fine as long as you have less than ~1500 starred repositories
-that match your INCLUDE/EXCLUDE parameters. Let me know if that's a problem for you.
+that match your INCLUDE/EXCLUDE parameters. Let me know if that's a problem for you. Also see section on [parallelism](#parallelism-level)
+
+## Parallelism level
+The amount of threads to fetch data from Github. If you're hitting some limits, set lower amount and try again in a few minutes.
+You can increase this value too if no error occurs, but chances are high that you will trigger api abuse mechanisms. I warned you :warning:
 
 ## Contribution
  - please mark issues in your repositories if you are willing to get some help
