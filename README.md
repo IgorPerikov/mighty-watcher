@@ -18,18 +18,19 @@ This utility helps to find issues available for contributing, based on repositor
 
 ## Prerequisites
 - Docker [installed][1]
-- Github API access token obtained. You could generate it by going to your GitHub [personal access tokens page][2]. Mighty Watcher requires no scopes. I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
+- Github API access token obtained. You could generate it by going to your GitHub [personal access tokens page][2]. 
+Mighty Watcher requires no scopes. I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
 
 ## How to use
 - Set environment variables:
 
-| name          | description | required | default behaviour |
-| ------------- | ----------- | -------- | ----------------- |
-| `TOKEN`       | GitHub API access token | :heavy_check_mark: | |
-| `INCLUDE`     | Comma-separated language names to be included (only main language of repository counts) | :heavy_multiplication_x: | include all languages |
-| `EXCLUDE`     | Comma-separated repository names to be fully excluded from search in form `$owner/$name`, e.g. `IgorPerikov/mighty-watcher` | :heavy_multiplication_x: | none will be excluded |
-| `DAYS`        | Days since last issue update to be included | :heavy_multiplication_x: | 365 |
-| `PARALLELISM` | Parallelism level for fetching data from github, [more details below](#parallelism-level) | :heavy_multiplication_x: | 12 |
+| name          | description                                                                                                                  | required                 | default behaviour     |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------ | --------------------- |
+| `TOKEN`       | GitHub API access token                                                                                                      | :heavy_check_mark:       |                       |
+| `INCLUDE`     | Comma-separated language names to be included, **nb** only main language counts                                              | :heavy_multiplication_x: | include all languages |
+| `EXCLUDE`     | Comma-separated repositories to be excluded from search, following `$repo/$name` template, e.g. `IgorPerikov/mighty-watcher` | :heavy_multiplication_x: | none will be excluded |
+| `DAYS`        | Days since last issue update to be included                                                                                  | :heavy_multiplication_x: | 365                   |
+| `PARALLELISM` | Parallelism level for fetching data from github, [more details below](#parallelism-level)                                    | :heavy_multiplication_x: | 12                    |
 - Launch Docker container from terminal: 
  ```sh
    docker pull igorperikov/mighty-watcher:latest
