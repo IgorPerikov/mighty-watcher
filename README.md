@@ -44,9 +44,9 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 
 ## Lacking starred repositories?
 - go and star languages/libraries you are using right now, if you like them ;)
-- check the trending section https://github.com/trending/kotlin?since=monthly and don't forget to change the language and play with date ranges!
-- check organizations, known for their open-source effort https://gitstar-ranking.com/organizations 
-- you might find more here https://github.com/MunGell/awesome-for-beginners
+- check the [trending section](https://github.com/trending/kotlin?since=monthly) and don't forget to change the language and play with date ranges!
+- check organizations, [known for their open-source effort](https://gitstar-ranking.com/organizations) 
+- you might find more [here](https://github.com/MunGell/awesome-for-beginners)
 
 ## Rate limiting
 Github lets you make up to 5000 API calls per hour and I am limiting amount of starred repositories fetched from github to 1000. 
