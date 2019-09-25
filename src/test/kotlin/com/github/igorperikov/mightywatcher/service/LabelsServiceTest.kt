@@ -6,8 +6,7 @@ import com.github.igorperikov.mightywatcher.external.GithubApiClient
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class LabelsServiceTest {
@@ -16,6 +15,13 @@ class LabelsServiceTest {
         for (easyLabel in EasyLabelsStorage().getEasyLabels()) {
             assertTrue(easyLabel == easyLabel.toLowerCase(), "label '$easyLabel' contains upper case letters")
         }
+    }
+
+    @Test
+    fun `labels should be sorted alphabetically by first letter`() {
+        val easyLabels = EasyLabelsStorage().getEasyLabels()
+        val sortedEasyLabels = easyLabels.sortedBy { s -> s.first() }
+        assertIterableEquals(sortedEasyLabels, easyLabels)
     }
 
     @Test
