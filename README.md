@@ -7,7 +7,7 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/igorperikov/mighty-watcher)
 
 # Mighty Watcher
-This utility helps to find issues available for contributing, based on repositories you starred
+Finds issues available for contributing, based on repositories you starred
 
 ## It will search for issues that are
 - non-assigned 
@@ -22,28 +22,25 @@ This utility helps to find issues available for contributing, based on repositor
 Mighty Watcher requires no scopes. I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.  
 
 ## How to use
-- Set environment variables:
+- Set environment variables in docker run command:
 
 |name         |description                                                                                                                 |required                |default behaviour    |
 |-------------|----------------------------------------------------------------------------------------------------------------------------|------------------------|---------------------|
 |`TOKEN`      |GitHub API access token                                                                                                     |:heavy_check_mark:      |                     |
-|`INCLUDE`    |Comma-separated language names to be included, **nb** only main language counts                                             |:heavy_multiplication_x:|include all languages|
-|`EXCLUDE`    |Comma-separated repositories to be excluded from search, following `$repo/$name` template, e.g. `IgorPerikov/mighty-watcher`|:heavy_multiplication_x:|none will be excluded|
+|`INCLUDE`    |Comma-separated language names(in lower case) to be included, **nb** only main language counts                              |:heavy_multiplication_x:|include all languages|
 |`DAYS`       |Days since last issue update to be included                                                                                 |:heavy_multiplication_x:|365                  |
 |`PARALLELISM`|Parallelism level for fetching data from github, [more details below](#parallelism-level)                                   |:heavy_multiplication_x:|12                   |
+|`EXCLUDE`    |Comma-separated repositories to be excluded from search, following `$repo/$name` template, e.g. `IgorPerikov/mighty-watcher`|:heavy_multiplication_x:|none will be excluded|
 - Launch Docker container from terminal: 
  ```sh
    docker pull igorperikov/mighty-watcher:latest
    docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" \
-              -e "INCLUDE=java,kotlin,go" \
-              -e "EXCLUDE=IgorPerikov/mighty-watcher" \
+              -e "DAYS=15" \ 
               --rm igorperikov/mighty-watcher:latest
  ```
 
 ## Example
 <p align="center"><img src="/docs/example.gif?raw=true"/></p>
-
-**NB**: In this example I intentionally made it to look only 20 days in the past, so output can fit 1 screen :smile:
 
 ## Rate limiting
 Github lets you make up to 5000 API calls per hour, so you're fine as long as you have less than ~1500 starred repositories
