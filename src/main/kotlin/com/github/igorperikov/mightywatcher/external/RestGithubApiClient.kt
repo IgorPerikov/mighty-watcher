@@ -28,7 +28,7 @@ class RestGithubApiClient(githubToken: String) : GithubApiClient {
                 .host("api.github.com")
                 .addPathSegment("user")
                 .addPathSegment("starred")
-                .addQueryParameter("per_page", "1000")
+                .addQueryParameter("per_page", "3000")
                 .build()
         }
     }
