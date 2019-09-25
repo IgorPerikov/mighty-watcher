@@ -49,8 +49,8 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 - you might find more here https://github.com/MunGell/awesome-for-beginners
 
 ## Rate limiting
-Github lets you make up to 5000 API calls per hour and I am limiting amount of starred repositories fetched from github to 1000. 
-So you are very unlikely to hit the limits. 
+Github lets you make up to 5000 API calls per hour and I am limiting amount of processed repositories to 1000. 
+So if you have >1000 starred repositories you probably want to split requests by language to fit into ~1000
 If you have more than that or still hitting some limits - please let me know, we'll figure it out.  
 Also see section on [parallelism](#parallelism-level)
 
