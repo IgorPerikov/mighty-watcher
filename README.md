@@ -14,7 +14,7 @@ Finds issues available for contributing, based on repositories you starred
 - open
 - was updated less than N days ago(configurable, see [how-to](#how-to-use))
 - labeled as `help wanted` or similar, all labels can be found [here](/src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt)
-- starred by account, which issued API access token 
+- starred by account, which issued API access token, if you lack starred repositories, there are some advices [here](#lacking-starred-repositories)
 
 ## Prerequisites
 - Docker [installed][1]
@@ -42,9 +42,17 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 ## Example
 <p align="center"><img src="/docs/example.gif?raw=true"/></p>
 
+## Lacking starred repositories?
+- go and star languages/libraries you are using right now, if you like them ;)
+- check the trending section https://github.com/trending/kotlin?since=monthly and don't forget to change the language and play with date ranges!
+- check organizations, known for their open-source effort https://gitstar-ranking.com/organizations 
+- you might find more here https://github.com/MunGell/awesome-for-beginners
+
 ## Rate limiting
-Github lets you make up to 5000 API calls per hour, so you're fine as long as you have less than ~1500 starred repositories
-that match your INCLUDE/EXCLUDE parameters. Let me know if that's a problem for you. Also see section on [parallelism](#parallelism-level)
+Github lets you make up to 5000 API calls per hour and I am limiting amount of starred repositories fetched from github to 1000. 
+So you are very unlikely to hit the limits. 
+If you have more than that or still hitting some limits - please let me know, we'll figure it out.  
+Also see section on [parallelism](#parallelism-level)
 
 ## Parallelism level
 The amount of threads to fetch data from Github. If you're hitting some limits, set lower amount and try again in a few minutes.
