@@ -29,7 +29,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 |`TOKEN`      |GitHub API access token                                                                                                     |:heavy_check_mark:      |                     |
 |`INCLUDE`    |Comma-separated language names(in lower case) to be included, **nb** only main language counts                              |:heavy_multiplication_x:|include all languages|
 |`DAYS`       |Days since last issue update to be included                                                                                 |:heavy_multiplication_x:|365                  |
-|`PARALLELISM`|Parallelism level for fetching data from github, [more details below](#parallelism-level)                                   |:heavy_multiplication_x:|12                   |
+|`PARALLELISM`|Parallelism level for fetching data from github, [more details below](#parallelism-level)                                   |:heavy_multiplication_x:|10                   |
 |`EXCLUDE`    |Comma-separated repositories to be excluded from search, following `$repo/$name` template, e.g. `IgorPerikov/mighty-watcher`|:heavy_multiplication_x:|none will be excluded|
 - Launch Docker container from terminal: 
  ```sh
