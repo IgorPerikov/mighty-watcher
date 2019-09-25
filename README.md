@@ -50,6 +50,14 @@ that match your INCLUDE/EXCLUDE parameters. Let me know if that's a problem for 
 The amount of threads to fetch data from Github. If you're hitting some limits, set lower amount and try again in a few minutes.
 You can increase this value too if no error occurs, but chances are high that you will trigger api abuse mechanisms. I warned you :warning:
 
+## How to build
+Unit testing:
+- `./gradlew clean test`
+
+e2e testing:
+- build new docker image locally `docker build -t igorperikov/mighty-watcher:local .`
+- launch it via docker, same as [here](#how-to-use)
+
 ## Contribution
  - please mark issues in your repositories if you are willing to get some help
  - contribute your own labels, if the list misses any
