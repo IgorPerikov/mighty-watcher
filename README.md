@@ -31,7 +31,8 @@ Finds issues available for contributing, based on repositories you starred
 - Open
 - Was updated less than N days ago(configurable, see [how-to](#how-to-use))
 - Labeled as `help wanted` or similar, all labels can be found [here][3]
-- Starred by account, which issued API access token, if you lack starred repositories, there are some advices [here](#lacking-starred-repositories)
+- Starred by account, which issued API access token. If you are lacking starred repositories, 
+there are some advices [here](#lacking-starred-repositories)
 
 ## How to use
 - [Install Docker][1]
@@ -85,7 +86,7 @@ Kotlin style guide is predefined Kotlin style guide from Intellij Idea settings.
 
 ### Issues labeling
  - Contribute your own labels, if [list][3] misses any
- - Mark issues in your repositories if you want to get some help
+ - Put labels on issues in your repositories if you want to get some help
  - Spread the word!
  
 ## Roadmap
