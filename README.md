@@ -12,7 +12,7 @@ Finds issues available for contributing, based on repositories you starred
 <p align="center"><img src="/docs/example.gif?raw=true"/></p>
 
 ## Table of contents
-- [Search criteria](#search-criteria)
+- [Search criteria](#search-criteria-mag)
 - [How to use](#how-to-use-computer)
 - [Lacking starred repositories?](#lacking-starred-repositories-star)
 - [Limitations](#limitations)
@@ -26,7 +26,7 @@ Finds issues available for contributing, based on repositories you starred
 - [Roadmap](#roadmap-memo)
 - [Contact me](#contact-me-mailbox_with_mail)
 
-## Search criteria
+## Search criteria :mag:
 - Non-assigned 
 - Open
 - Was updated less than N days ago(configurable, see [how-to](#how-to-use-computer))
