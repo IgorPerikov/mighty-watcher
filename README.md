@@ -106,5 +106,5 @@ If something doesn't work as expected or you have a feature request - create new
 [7]: https://github.com/IgorPerikov/mighty-watcher/issues/67
 [8]: https://github.com/IgorPerikov/mighty-watcher/issues/new
 [9]: https://github.com/IgorPerikov/mighty-watcher/issues/60
-[10]: https://github.com/IgorPerikov/mighty-watcher/issues/42
+[10]: https://github.com/IgorPerikov/mighty-watcher/issues/41
 [11]: https://github.com/IgorPerikov/mighty-watcher/issues/64
