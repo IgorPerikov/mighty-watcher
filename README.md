@@ -12,9 +12,9 @@ Finds issues available for contributing, based on repositories you starred
 <p align="center"><img src="/docs/example.gif?raw=true"/></p>
 
 ## Table of contents
-- [Search criteria](#search-criteria-mag)
-- [How to use](#how-to-use-computer)
-- [Lacking starred repositories?](#lacking-starred-repositories-star)
+- [Search criteria](#search-criteria)
+- [How to use](#how-to-use)
+- [Lacking starred repositories?](#lacking-starred-repositories)
 - [Limitations](#limitations)
   - [Github rate limiting](#github-rate-limiting)
   - [Api abuse detection](#api-abuse-detection)
@@ -23,17 +23,17 @@ Finds issues available for contributing, based on repositories you starred
     - [Unit testing](#unit-testing)
     - [E2E testing](#e2e-testing)
   - [Issues labeling](#issues-labeling)
-- [Roadmap](#roadmap-memo)
-- [Contact me](#contact-me-mailbox_with_mail)
+- [Roadmap](#roadmap)
+- [Contact me](#contact-me)
 
-## Search criteria :mag:
+## Search criteria
 - Non-assigned 
 - Open
-- Was updated less than N days ago(configurable, see [how-to](#how-to-use-computer))
+- Was updated less than N days ago(configurable, see [how-to](#how-to-use))
 - Labeled as `help wanted` or similar, all labels can be found [here][3]
-- Starred by account, which issued API access token, if you lack starred repositories, there are some advices [here](#lacking-starred-repositories-star)
+- Starred by account, which issued API access token, if you lack starred repositories, there are some advices [here](#lacking-starred-repositories)
 
-## How to use :computer:
+## How to use
 - [Install Docker][1]
 - Obtain github API access token. You could generate it by going to your GitHub [personal access tokens page][2]. 
 Mighty Watcher requires no scopes. I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.
@@ -54,7 +54,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
               --rm igorperikov/mighty-watcher:latest
  ```
 
-## Lacking starred repositories? :star:
+## Lacking starred repositories? 
 - Star languages/libraries you are using right now, if you enjoy them ;)
 - [Trending section][4]. Don't forget to change the language and play with date ranges. 
 - Check [organizations with big open-source effort][5] 
@@ -64,7 +64,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 ### Github rate limiting
 Github lets you make up to 5000 API calls per hour and I am limiting amount of processed repositories to 1000. 
 So if you have more than 1000 starred repositories you should split requests by 1 language via `INCLUDE` variable to fit into limits. 
-If you have more than that or still hitting some limits - please [contact me](#contact-me-mailbox_with_mail), I haven't thought about it thoroughly.
+If you have more than that or still hitting some limits - please [contact me](#contact-me), I haven't thought about it thoroughly.
 
 ### Api abuse detection
 `PARALLELISM` variable defines amount of threads to use to fetch data from Github. 
@@ -81,20 +81,20 @@ Kotlin style guide is predefined Kotlin style guide from Intellij Idea settings.
 
 #### E2E testing
 - Build new docker image locally `docker build -t igorperikov/mighty-watcher:local .`
-- Launch it via docker [command](#how-to-use-computer)
+- Launch it via docker [command](#how-to-use)
 
 ### Issues labeling
  - Contribute your own labels, if [list][3] misses any
  - Mark issues in your repositories if you want to get some help
  - Spread the word!
  
-## Roadmap :memo:
+## Roadmap
 - [ ] [Advanced mode][9]
 - [ ] [Pdf/html reports][10]
 - [ ] [Track github api limits during import process][11]
 - [ ] Web/Mobile application
 
-## Contact me :mailbox_with_mail:
+## Contact me 
 For general feedback please proceed to the [feedback issue][7]. 
 If something doesn't work as expected or you have a feature request - don't hesitate to create new [issue][8] 
 
