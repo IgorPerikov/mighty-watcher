@@ -7,32 +7,34 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/igorperikov/mighty-watcher)
 
 # Mighty Watcher
-Finds issues available for contributing, based on repositories you starred
+Finds issues available for contributing, based on repositories you starred :star:
 
 <p align="center"><img src="/docs/example.gif?raw=true"/></p>
 
 ## Table of contents
-- [Search criteria](#it-will-search-for-issues-that-are)
-- [How to use](#how-to-use)
+- [Search criteria](#search-criteria)
+- [How to use](#how-to-use-computer)
 - [Lacking starred repositories?](#lacking-starred-repositories)
 - [Limitations](#limitations)
   - [Github rate limiting](#github-rate-limiting)
   - [Api abuse detection](#api-abuse-detection)
 - [Contribution](#contribution)
   - [How to build](#how-to-build)
+    - [Unit testing](#unit-testing)
+    - [E2E testing](#e2e-testing)
   - [Issues labeling](#issues-labeling)
-- [Roadmap](#roadmap)
+- [Roadmap](#roadmap-memo)
 - [Contact me](#contact-me)
 
-## It will search for issues that are
-- non-assigned 
-- open
-- was updated less than N days ago(configurable, see [how-to](#how-to-use))
-- labeled as `help wanted` or similar, all labels can be found [here][3]
-- starred by account, which issued API access token, if you lack starred repositories, there are some advices [here](#lacking-starred-repositories)
+## Search criteria
+- Non-assigned 
+- Open
+- Was updated less than N days ago(configurable, see [how-to](#how-to-use-computer))
+- Labeled as `help wanted` or similar, all labels can be found [here][3]
+- Starred by account, which issued API access token, if you lack starred repositories, there are some advices [here](#lacking-starred-repositories)
 
-## How to use
-- [install Docker][1]
+## How to use :computer:
+- [Install Docker][1]
 - Obtain github API access token. You could generate it by going to your GitHub [personal access tokens page][2]. 
 Mighty Watcher requires no scopes. I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.
 - Set environment variables in docker run command:
@@ -53,10 +55,10 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
  ```
 
 ## Lacking starred repositories?
-- go and star languages/libraries you are using right now, if you enjoy them ;)
-- check the [trending section][4] and don't forget to change the language and play with date ranges!
-- check organizations, [known for their open-source effort][5] 
-- you might find more [here][6]
+- Star languages/libraries you are using right now, if you enjoy them ;)
+- [Trending section][4]. Don't forget to change the language and play with date ranges. 
+- Check [organizations with big open-source effort][5] 
+- Check [this website][6]
 
 ## Limitations
 ### Github rate limiting
@@ -72,30 +74,29 @@ but chances are high that you will trigger api abuse mechanisms. I warned you :w
 
 ## Contribution
 ### How to build
-Kotlin style guide is predefined Kotlin style guide from Intellij Idea settings 
+Kotlin style guide is predefined Kotlin style guide from Intellij Idea settings. 
 
-Unit testing:
+#### Unit testing
 - `./gradlew clean test`
 
-e2e testing:
-- build new docker image locally `docker build -t igorperikov/mighty-watcher:local .`
-- launch it via docker [command](#how-to-use)
+#### E2E testing
+- Build new docker image locally `docker build -t igorperikov/mighty-watcher:local .`
+- Launch it via docker [command](#how-to-use-computer)
 
 ### Issues labeling
- - contribute your own labels, if [list][3] misses any
- - mark issues in your repositories if you want to get some help
- - spread the word!
+ - Contribute your own labels, if [list][3] misses any
+ - Mark issues in your repositories if you want to get some help
+ - Spread the word!
  
-## Roadmap
-- [ ] [advanced mode][9]
-- [ ] [pdf/html reports][10]
-- [ ] [track github api limits during import process][11]
-- [ ] web/mobile application
+## Roadmap :memo:
+- [ ] [Advanced mode][9]
+- [ ] [Pdf/html reports][10]
+- [ ] [Track github api limits during import process][11]
+- [ ] Web/Mobile application
 
 ## Contact me
 For general feedback please proceed to [feedback issue][7]. 
 If something doesn't work as expected or you have a feature request - create new [issue][8] 
-
 
 [1]: https://docs.docker.com/install/
 [2]: https://github.com/settings/tokens
