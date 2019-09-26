@@ -97,14 +97,14 @@ For general feedback please proceed to [feedback issue][7].
 If something doesn't work as expected or you have a feature request - create new [issue][8] 
 
 
-[1] : https://docs.docker.com/install/
-[2] : https://github.com/settings/tokens
-[3] : https://github.com/IgorPerikov/mighty-watcher/blob/master/src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt
-[4] : https://github.com/trending/kotlin?since=monthly
-[5] : https://gitstar-ranking.com/organizations
-[6] : https://github.com/MunGell/awesome-for-beginners
-[7] : https://github.com/IgorPerikov/mighty-watcher/issues/67
-[8] : https://github.com/IgorPerikov/mighty-watcher/issues/new
-[9] : https://github.com/IgorPerikov/mighty-watcher/issues/60
+[1]: https://docs.docker.com/install/
+[2]: https://github.com/settings/tokens
+[3]: https://github.com/IgorPerikov/mighty-watcher/blob/master/src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt
+[4]: https://github.com/trending/kotlin?since=monthly
+[5]: https://gitstar-ranking.com/organizations
+[6]: https://github.com/MunGell/awesome-for-beginners
+[7]: https://github.com/IgorPerikov/mighty-watcher/issues/67
+[8]: https://github.com/IgorPerikov/mighty-watcher/issues/new
+[9]: https://github.com/IgorPerikov/mighty-watcher/issues/60
 [10]: https://github.com/IgorPerikov/mighty-watcher/issues/42
 [11]: https://github.com/IgorPerikov/mighty-watcher/issues/64
