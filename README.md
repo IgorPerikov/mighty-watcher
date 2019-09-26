@@ -87,10 +87,10 @@ e2e testing:
  - spread the word!
  
 ## Roadmap
-- [] [advanced mode][9]
-- [] [pdf/html reports][10]
-- [] [track github api limits during import process][11]
-- [] web/mobile application
+- [ ] [advanced mode][9]
+- [ ] [pdf/html reports][10]
+- [ ] [track github api limits during import process][11]
+- [ ] web/mobile application
 
 ## Contact me
 For general feedback please proceed to [feedback issue][7]. 
