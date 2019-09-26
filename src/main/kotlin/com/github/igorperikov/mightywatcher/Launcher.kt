@@ -15,7 +15,6 @@ const val DEFAULT_PARALLELISM_LEVEL = "12"
 const val DAYS_SINCE_LAST_UPDATE_ENV_NAME = "DAYS"
 const val DEFAULT_DAYS_SINCE_LAST_UPDATE = "365"
 const val OUTPUT_TYPE = "OUTPUT"
-const val DEFAULT_OUTPUT_TYPE = "CONSOLE"
 
 object Launcher {
     @JvmStatic
@@ -35,7 +34,7 @@ object Launcher {
     private val groupingService = GroupingService.withDefaultTimeGroups()
 
     private val outputService = OutputService(
-        type = (System.getenv(OUTPUT_TYPE) ?: DEFAULT_OUTPUT_TYPE)
+        type = (System.getenv(OUTPUT_TYPE) ?: CONSOLE_OUTPUT_TYPE)
     )
 
     @JvmStatic
