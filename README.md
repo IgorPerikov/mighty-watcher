@@ -99,7 +99,7 @@ If something doesn't work as expected or you have a feature request - create new
 
 [1] : https://docs.docker.com/install/
 [2] : https://github.com/settings/tokens
-[3] : /src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt
+[3] : https://github.com/IgorPerikov/mighty-watcher/blob/master/src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt
 [4] : https://github.com/trending/kotlin?since=monthly
 [5] : https://gitstar-ranking.com/organizations
 [6] : https://github.com/MunGell/awesome-for-beginners
