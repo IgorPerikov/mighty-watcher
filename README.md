@@ -7,14 +7,14 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/igorperikov/mighty-watcher)
 
 # Mighty Watcher
-Finds issues available for contributing, based on repositories you starred :star:
+Finds issues available for contributing, based on repositories you starred
 
 <p align="center"><img src="/docs/example.gif?raw=true"/></p>
 
 ## Table of contents
 - [Search criteria](#search-criteria)
 - [How to use](#how-to-use-computer)
-- [Lacking starred repositories?](#lacking-starred-repositories)
+- [Lacking starred repositories?](#lacking-starred-repositories-star)
 - [Limitations](#limitations)
   - [Github rate limiting](#github-rate-limiting)
   - [Api abuse detection](#api-abuse-detection)
@@ -24,14 +24,14 @@ Finds issues available for contributing, based on repositories you starred :star
     - [E2E testing](#e2e-testing)
   - [Issues labeling](#issues-labeling)
 - [Roadmap](#roadmap-memo)
-- [Contact me](#contact-me)
+- [Contact me](#contact-me-mailbox_with_mail)
 
 ## Search criteria
 - Non-assigned 
 - Open
 - Was updated less than N days ago(configurable, see [how-to](#how-to-use-computer))
 - Labeled as `help wanted` or similar, all labels can be found [here][3]
-- Starred by account, which issued API access token, if you lack starred repositories, there are some advices [here](#lacking-starred-repositories)
+- Starred by account, which issued API access token, if you lack starred repositories, there are some advices [here](#lacking-starred-repositories-star)
 
 ## How to use :computer:
 - [Install Docker][1]
@@ -54,7 +54,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
               --rm igorperikov/mighty-watcher:latest
  ```
 
-## Lacking starred repositories?
+## Lacking starred repositories? :star:
 - Star languages/libraries you are using right now, if you enjoy them ;)
 - [Trending section][4]. Don't forget to change the language and play with date ranges. 
 - Check [organizations with big open-source effort][5] 
@@ -64,7 +64,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 ### Github rate limiting
 Github lets you make up to 5000 API calls per hour and I am limiting amount of processed repositories to 1000. 
 So if you have more than 1000 starred repositories you should split requests by 1 language via `INCLUDE` variable to fit into limits. 
-If you have more than that or still hitting some limits - please [contact me](#contact-me), I haven't thought about it thoroughly.
+If you have more than that or still hitting some limits - please [contact me](#contact-me-mailbox_with_mail), I haven't thought about it thoroughly.
 
 ### Api abuse detection
 `PARALLELISM` variable defines amount of threads to use to fetch data from Github. 
@@ -94,9 +94,9 @@ Kotlin style guide is predefined Kotlin style guide from Intellij Idea settings.
 - [ ] [Track github api limits during import process][11]
 - [ ] Web/Mobile application
 
-## Contact me
-For general feedback please proceed to [feedback issue][7]. 
-If something doesn't work as expected or you have a feature request - create new [issue][8] 
+## Contact me :mailbox_with_mail:
+For general feedback please proceed to the [feedback issue][7]. 
+If something doesn't work as expected or you have a feature request - don't hesitate to create new [issue][8] 
 
 [1]: https://docs.docker.com/install/
 [2]: https://github.com/settings/tokens
