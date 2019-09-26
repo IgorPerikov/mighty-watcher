@@ -20,7 +20,8 @@ Finds issues available for contributing, based on repositories you starred
   - [Api abuse detection](#api-abuse-detection)
 - [Contribution](#contribution)
   - [How to build](#how-to-build)
-  - [Add labels](#add-labels)
+  - [Issues labeling](#issues-labeling)
+- [Roadmap](#roadmap)
 - [Contact me](#contact-me)
 
 ## It will search for issues that are
@@ -52,7 +53,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
  ```
 
 ## Lacking starred repositories?
-- go and star languages/libraries you are using right now, if you like them ;)
+- go and star languages/libraries you are using right now, if you enjoy them ;)
 - check the [trending section][4] and don't forget to change the language and play with date ranges!
 - check organizations, [known for their open-source effort][5] 
 - you might find more [here][6]
@@ -64,7 +65,7 @@ So if you have more than 1000 starred repositories you should split requests by 
 If you have more than that or still hitting some limits - please [contact me](#contact-me), I haven't thought about it thoroughly.
 
 ### Api abuse detection
-`PARALLELISM` variable defines amount of threads to fetch data from Github. 
+`PARALLELISM` variable defines amount of threads to use to fetch data from Github. 
 If you're hitting some limits, set lower amount and try again in a few minutes.
 You can increase this value too if no error occurs to get results faster, 
 but chances are high that you will trigger api abuse mechanisms. I warned you :warning:
@@ -80,19 +81,30 @@ e2e testing:
 - build new docker image locally `docker build -t igorperikov/mighty-watcher:local .`
 - launch it via docker [command](#how-to-use)
 
-### Add labels
- - please mark issues in your repositories if you want to get some help
- - contribute your own labels, if the list misses any
+### Issues labeling
+ - contribute your own labels, if [list][3] misses any
+ - mark issues in your repositories if you want to get some help
+ - spread the word!
+ 
+## Roadmap
+- [] [advanced mode][9]
+- [] [pdf/html reports][10]
+- [] [track github api limits during import process][11]
+- [] web/mobile application
 
 ## Contact me
 For general feedback please proceed to [feedback issue][7]. 
 If something doesn't work as expected or you have a feature request - create new [issue][8] 
 
-[1]: https://docs.docker.com/install/
-[2]: https://github.com/settings/tokens
-[3]: /src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt
-[4]: https://github.com/trending/kotlin?since=monthly
-[5]: https://gitstar-ranking.com/organizations
-[6]: https://github.com/MunGell/awesome-for-beginners
-[7]: https://github.com/IgorPerikov/mighty-watcher/issues/67
-[8]: https://github.com/IgorPerikov/mighty-watcher/issues/new
+
+[1] : https://docs.docker.com/install/
+[2] : https://github.com/settings/tokens
+[3] : /src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt
+[4] : https://github.com/trending/kotlin?since=monthly
+[5] : https://gitstar-ranking.com/organizations
+[6] : https://github.com/MunGell/awesome-for-beginners
+[7] : https://github.com/IgorPerikov/mighty-watcher/issues/67
+[8] : https://github.com/IgorPerikov/mighty-watcher/issues/new
+[9] : https://github.com/IgorPerikov/mighty-watcher/issues/60
+[10]: https://github.com/IgorPerikov/mighty-watcher/issues/42
+[11]: https://github.com/IgorPerikov/mighty-watcher/issues/64
