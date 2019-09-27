@@ -67,8 +67,8 @@ dependencies {
     implementation("org.slf4j", "slf4j-api", slf4jVersion)
     implementation("ch.qos.logback", "logback-core", logbackVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)
-
-    implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.10")
+    
+    implementation("com.j2html", "j2html", "1.4.0")
 
     testImplementation("org.junit.jupiter", "junit-jupiter-api", junit5Version)
     testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junit5Version)
