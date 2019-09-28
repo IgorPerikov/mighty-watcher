@@ -59,7 +59,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 - Star languages/libraries you are using right now, if you enjoy them ;)
 - [Trending section][4]. Don't forget to change the language and play with date ranges. 
 - Check [organizations with big open-source effort][5] 
-- Check [this website][6]
+- Check [awesome lists][6]
 
 ## Limitations
 ### Github rate limiting
@@ -104,7 +104,7 @@ If something doesn't work as expected or you have a feature request - don't hesi
 [3]: https://github.com/IgorPerikov/mighty-watcher/blob/master/src/main/kotlin/com/github/igorperikov/mightywatcher/service/EasyLabelsStorage.kt
 [4]: https://github.com/trending/kotlin?since=monthly
 [5]: https://gitstar-ranking.com/organizations
-[6]: https://github.com/MunGell/awesome-for-beginners
+[6]: https://github.com/sindresorhus/awesome
 [7]: https://github.com/IgorPerikov/mighty-watcher/issues/67
 [8]: https://github.com/IgorPerikov/mighty-watcher/issues/new
 [9]: https://github.com/IgorPerikov/mighty-watcher/issues/60
