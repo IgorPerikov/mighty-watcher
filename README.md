@@ -39,7 +39,7 @@ there are some advices [here](#lacking-starred-repositories)
 - [Install Docker][1]
 - Obtain github API access token. You could generate it by going to your GitHub [personal access tokens page][2]. 
 Mighty Watcher requires no scopes. I'd recommend you to put API token in env variable (e.g. `MIGHTY_WATCHER_GITHUB_TOKEN`) rather than passing it around everytime.
-- Set environment variables in docker run command:
+- Set environment variables in [docker run command][13]:
 
 |name         |description                                                                                                                 |required                |default behaviour    |
 |-------------|----------------------------------------------------------------------------------------------------------------------------|------------------------|---------------------|
@@ -51,7 +51,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 - Launch Docker container from terminal: 
  ```sh
    docker pull igorperikov/mighty-watcher:latest
-   docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" --rm igorperikov/mighty-watcher:latest
+   docker run -e TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN --rm igorperikov/mighty-watcher:latest
  ```
 
 ## Privacy policy
@@ -116,3 +116,4 @@ If something doesn't work as expected or you have a feature request - don't hesi
 [10]: https://github.com/IgorPerikov/mighty-watcher/issues/41
 [11]: https://github.com/IgorPerikov/mighty-watcher/issues/64
 [12]: https://hub.docker.com/
+[13]: https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file
