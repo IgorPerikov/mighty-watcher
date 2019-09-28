@@ -14,6 +14,7 @@ Finds issues available for contributing, based on repositories you starred
 ## Table of contents
 - [Search criteria](#search-criteria)
 - [How to use](#how-to-use)
+- [Privacy policy](#privacy-policy)
 - [Lacking starred repositories?](#lacking-starred-repositories)
 - [Limitations](#limitations)
   - [Github rate limiting](#github-rate-limiting)
@@ -52,6 +53,12 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
    docker pull igorperikov/mighty-watcher:latest
    docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" --rm igorperikov/mighty-watcher:latest
  ```
+
+## Privacy policy
+**I do not track a thing about you**. 
+Your api token in absolute safety - you can check this by codebase or by tcpdumping the outcome traffic -
+application will communicate only with github api server via https. 
+The only thing I see is amount of docker image pulls (not runs!), it is provided by [Docker hub][12]
 
 ## Lacking starred repositories? 
 - Star languages/libraries you are using right now, if you enjoy them ;)
@@ -108,3 +115,4 @@ If something doesn't work as expected or you have a feature request - don't hesi
 [9]: https://github.com/IgorPerikov/mighty-watcher/issues/60
 [10]: https://github.com/IgorPerikov/mighty-watcher/issues/41
 [11]: https://github.com/IgorPerikov/mighty-watcher/issues/64
+[12]: https://hub.docker.com/
