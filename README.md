@@ -58,7 +58,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 **I do not track a thing about you**. 
 Your api token in absolute safety - you can check this by codebase or by tcpdumping the outcome traffic -
 application will communicate only with github api server via https. 
-The only thing I see is amount of docker image pulls (not runs!), it is provided by [Docker hub][12]
+The only thing I can see is amount of docker image pulls (not runs!), it is provided by [docker hub][12]
 
 ## Lacking starred repositories? 
 - Star languages/libraries you are using right now, if you enjoy them ;)
