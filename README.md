@@ -9,7 +9,7 @@
 # Mighty Watcher
 Finds issues available for contributing, based on repositories you starred
 
-<p align="center"><img src="/docs/example.gif?raw=true"/></p>
+<img src="/docs/example.gif?raw=true" width="95%"/>
 
 ## Table of contents
 - [Search criteria](#search-criteria)
@@ -50,9 +50,7 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 - Launch Docker container from terminal: 
  ```sh
    docker pull igorperikov/mighty-watcher:latest
-   docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" \
-              -e "DAYS=15" \ 
-              --rm igorperikov/mighty-watcher:latest
+   docker run -e "TOKEN=$MIGHTY_WATCHER_GITHUB_TOKEN" --rm igorperikov/mighty-watcher:latest
  ```
 
 ## Lacking starred repositories? 
