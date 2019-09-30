@@ -5,6 +5,8 @@ import com.github.igorperikov.mightywatcher.entity.Label
 import com.github.igorperikov.mightywatcher.entity.Repository
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
 
+const val limitRepositories = 1000
+
 class GithubService(
     private val githubApiClient: GithubApiClient,
     private val includedLanguages: Set<String>,
@@ -16,6 +18,7 @@ class GithubService(
             .filter { it.hasIssues }
             .filter { languageAllowed(it.language) }
             .filterNot { it.fullName in excludedRepositories }
+            .take(limitRepositories)
             .toList()
     }
 
