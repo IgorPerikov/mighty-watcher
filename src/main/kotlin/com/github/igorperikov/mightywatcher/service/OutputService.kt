@@ -2,12 +2,11 @@ package com.github.igorperikov.mightywatcher.service
 
 import com.github.igorperikov.mightywatcher.Issues
 import com.github.igorperikov.mightywatcher.entity.NamedTimestamp
-import org.slf4j.LoggerFactory
-import java.util.LinkedHashMap
 import j2html.TagCreator.*
-import j2html.attributes.Attr.COLSPAN
+import j2html.attributes.Attr
 import j2html.tags.ContainerTag
-import javax.xml.parsers.DocumentBuilderFactory
+import org.slf4j.LoggerFactory
+import java.util.*
 
 const val PDF_OUTPUT_TYPE = "PDF"
 const val HTML_OUTPUT_TYPE = "HTML"
@@ -37,8 +36,10 @@ class OutputService(
                 for ((timeGroupName, issuesInTimeGroup) in issues) {
                     if (issuesInTimeGroup.isEmpty()) continue
                     mutableList.add(tr(
-                            td(b(timeGroupName.toString())).withStyle("text-align:center").withClass("col-xs-12")
-                    ).attr(COLSPAN, 2))
+                            td(b(timeGroupName.toString()))
+                                    .withStyle("text-align:center")
+                                    .attr(Attr.COLSPAN, 2)
+                    ))
                     for (issue in issuesInTimeGroup) {
                         mutableList.add(tr(
                                 td(issue.getRepoName()).withClass("col-xs-4"),
@@ -63,7 +64,7 @@ class OutputService(
                 )
             }
             else ->
-                throw IllegalArgumentException("This output type ${type} is not supported")
+                throw IllegalArgumentException("This output type $type is not supported")
         }
 
     }

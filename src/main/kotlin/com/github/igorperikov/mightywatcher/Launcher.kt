@@ -1,7 +1,6 @@
 package com.github.igorperikov.mightywatcher
 
 import com.github.igorperikov.mightywatcher.entity.Issue
-import com.github.igorperikov.mightywatcher.entity.NamedTimestamp
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
 import com.github.igorperikov.mightywatcher.service.*
 import org.slf4j.LoggerFactory
