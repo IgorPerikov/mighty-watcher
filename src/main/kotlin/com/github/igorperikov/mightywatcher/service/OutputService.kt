@@ -5,6 +5,7 @@ import com.github.igorperikov.mightywatcher.entity.NamedTimestamp
 import org.slf4j.LoggerFactory
 import java.util.LinkedHashMap
 import j2html.TagCreator.*
+import j2html.attributes.Attr.COLSPAN
 import j2html.tags.ContainerTag
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -32,22 +33,31 @@ class OutputService(
                 throw NotImplementedError("PDF export isn't implmented yet")
             }
             HTML_OUTPUT_TYPE -> {
-                val filteredIssues = issues.filter { it.value.isNotEmpty() }.flatMap { it.value }
-                val map: Array<ContainerTag> = filteredIssues.map { issue ->
-                    tr(
-                            td(issue.getRepoName()).withStyle("border: 1px solid black;"),
-                            td(a(issue.title).withHref(issue.htmlUrl)).withStyle("border: 1px solid black;")
-                    )
-                }.toTypedArray()
+                val mutableList: MutableList<ContainerTag> = arrayListOf()
+                for ((timeGroupName, issuesInTimeGroup) in issues) {
+                    if (issuesInTimeGroup.isEmpty()) continue
+                    mutableList.add(tr(
+                            td(b(timeGroupName.toString())).withStyle("text-align:center").withClass("col-xs-12")
+                    ).attr(COLSPAN, 2))
+                    for (issue in issuesInTimeGroup) {
+                        mutableList.add(tr(
+                                td(issue.getRepoName()).withClass("col-xs-4"),
+                                td(a(issue.title).withHref(issue.htmlUrl)).withClass("col-xs-8")
+                        ))
+                    }
+                }
                 log.info(
                         html(
                                 head(
-                                        title("Issues report")
+                                        title("Issues report"),
+                                        link().withHref("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css").withRel("stylesheet")
                                 ),
                                 body(
+                                        h3("Issues report").withStyle("text-align: center"),
+                                        br(),
                                         table(
-                                                *map
-                                        ).withStyle("border: 1px solid black;")
+                                                *mutableList.toTypedArray()
+                                        ).withClass("table table-striped")
                                 )
                         ).renderFormatted()
                 )
