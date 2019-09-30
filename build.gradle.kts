@@ -68,7 +68,6 @@ dependencies {
     implementation("ch.qos.logback", "logback-core", logbackVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)
 
-    implementation("org.apache.pdfbox", "pdfbox", "2.0.17")
     implementation("com.j2html", "j2html", "1.4.0")
 
     testImplementation("org.junit.jupiter", "junit-jupiter-api", junit5Version)
