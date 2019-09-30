@@ -40,12 +40,11 @@ object Launcher {
     }
 
     private fun printResult(issues: LinkedHashMap<NamedTimestamp, Issues>) {
-        for ((timeGroupName, issuesInTimeGroup) in issues) {
-            if (issuesInTimeGroup.isEmpty()) continue
-            log.info("{}", timeGroupName)
-            for (issue in issuesInTimeGroup) {
-                log.info(" {}", issue)
-            }
-        }
+        issues
+            .filterNot { entry -> entry.value.isEmpty() }
+            .flatMap { entry ->
+                log.info("{}", entry.key)
+                entry.value
+            }.forEach { issue -> log.info(" {}", issue) }
     }
 }
