@@ -6,15 +6,25 @@ import j2html.TagCreator.*
 import j2html.attributes.Attr
 import j2html.tags.ContainerTag
 import org.slf4j.LoggerFactory
+import java.io.File
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 const val PDF_OUTPUT_TYPE = "PDF"
 const val HTML_OUTPUT_TYPE = "HTML"
 const val CONSOLE_OUTPUT_TYPE = "CONSOLE"
 
+
 class OutputService(
         private val type: String
 ) {
+    companion object {
+        const val HTML_PATH_FORMAT = "might-watch-report-%s.html"
+        @JvmField
+        val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
+    }
+
     private val log = LoggerFactory.getLogger(this.javaClass)
 
     fun getResults(issues: LinkedHashMap<NamedTimestamp, Issues>) {
@@ -47,21 +57,24 @@ class OutputService(
                         ))
                     }
                 }
-                log.info(
-                        html(
-                                head(
-                                        title("Issues report"),
-                                        link().withHref("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css").withRel("stylesheet")
-                                ),
-                                body(
-                                        h3("Issues report").withStyle("text-align: center"),
-                                        br(),
-                                        table(
-                                                *mutableList.toTypedArray()
-                                        ).withClass("table table-striped")
-                                )
-                        ).renderFormatted()
-                )
+
+                File(HTML_PATH_FORMAT.format(LocalDate.now().format(FORMATTER))).printWriter().use { out ->
+                    out.println(
+                            html(
+                                    head(
+                                            title("Issues report"),
+                                            link().withHref("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css").withRel("stylesheet")
+                                    ),
+                                    body(
+                                            h3("Issues report").withStyle("text-align: center"),
+                                            br(),
+                                            table(
+                                                    *mutableList.toTypedArray()
+                                            ).withClass("table table-striped")
+                                    )
+                            ).renderFormatted()
+                    )
+                }
             }
             else ->
                 throw IllegalArgumentException("This output type $type is not supported")
