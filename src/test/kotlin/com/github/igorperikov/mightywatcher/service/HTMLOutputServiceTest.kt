@@ -26,7 +26,7 @@ class HTMLOutputServiceTest {
 
     @AfterEach
     fun `remove file`() {
-//        Files.deleteIfExists(reportFileName)
+        Files.deleteIfExists(reportFileName)
     }
 
     @Test
