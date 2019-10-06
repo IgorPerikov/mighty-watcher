@@ -2,84 +2,28 @@ package com.github.igorperikov.mightywatcher.service
 
 import com.github.igorperikov.mightywatcher.Issues
 import com.github.igorperikov.mightywatcher.entity.NamedTimestamp
-import j2html.TagCreator.*
-import j2html.attributes.Attr
-import j2html.tags.ContainerTag
-import org.slf4j.LoggerFactory
-import java.io.File
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-const val PDF_OUTPUT_TYPE = "PDF"
-const val HTML_OUTPUT_TYPE = "HTML"
-const val CONSOLE_OUTPUT_TYPE = "CONSOLE"
-
-
-class OutputService(
-        private val type: String
-) {
+abstract class OutputService {
     companion object {
+
+        fun createOutputService(type: String): OutputService {
+            return when (type) {
+                HTML_OUTPUT_TYPE -> HTMLOutputService()
+                CONSOLE_OUTPUT_TYPE -> ConsoleOutputService()
+                else -> throw IllegalArgumentException("No supported output service of ${type} exists§")
+            }
+        }
+
         const val HTML_PATH_FORMAT = "might-watch-report-%s.html"
+        const val PDF_OUTPUT_TYPE = "PDF"
+        const val HTML_OUTPUT_TYPE = "HTML"
+        const val CONSOLE_OUTPUT_TYPE = "CONSOLE"
         @JvmField
         val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
     }
 
-    private val log = LoggerFactory.getLogger(this.javaClass)
+    abstract fun getResults(issues: LinkedHashMap<NamedTimestamp, Issues>)
 
-    fun getResults(issues: LinkedHashMap<NamedTimestamp, Issues>) {
-        when (type) {
-            CONSOLE_OUTPUT_TYPE -> exportToConsole(issues)
-            PDF_OUTPUT_TYPE -> throw NotImplementedError("PDF export isn't implemented yet")
-            HTML_OUTPUT_TYPE -> exportToHTML(issues)
-            else ->throw IllegalArgumentException("This output type $type is not supported")
-        }
-
-    }
-
-    private fun exportToHTML(issues: LinkedHashMap<NamedTimestamp, Issues>) {
-        val mutableList: MutableList<ContainerTag> = arrayListOf()
-        for ((timeGroupName, issuesInTimeGroup) in issues) {
-            if (issuesInTimeGroup.isEmpty()) continue
-            mutableList.add(tr(
-                    td(b(timeGroupName.toString()))
-                            .withStyle("text-align:center")
-                            .attr(Attr.COLSPAN, 2)
-            ))
-            for (issue in issuesInTimeGroup) {
-                mutableList.add(tr(
-                        td(issue.getRepoName()).withClass("col-xs-4"),
-                        td(a(issue.title).withHref(issue.htmlUrl)).withClass("col-xs-8")
-                ))
-            }
-        }
-
-        File(HTML_PATH_FORMAT.format(LocalDate.now().format(FORMATTER))).printWriter().use { out ->
-            out.println(
-                    html(
-                            head(
-                                    title("Issues report"),
-                                    link().withHref("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css").withRel("stylesheet")
-                            ),
-                            body(
-                                    h3("Issues report").withStyle("text-align: center"),
-                                    br(),
-                                    table(
-                                            *mutableList.toTypedArray()
-                                    ).withClass("table table-striped")
-                            )
-                    ).renderFormatted()
-            )
-        }
-    }
-
-    private fun exportToConsole(issues: LinkedHashMap<NamedTimestamp, Issues>) {
-        for ((timeGroupName, issuesInTimeGroup) in issues) {
-            if (issuesInTimeGroup.isEmpty()) continue
-            log.info("{}", timeGroupName)
-            for (issue in issuesInTimeGroup) {
-                log.info(" {}", issue)
-            }
-        }
-    }
 }

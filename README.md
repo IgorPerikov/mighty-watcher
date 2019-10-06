@@ -48,7 +48,6 @@ Mighty Watcher requires no scopes. I'd recommend you to put API token in env var
 |`DAYS`       |Days since last issue update to be included                                                                                 |:heavy_multiplication_x:|90                   |
 |`PARALLELISM`|Parallelism level for fetching data from github, [more details below](#api-abuse-detection)                                 |:heavy_multiplication_x:|10                   |
 |`EXCLUDE`    |Comma-separated repositories to be excluded from search, following `$repo/$name` template, e.g. `IgorPerikov/mighty-watcher`|:heavy_multiplication_x:|none will be excluded|
-|`OUTPUT`     |Type of response output format (CONSOLE for console response, HTML for html-generated page)                                 |:heavy_multiplication_x:|console              |
 - Launch Docker container from terminal: 
  ```sh
    docker pull igorperikov/mighty-watcher:latest
