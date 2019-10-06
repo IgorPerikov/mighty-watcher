@@ -12,7 +12,7 @@ abstract class OutputService {
             return when (type) {
                 HTML_OUTPUT_TYPE -> HTMLOutputService()
                 CONSOLE_OUTPUT_TYPE -> ConsoleOutputService()
-                else -> throw IllegalArgumentException("No supported output service of ${type} exists§")
+                else -> throw IllegalArgumentException("No supported output service of $type exists§")
             }
         }
 
