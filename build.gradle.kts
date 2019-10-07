@@ -44,7 +44,7 @@ repositories {
 }
 
 val kotlinCoroutinesVersion = "1.3.1"
-val okHttpVersion = "3.14.2"
+val ktorVersion = "1.2.4"
 val jacksonVersion = "2.9.9"
 val slf4jVersion = "1.7.28"
 val logbackVersion = "1.2.3"
@@ -59,7 +59,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", kotlinCoroutinesVersion)
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core-common", kotlinCoroutinesVersion)
 
-    implementation("com.squareup.okhttp3", "okhttp", okHttpVersion)
+    implementation("io.ktor", "ktor-client-apache", ktorVersion)
+    implementation("io.ktor", "ktor-client-json-jvm", ktorVersion)
+    implementation("io.ktor", "ktor-client-jackson", ktorVersion)
 
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
     implementation("com.fasterxml.jackson.datatype", "jackson-datatype-jsr310", jacksonVersion)
