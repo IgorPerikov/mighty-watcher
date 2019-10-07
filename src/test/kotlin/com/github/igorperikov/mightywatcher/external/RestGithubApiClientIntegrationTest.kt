@@ -1,15 +1,48 @@
 package com.github.igorperikov.mightywatcher.external
 
+import com.github.igorperikov.mightywatcher.Launcher
 import com.github.igorperikov.mightywatcher.utils.Iso8601Formatter
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 import java.time.LocalDateTime
 import java.time.Month
 import java.time.ZoneOffset
 
 private const val mightyWatcherGithubIntegrationTokenName = "MIGHTY_WATCHER_GITHUB_INTEGRATION_TOKEN"
 
-class RestGithubApiClientIntegrationTest {
+class RestGithubApiClientIntegrationTest : KoinTest {
+
+    private val githubApiClient by inject<GithubApiClient>()
+
+    private val testModule = module {
+        single { Launcher.initHttpClient(getProperty(mightyWatcherGithubIntegrationTokenName)) }
+        single { RestGithubApiClient(get()) as GithubApiClient}
+    }
+
+    @BeforeEach
+    fun before() {
+        if (isIntegrationEnv()) {
+            startKoin {
+                environmentProperties()
+                modules(testModule)
+            }
+        }
+    }
+
+    @AfterEach
+    fun after() {
+        if (isIntegrationEnv()) {
+            stopKoin()
+        }
+    }
+
     private fun isIntegrationEnv(): Boolean {
         return System.getenv(mightyWatcherGithubIntegrationTokenName) != null
     }
@@ -24,7 +57,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun testGetStarredRepositories() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val testRepo = githubApiClient.getStarredRepositories()
                 .find { repository -> repository.fullName == "$testRepoOwner/$testRepoName" }
             assertNotNull(testRepo)
@@ -34,7 +66,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun testGetRepositoryLabels() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val repositoryLabels = githubApiClient.getRepositoryLabels(testRepoOwner, testRepoName)
             assertNotNull(repositoryLabels.find { label -> label.name == label1Name })
             assertNotNull(repositoryLabels.find { label -> label.name == label2Name })
@@ -45,7 +76,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun `getIssues should not find closed issue`() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val issues = githubApiClient.getIssues(
                 testRepoOwner,
                 testRepoName,
@@ -60,7 +90,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun `getIssues should not find assigned issue`() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val issues = githubApiClient.getIssues(
                 testRepoOwner,
                 testRepoName,
@@ -75,7 +104,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun `getIssues should find open non-assigned issue with given label`() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val issues = githubApiClient.getIssues(
                 testRepoOwner,
                 testRepoName,
