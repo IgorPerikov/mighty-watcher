@@ -1,46 +1,17 @@
 package com.github.igorperikov.mightywatcher.external
 
-import com.github.igorperikov.mightywatcher.Launcher
 import com.github.igorperikov.mightywatcher.utils.Iso8601Formatter
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.module
-import org.koin.test.KoinTest
-import org.koin.test.inject
 import java.time.LocalDateTime
 import java.time.Month
 import java.time.ZoneOffset
 
 private const val mightyWatcherGithubIntegrationTokenName = "MIGHTY_WATCHER_GITHUB_INTEGRATION_TOKEN"
 
-class RestGithubApiClientIntegrationTest : KoinTest {
-
-    private val githubApiClient by inject<GithubApiClient>()
-
-    private val testModule = module {
-        single { Launcher.initHttpClient(getProperty(mightyWatcherGithubIntegrationTokenName)) }
-        single { RestGithubApiClient(get()) as GithubApiClient}
-    }
-
-    @BeforeEach
-    fun before() {
-        if (isIntegrationEnv()) {
-            startKoin {
-                environmentProperties()
-                modules(testModule)
-            }
-        }
-    }
-
-    @AfterEach
-    fun after() {
-        if (isIntegrationEnv()) {
-            stopKoin()
-        }
+class RestGithubApiClientIntegrationTest {
+    private val githubApiClient: GithubApiClient by lazy {
+        RestGithubApiClient(initHttpClient(System.getenv(mightyWatcherGithubIntegrationTokenName)))
     }
 
     private fun isIntegrationEnv(): Boolean {

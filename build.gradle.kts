@@ -65,7 +65,6 @@ dependencies {
     implementation("io.ktor", "ktor-client-jackson", ktorVersion)
 
     implementation("org.koin", "koin-core", koinVersion)
-    testImplementation("org.koin", "koin-test", koinVersion)
 
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
     implementation("com.fasterxml.jackson.datatype", "jackson-datatype-jsr310", jacksonVersion)

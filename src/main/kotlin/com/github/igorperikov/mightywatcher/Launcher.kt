@@ -1,18 +1,11 @@
 package com.github.igorperikov.mightywatcher
 
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.github.igorperikov.mightywatcher.entity.Issue
 import com.github.igorperikov.mightywatcher.entity.NamedTimestamp
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
 import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
+import com.github.igorperikov.mightywatcher.external.initHttpClient
 import com.github.igorperikov.mightywatcher.service.*
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.apache.Apache
-import io.ktor.client.features.defaultRequest
-import io.ktor.client.features.json.JacksonSerializer
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.request.header
-import io.ktor.http.URLProtocol
 import org.koin.core.context.startKoin
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
@@ -31,27 +24,6 @@ const val TOKEN_ENV_NAME = "TOKEN"
 object Launcher {
     @JvmStatic
     private val log = LoggerFactory.getLogger(this.javaClass)
-
-    fun initHttpClient(githubToken: String): HttpClient {
-        return HttpClient(Apache) {
-            install(JsonFeature) {
-                serializer = JacksonSerializer {
-                    findAndRegisterModules()
-                    registerModule(JavaTimeModule())
-                }
-            }
-
-            defaultRequest {
-                url {
-                    protocol = URLProtocol.HTTPS
-                    host = "api.github.com"
-                }
-                header("Accept", "application/vnd.github.v3+json")
-                header("User-Agent", "IgorPerikov/mighty-watcher")
-                header("Authorization", "token $githubToken")
-            }
-        }
-    }
 
     val applicationModule = module {
         single { initHttpClient(getProperty(TOKEN_ENV_NAME)) }
