@@ -51,6 +51,7 @@ val logbackVersion = "1.2.3"
 val junit5Version = "5.5.2"
 val hamkrestVersion = "1.7.0.0"
 val mockitoKotlin2Version = "2.2.0"
+val koinVersion = "2.0.1"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -62,6 +63,8 @@ dependencies {
     implementation("io.ktor", "ktor-client-apache", ktorVersion)
     implementation("io.ktor", "ktor-client-json-jvm", ktorVersion)
     implementation("io.ktor", "ktor-client-jackson", ktorVersion)
+
+    implementation("org.koin", "koin-core", koinVersion)
 
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
     implementation("com.fasterxml.jackson.datatype", "jackson-datatype-jsr310", jacksonVersion)
