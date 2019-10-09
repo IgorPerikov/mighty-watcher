@@ -10,6 +10,10 @@ import java.time.ZoneOffset
 private const val mightyWatcherGithubIntegrationTokenName = "MIGHTY_WATCHER_GITHUB_INTEGRATION_TOKEN"
 
 class RestGithubApiClientIntegrationTest {
+    private val githubApiClient: GithubApiClient by lazy {
+        RestGithubApiClient(initHttpClient(System.getenv(mightyWatcherGithubIntegrationTokenName)))
+    }
+
     private fun isIntegrationEnv(): Boolean {
         return System.getenv(mightyWatcherGithubIntegrationTokenName) != null
     }
@@ -24,7 +28,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun testGetStarredRepositories() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val testRepo = githubApiClient.getStarredRepositories()
                 .find { repository -> repository.fullName == "$testRepoOwner/$testRepoName" }
             assertNotNull(testRepo)
@@ -34,7 +37,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun testGetRepositoryLabels() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val repositoryLabels = githubApiClient.getRepositoryLabels(testRepoOwner, testRepoName)
             assertNotNull(repositoryLabels.find { label -> label.name == label1Name })
             assertNotNull(repositoryLabels.find { label -> label.name == label2Name })
@@ -45,7 +47,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun `getIssues should not find closed issue`() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val issues = githubApiClient.getIssues(
                 testRepoOwner,
                 testRepoName,
@@ -60,7 +61,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun `getIssues should not find assigned issue`() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val issues = githubApiClient.getIssues(
                 testRepoOwner,
                 testRepoName,
@@ -75,7 +75,6 @@ class RestGithubApiClientIntegrationTest {
     @Test
     fun `getIssues should find open non-assigned issue with given label`() {
         if (isIntegrationEnv()) {
-            val githubApiClient = RestGithubApiClient(System.getenv(mightyWatcherGithubIntegrationTokenName))
             val issues = githubApiClient.getIssues(
                 testRepoOwner,
                 testRepoName,
