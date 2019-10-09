@@ -6,16 +6,22 @@ import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.defaultRequest
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.http.URLProtocol
+import kotlinx.coroutines.runBlocking
 
 fun initHttpClient(githubToken: String): HttpClient {
-    return HttpClient(Apache) {
+    val httpClient =  HttpClient(Apache) {
         install(JsonFeature) {
             serializer = JacksonSerializer {
                 findAndRegisterModules()
                 registerModule(JavaTimeModule())
             }
+        }
+
+        xRateLimit {
+            startDegradeFrom = 1000
         }
 
         defaultRequest {
@@ -28,4 +34,16 @@ fun initHttpClient(githubToken: String): HttpClient {
             header("Authorization", "token $githubToken")
         }
     }
+
+    //call to /rate_limit doesn't count as search but it returns X-Rate-Limit headers
+    //so XRateLimitInterceptor has relevant XRateLimit before first search call is made
+    runBlocking {
+        httpClient.get<Unit> {
+            url {
+                path("rate_limit")
+            }
+        }
+    }
+
+    return httpClient
 }
