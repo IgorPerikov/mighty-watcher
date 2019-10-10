@@ -26,6 +26,26 @@ class RestGithubApiClientIntegrationTest {
     private val startOfCentury = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1, 1).toInstant(ZoneOffset.UTC)
 
     @Test
+    fun testDegradeFrom() {
+        if (isIntegrationEnv()) {
+            val rate = githubApiClient.getXRateLimits().rate
+            val limitedClient = RestGithubApiClient(
+                    httpClient = initHttpClient(System.getenv(mightyWatcherGithubIntegrationTokenName)),
+                    degradeFromRemaining = rate.remaining - 1
+            )
+            assertTrue(limitedClient.getStarredRepositories().isNotEmpty())
+            assertTrue(limitedClient.getStarredRepositories().isEmpty())
+        }
+    }
+
+    @Test
+    fun testGetXRateLimits() {
+        if (isIntegrationEnv()) {
+            assertNotNull(githubApiClient.getXRateLimits())
+        }
+    }
+
+    @Test
     fun testGetStarredRepositories() {
         if (isIntegrationEnv()) {
             val testRepo = githubApiClient.getStarredRepositories()
