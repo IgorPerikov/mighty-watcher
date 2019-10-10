@@ -1,9 +1,7 @@
 package com.github.igorperikov.mightywatcher.service
 
-import com.github.igorperikov.mightywatcher.Issues
-import com.github.igorperikov.mightywatcher.entity.NamedTimestamp
+import com.github.igorperikov.mightywatcher.entity.ResultLine
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 abstract class OutputService {
     companion object {
@@ -24,6 +22,6 @@ abstract class OutputService {
         val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
     }
 
-    abstract fun getResults(issues: LinkedHashMap<NamedTimestamp, Issues>)
+    abstract fun outputResults(lines: List<ResultLine>)
 
 }

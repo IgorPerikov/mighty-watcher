@@ -32,9 +32,10 @@ class HTMLOutputServiceTest {
     @Test
     fun `html generator`() {
         val outputService = OutputService.createOutputService(HTML_OUTPUT_TYPE)
+        val transformService = TransformService()
         val map = LinkedHashMap<NamedTimestamp, Issues>()
         map[today] = mutableListOf(issue1, issue2, issue3)
-        outputService.getResults(map)
+        outputService.outputResults(transformService.transform(map))
         Assertions.assertTrue(Files.exists(reportFileName))
         val lines = Files.readAllLines(reportFileName)
         // we have boostrap css

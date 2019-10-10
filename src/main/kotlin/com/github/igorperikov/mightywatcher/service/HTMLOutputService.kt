@@ -1,31 +1,31 @@
 package com.github.igorperikov.mightywatcher.service
 
-import com.github.igorperikov.mightywatcher.Issues
-import com.github.igorperikov.mightywatcher.entity.NamedTimestamp
+import com.github.igorperikov.mightywatcher.entity.IssueLine
+import com.github.igorperikov.mightywatcher.entity.ResultLine
+import com.github.igorperikov.mightywatcher.entity.TimestampLine
 import j2html.TagCreator
 import j2html.attributes.Attr
 import j2html.tags.ContainerTag
 import java.io.File
 import java.time.LocalDate
-import java.util.*
 
 class HTMLOutputService : OutputService() {
 
-    override fun getResults(issues: LinkedHashMap<NamedTimestamp, Issues>) {
-        val mutableList: MutableList<ContainerTag> = arrayListOf()
-        for ((timeGroupName, issuesInTimeGroup) in issues) {
-            if (issuesInTimeGroup.isEmpty()) continue
-            mutableList.add(TagCreator.tr(
-                    TagCreator.td(TagCreator.b(timeGroupName.toString()))
-                            .withStyle("text-align:center")
-                            .attr(Attr.COLSPAN, 2)
-            ))
-            for (issue in issuesInTimeGroup) {
-                mutableList.add(TagCreator.tr(
-                        TagCreator.td(issue.getRepoName()).withClass("col-xs-4"),
-                        TagCreator.td(TagCreator.a(issue.title).withHref(issue.htmlUrl)).withClass("col-xs-8")
-                ))
+    override fun outputResults(lines: List<ResultLine>) {
+        val outputTags: List<ContainerTag> = lines.map {
+            when (it) {
+                is TimestampLine -> TagCreator.tr(
+                        TagCreator.td(TagCreator.b(it.toString()))
+                                .withStyle("text-align:center")
+                                .attr(Attr.COLSPAN, 2)
+                )
+                is IssueLine -> TagCreator.tr(
+                        TagCreator.td(it.repoName).withClass("col-xs-4"),
+                        TagCreator.td(TagCreator.a(it.title).withHref(it.htmlUrl)).withClass("col-xs-8")
+                )
+                else -> TagCreator.tr()
             }
+
         }
 
         File(HTML_PATH_FORMAT.format(LocalDate.now().format(FORMATTER))).printWriter().use { out ->
@@ -39,7 +39,7 @@ class HTMLOutputService : OutputService() {
                                     TagCreator.h3("Issues report").withStyle("text-align: center"),
                                     TagCreator.br(),
                                     TagCreator.table(
-                                            *mutableList.toTypedArray()
+                                            *outputTags.toTypedArray()
                                     ).withClass("table table-striped")
                             )
                     ).renderFormatted()

@@ -39,9 +39,12 @@ object Launcher {
             )
         }
         single { GroupingService.withDefaultTimeGroups() }
-        single { OutputService.createOutputService(
-                type = (System.getenv(OUTPUT_TYPE) ?: CONSOLE_OUTPUT_TYPE)
-        )}
+        single {
+            OutputService.createOutputService(
+                    type = (System.getenv(OUTPUT_TYPE) ?: CONSOLE_OUTPUT_TYPE)
+            )
+        }
+        single { TransformService() }
     }
 
     private fun Scope.getSetProperty(key: String): Set<String> = getPropertyOrNull<String>(key)
@@ -55,11 +58,13 @@ object Launcher {
 
             val importService: ImportService = koin.get()
             val groupingService: GroupingService = koin.get()
+            val transformService: TransformService = koin.get()
             val outputService: OutputService = koin.get()
 
             val issues = importService.findIssues()
             val groupedIssues = groupingService.groupByTime(issues)
-            outputService.getResults(groupedIssues)
+            val resultLines = transformService.transform(groupedIssues)
+            outputService.outputResults(resultLines)
         }
     }
 }
