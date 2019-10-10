@@ -20,10 +20,6 @@ fun initHttpClient(githubToken: String): HttpClient {
             }
         }
 
-        xRateLimit {
-            startDegradeFrom = 1000
-        }
-
         defaultRequest {
             url {
                 protocol = URLProtocol.HTTPS
@@ -32,16 +28,6 @@ fun initHttpClient(githubToken: String): HttpClient {
             header("Accept", "application/vnd.github.v3+json")
             header("User-Agent", "IgorPerikov/mighty-watcher")
             header("Authorization", "token $githubToken")
-        }
-    }
-
-    //call to /rate_limit doesn't count as search but it returns X-Rate-Limit headers
-    //so XRateLimitInterceptor has relevant XRateLimit before first search call is made
-    runBlocking {
-        httpClient.get<Unit> {
-            url {
-                path("rate_limit")
-            }
         }
     }
 
