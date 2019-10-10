@@ -19,8 +19,4 @@ class NamedTimestamp(val time: Instant, val name: String = "") : Comparable<Name
     override fun hashCode(): Int {
         return name.hashCode()
     }
-
-    override fun toString(): String {
-        return "${name.toUpperCase()}:"
-    }
 }
