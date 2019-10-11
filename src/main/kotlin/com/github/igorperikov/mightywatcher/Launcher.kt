@@ -1,15 +1,15 @@
 package com.github.igorperikov.mightywatcher
 
 import com.github.igorperikov.mightywatcher.entity.Issue
+import com.github.igorperikov.mightywatcher.external.BasicGithubApiClient
 import com.github.igorperikov.mightywatcher.external.GithubApiClient
-import com.github.igorperikov.mightywatcher.external.RestGithubApiClient
+import com.github.igorperikov.mightywatcher.external.LimitsAwareGithubApiClient
 import com.github.igorperikov.mightywatcher.external.initHttpClient
 import com.github.igorperikov.mightywatcher.service.*
 import com.github.igorperikov.mightywatcher.service.OutputService.Companion.CONSOLE_OUTPUT_TYPE
 import org.koin.core.context.startKoin
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
-import org.slf4j.LoggerFactory
 
 typealias Issues = MutableList<Issue>
 
@@ -23,32 +23,30 @@ const val TOKEN_ENV_NAME = "TOKEN"
 const val OUTPUT_TYPE = "OUTPUT"
 
 object Launcher {
-    @JvmStatic
-    private val log = LoggerFactory.getLogger(this.javaClass)
-
-    val applicationModule = module {
+    private val applicationModule = module {
         single { initHttpClient(getProperty(TOKEN_ENV_NAME)) }
-        single { RestGithubApiClient(get()) as GithubApiClient }
+        single { LimitsAwareGithubApiClient(BasicGithubApiClient(get())) as GithubApiClient }
         single { GithubService(get(), getSetProperty(INCLUDE_LANG_ENV_NAME), getSetProperty(EXCLUDE_REPOS_ENV_NAME)) }
         single { EasyLabelsStorage() }
         single { LabelsService(get(), get()) }
         single {
-            ImportService(get(), get(),
-                    getProperty(PARALLELISM_LEVEL_ENV_NAME, DEFAULT_PARALLELISM_LEVEL),
-                    getProperty(DAYS_SINCE_LAST_UPDATE_ENV_NAME, DEFAULT_DAYS_SINCE_LAST_UPDATE)
+            ImportService(
+                get(), get(),
+                getProperty(PARALLELISM_LEVEL_ENV_NAME, DEFAULT_PARALLELISM_LEVEL),
+                getProperty(DAYS_SINCE_LAST_UPDATE_ENV_NAME, DEFAULT_DAYS_SINCE_LAST_UPDATE)
             )
         }
         single { GroupingService.withDefaultTimeGroups() }
         single {
             OutputService.createOutputService(
-                    type = (System.getenv(OUTPUT_TYPE) ?: CONSOLE_OUTPUT_TYPE)
+                type = (System.getenv(OUTPUT_TYPE) ?: CONSOLE_OUTPUT_TYPE)
             )
         }
         single { TransformService() }
     }
 
     private fun Scope.getSetProperty(key: String): Set<String> = getPropertyOrNull<String>(key)
-            ?.split(",")?.toHashSet() ?: setOf()
+        ?.split(",")?.toHashSet() ?: setOf()
 
     @JvmStatic
     fun main(args: Array<String>) {

@@ -15,13 +15,13 @@ class HTMLOutputService : OutputService() {
         val outputTags: List<ContainerTag> = lines.map {
             when (it) {
                 is TimestampLine -> TagCreator.tr(
-                        TagCreator.td(TagCreator.b(it.toString()))
-                                .withStyle("text-align:center")
-                                .attr(Attr.COLSPAN, 2)
+                    TagCreator.td(TagCreator.b(it.toString()))
+                        .withStyle("text-align:center")
+                        .attr(Attr.COLSPAN, 2)
                 )
                 is IssueLine -> TagCreator.tr(
-                        TagCreator.td(it.repoName).withClass("col-xs-4"),
-                        TagCreator.td(TagCreator.a(it.title).withHref(it.htmlUrl)).withClass("col-xs-8")
+                    TagCreator.td(it.repoName).withClass("col-xs-4"),
+                    TagCreator.td(TagCreator.a(it.title).withHref(it.htmlUrl)).withClass("col-xs-8")
                 )
                 else -> TagCreator.tr()
             }
@@ -30,19 +30,21 @@ class HTMLOutputService : OutputService() {
 
         File(HTML_PATH_FORMAT.format(LocalDate.now().format(FORMATTER))).printWriter().use { out ->
             out.println(
-                    TagCreator.html(
-                            TagCreator.head(
-                                    TagCreator.title("Issues report"),
-                                    TagCreator.link().withHref("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css").withRel("stylesheet")
-                            ),
-                            TagCreator.body(
-                                    TagCreator.h3("Issues report").withStyle("text-align: center"),
-                                    TagCreator.br(),
-                                    TagCreator.table(
-                                            *outputTags.toTypedArray()
-                                    ).withClass("table table-striped")
-                            )
-                    ).renderFormatted()
+                TagCreator.html(
+                    TagCreator.head(
+                        TagCreator.title("Issues report"),
+                        TagCreator.link().withHref("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css").withRel(
+                            "stylesheet"
+                        )
+                    ),
+                    TagCreator.body(
+                        TagCreator.h3("Issues report").withStyle("text-align: center"),
+                        TagCreator.br(),
+                        TagCreator.table(
+                            *outputTags.toTypedArray()
+                        ).withClass("table table-striped")
+                    )
+                ).renderFormatted()
             )
         }
     }
