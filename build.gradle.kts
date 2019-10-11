@@ -52,6 +52,7 @@ val junit5Version = "5.5.2"
 val hamkrestVersion = "1.7.0.0"
 val mockitoKotlin2Version = "2.2.0"
 val koinVersion = "2.0.1"
+val j2htmlVersion = "1.4.0"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -72,6 +73,8 @@ dependencies {
     implementation("org.slf4j", "slf4j-api", slf4jVersion)
     implementation("ch.qos.logback", "logback-core", logbackVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)
+
+    implementation("com.j2html", "j2html", j2htmlVersion)
 
     testImplementation("org.junit.jupiter", "junit-jupiter-api", junit5Version)
     testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", junit5Version)

@@ -15,7 +15,7 @@ data class Issue(
         return "${getRepoName()}  \"$title\"  $htmlUrl"
     }
 
-    private fun getRepoName(): String {
+    fun getRepoName(): String {
         val split = htmlUrl.split("/")
         return split[split.size - 3]
     }
