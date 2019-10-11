@@ -29,7 +29,8 @@ object Launcher {
         single { LabelsService(get(), get()) }
         single {
             ImportService(
-                get(), get(),
+                get(),
+                get(),
                 getProperty(PARALLELISM_LEVEL_ENV_NAME, DEFAULT_PARALLELISM_LEVEL),
                 getProperty(DAYS_SINCE_LAST_UPDATE_ENV_NAME, DEFAULT_DAYS_SINCE_LAST_UPDATE)
             )

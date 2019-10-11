@@ -14,14 +14,13 @@ class RateLimits(val remaining: Long, val reset: Long) {
         @JsonCreator
         @JvmStatic
         fun createFromJson(jsonNode: JsonNode): RateLimits {
-            val rateNode = jsonNode[rateNodeName] ?: throw WrongNodeNameException(rateNodeName)
+            val rateNode = jsonNode[rateNodeName] ?: throw NodeNotFoundException(rateNodeName)
             return RateLimits(
-                rateNode[remainingNodeName]?.asLong() ?: throw WrongNodeNameException(remainingNodeName),
-                rateNode[resetNodeName]?.asLong() ?: throw WrongNodeNameException(resetNodeName)
+                rateNode[remainingNodeName]?.asLong() ?: throw NodeNotFoundException(remainingNodeName),
+                rateNode[resetNodeName]?.asLong() ?: throw NodeNotFoundException(resetNodeName)
             )
         }
     }
 }
 
-private class WrongNodeNameException(expectedNodeName: String) :
-    RuntimeException("Expected to find $expectedNodeName node")
+private class NodeNotFoundException(expected: String) : RuntimeException("Expected to find $expected node")
