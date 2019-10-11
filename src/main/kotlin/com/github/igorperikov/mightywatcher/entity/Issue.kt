@@ -6,9 +6,9 @@ import java.time.Instant
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Issue(
-    @JsonProperty("html_url") val htmlUrl: String,
-    @JsonProperty("created_at") val createdAt: Instant,
-    @JsonProperty("updated_at") val updatedAt: Instant,
+    @JsonProperty("html_url", required = true) val htmlUrl: String,
+    @JsonProperty("created_at", required = true) val createdAt: Instant,
+    @JsonProperty("updated_at", required = true) val updatedAt: Instant,
     val title: String
 ) {
     override fun toString(): String {

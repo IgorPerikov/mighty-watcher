@@ -9,9 +9,9 @@ import java.time.ZoneOffset
 
 private const val mightyWatcherGithubIntegrationTokenName = "MIGHTY_WATCHER_GITHUB_INTEGRATION_TOKEN"
 
-class RestGithubApiClientIntegrationTest {
+class BasicGithubApiClientIntegrationTest {
     private val githubApiClient: GithubApiClient by lazy {
-        RestGithubApiClient(initHttpClient(System.getenv(mightyWatcherGithubIntegrationTokenName)))
+        BasicGithubApiClient(initHttpClient(System.getenv(mightyWatcherGithubIntegrationTokenName)))
     }
 
     private fun isIntegrationEnv(): Boolean {
@@ -26,22 +26,11 @@ class RestGithubApiClientIntegrationTest {
     private val startOfCentury = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1, 1).toInstant(ZoneOffset.UTC)
 
     @Test
-    fun testDegradeFrom() {
+    fun testGetRateLimits() {
         if (isIntegrationEnv()) {
-            val rate = githubApiClient.getXRateLimits().rate
-            val limitedClient = RestGithubApiClient(
-                    httpClient = initHttpClient(System.getenv(mightyWatcherGithubIntegrationTokenName)),
-                    degradeFromRemaining = rate.remaining - 1
-            )
-            assertTrue(limitedClient.getStarredRepositories().isNotEmpty())
-            assertTrue(limitedClient.getStarredRepositories().isEmpty())
-        }
-    }
-
-    @Test
-    fun testGetXRateLimits() {
-        if (isIntegrationEnv()) {
-            assertNotNull(githubApiClient.getXRateLimits())
+            val xRateLimits = githubApiClient.getRateLimits()
+            assertTrue(xRateLimits.remaining >= 0)
+            assertTrue(xRateLimits.reset >= startOfCentury.epochSecond)
         }
     }
 

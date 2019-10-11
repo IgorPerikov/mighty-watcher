@@ -6,13 +6,11 @@ import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.defaultRequest
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.http.URLProtocol
-import kotlinx.coroutines.runBlocking
 
 fun initHttpClient(githubToken: String): HttpClient {
-    val httpClient =  HttpClient(Apache) {
+    return HttpClient(Apache) {
         install(JsonFeature) {
             serializer = JacksonSerializer {
                 findAndRegisterModules()
@@ -30,6 +28,4 @@ fun initHttpClient(githubToken: String): HttpClient {
             header("Authorization", "token $githubToken")
         }
     }
-
-    return httpClient
 }

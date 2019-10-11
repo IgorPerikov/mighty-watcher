@@ -7,10 +7,9 @@ import com.github.igorperikov.mightywatcher.entity.ResultLine
 import com.github.igorperikov.mightywatcher.entity.TimestampLine
 
 /**
- * Convert grouped issues into list of results that could be printed/exported to html/pdf
+ * Convert grouped issues into list of results that are convenient for further transformations
  */
 class TransformService {
-
     fun transform(issues: LinkedHashMap<NamedTimestamp, Issues>): List<ResultLine> {
         val resultLines = mutableListOf<ResultLine>()
         for ((timeGroupName, issuesInTimeGroup) in issues) {

@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Repository(
     val language: String?,
-    @JsonProperty("full_name") val fullName: String,
-    @JsonProperty("has_issues") val hasIssues: Boolean
+    @JsonProperty("full_name", required = true) val fullName: String,
+    @JsonProperty("has_issues", required = true) val hasIssues: Boolean
 ) {
     fun getOwner(): String {
         return fullName.split("/")[0]

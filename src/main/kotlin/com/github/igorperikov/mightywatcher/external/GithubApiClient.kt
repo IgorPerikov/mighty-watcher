@@ -2,11 +2,11 @@ package com.github.igorperikov.mightywatcher.external
 
 import com.github.igorperikov.mightywatcher.Issues
 import com.github.igorperikov.mightywatcher.entity.Label
+import com.github.igorperikov.mightywatcher.entity.RateLimits
 import com.github.igorperikov.mightywatcher.entity.Repository
-import com.github.igorperikov.mightywatcher.entity.XRateResources
 
 interface GithubApiClient {
-    fun getXRateLimits() : XRateResources
+    fun getRateLimits(): RateLimits
 
     fun getStarredRepositories(): List<Repository>
 
