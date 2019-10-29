@@ -97,7 +97,7 @@ Kotlin style guide is predefined Kotlin style guide from Intellij Idea settings.
 ## Roadmap
 - [ ] [Advanced mode][9]
 - [ ] [Pdf/html reports][10]
-- [ ] [Track github api limits during import process][11]
+- [x] [Track github api limits during import process][11]
 - [ ] Web/Mobile application
 
 ## Contact me 
