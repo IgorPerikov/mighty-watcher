@@ -62,6 +62,9 @@ class EasyLabelsStorage {
             "noob friendly",
             "please contribute",
             "pr welcome",
+            "pr-welcome",
+            "status: first-timers-only",
+            "status: ideal-for-contribution",
             "trivial",
             "up for grabs",
             "up-for-grabs"
